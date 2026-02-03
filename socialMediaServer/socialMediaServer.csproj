@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SocketAbi">
-      <HintPath>..\..\..\..\3D Objects\Desktop\SocketAbi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\SocketAbi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="ServerThread.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
