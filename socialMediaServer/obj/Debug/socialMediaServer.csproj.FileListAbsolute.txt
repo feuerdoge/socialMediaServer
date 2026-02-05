@@ -1,0 +1,9 @@
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\bin\Debug\socialMediaServer.exe.config
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\bin\Debug\socialMediaServer.exe
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\bin\Debug\socialMediaServer.pdb
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\bin\Debug\SocketAbi.dll
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\obj\Debug\socialMediaServer.csproj.AssemblyReference.cache
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\obj\Debug\socialMediaServer.csproj.CoreCompileInputs.cache
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\obj\Debug\socialMe.62BAD5B5.Up2Date
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\obj\Debug\socialMediaServer.exe
+C:\Users\loli7\Documents\GitHub\socialMediaServer\socialMediaServer\obj\Debug\socialMediaServer.pdb
