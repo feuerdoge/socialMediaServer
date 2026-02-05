@@ -9,11 +9,25 @@ namespace socialMediaServer
 {
     public class Client
     {
-        Socket clientSocket;
+        private Socket clientSocket;
 
         public Client() 
         {
-            
+            clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
+
+        public bool Verbinden(string server, int port) 
+        {
+            try
+            {
+                clientSocket.Connect(server, port);
+            }
+            catch (Exception e) 
+            {
+
+                return false;
+            }
+            return true;
         }
     }
 }
