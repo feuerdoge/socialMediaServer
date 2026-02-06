@@ -12,15 +12,24 @@ namespace socialMediaServer
     public class Server
     {
         ServerSocket Serversocket;
+        private SocialMediaPlatform spf;
         public Server(int port) 
         {
             this.Serversocket = new ServerSocket(port);
+            spf = new SocialMediaPlatform();
             runServer();
         }
 
         public void runServer() 
         {
-                while (true)
+            int result = spf.Registrieren("bernd", "1234", "test@gmx.de");
+            if (result == 0)
+                Console.WriteLine("Test erfolgreich");
+            else if (result == -1)
+                Console.WriteLine("Test erfolgreich: Nutzernamen oder E-Mail bereits vergeben");
+            else
+                Console.WriteLine("Test fehlgeschlagen");
+            while (true)
                 {
                     Socket client = Serversocket.Accept();
                     ServerThread thread = new ServerThread(client);
