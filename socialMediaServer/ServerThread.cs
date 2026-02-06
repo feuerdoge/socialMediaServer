@@ -11,8 +11,8 @@ namespace socialMediaServer
 {
     public class ServerThread
     {
-        Socket client;
-        public ServerThread(Socket cs) 
+        public SocketAbi.Socket client;
+        public ServerThread(SocketAbi.Socket cs) 
         {
             this.client = cs;
         }
@@ -21,7 +21,11 @@ namespace socialMediaServer
         {
             while(true) 
             {
-                
+                string befehl = client.ReadLine();
+                if(befehl.Contains("anmelden")) 
+                {
+                    Console.WriteLine("Test hat geklappt");
+                }
             }
         }
     }
