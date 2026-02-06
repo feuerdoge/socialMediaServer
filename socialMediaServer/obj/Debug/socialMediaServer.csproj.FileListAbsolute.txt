@@ -10,3 +10,8 @@ C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\obj\Debug\social
 C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\obj\Debug\socialMediaServer.csproj.CoreCompileInputs.cache
 C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\obj\Debug\socialMediaServer.exe
 C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\obj\Debug\socialMediaServer.pdb
+C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\bin\Debug\socialMediaServer.exe.config
+C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\bin\Debug\socialMediaServer.exe
+C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\bin\Debug\socialMediaServer.pdb
+C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\bin\Debug\SocketAbi.dll
+C:\Users\ruper\source\repos\socialMediaServer\socialMediaServer\obj\Debug\socialMe.62BAD5B5.Up2Date
