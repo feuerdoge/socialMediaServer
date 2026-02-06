@@ -7,16 +7,16 @@
       "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\socialmediaplatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|D:\\Documents\\GitHub\\socialMediaServer\\socialmediaserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|d:\\documents\\github\\socialmediaserver\\socialmediaserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|D:\\Documents\\GitHub\\socialMediaServer\\socialmediaserver\\serverthread.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\serverthread.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|d:\\documents\\github\\socialmediaserver\\socialmediaserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|D:\\Documents\\GitHub\\socialMediaServer\\socialmediaserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -44,14 +44,14 @@
               "RelativeDocumentMoniker": "socialMediaServer\\SocialMediaPlatform.cs",
               "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\SocialMediaPlatform.cs",
               "RelativeToolTip": "socialMediaServer\\SocialMediaPlatform.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAAAB0AAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowDQAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-06T16:19:13.588Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Program.cs",
               "RelativeDocumentMoniker": "socialMediaServer\\Program.cs",
@@ -70,20 +70,20 @@
               "RelativeDocumentMoniker": "socialMediaServer\\ServerThread.cs",
               "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\ServerThread.cs",
               "RelativeToolTip": "socialMediaServer\\ServerThread.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-03T13:34:46.354Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Server.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Server.cs",
               "RelativeDocumentMoniker": "socialMediaServer\\Server.cs",
               "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Server.cs",
               "RelativeToolTip": "socialMediaServer\\Server.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABwAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACAAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-03T13:26:22.925Z",
               "EditorCaption": ""

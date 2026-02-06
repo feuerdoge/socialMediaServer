@@ -28,6 +28,7 @@ namespace socialMediaServer
             checkSelect.Parameters.AddWithValue("@email", email);
             if (Convert.ToInt32(checkSelect.ExecuteScalar()) > 0)
             {
+                conn.Close();
                 return -1;
             }
 
@@ -39,16 +40,26 @@ namespace socialMediaServer
             insert.ExecuteNonQuery();
 
             Nutzer neuerNutzer = new Nutzer(name, passwort, email);
+            conn.Close();
             return 0;
         }
         public Nutzer Anmelden(string name, string passwort)
         {
-            Nutzer n = SucheNutzer(name);
-            if (n != null && n.Passwort == passwort)
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand search = new MySqlCommand("SELECT passwort, email FROM nutzer WHERE benutzerName=@benutzerName", conn);
+            search.Parameters.AddWithValue("@benutzerName", name);
+            MySqlDataReader reader = search.ExecuteReader();
+            if (!reader.Read() || reader.GetString("passwort") != passwort)
+                return null;
+            Nutzer n = new Nutzer(name, passwort, reader.GetString("email"));
+            lock (nutzer)
             {
-                return n;
+                nutzer.Add(n);
             }
-            return null;
+            reader.Close();
+            conn.Close();
+            return n;
         }
         public char[] GenerierePasswort()
         {

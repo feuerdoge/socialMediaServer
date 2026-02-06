@@ -29,7 +29,14 @@ namespace socialMediaServer
                 Console.WriteLine("Test erfolgreich: Nutzernamen oder E-Mail bereits vergeben");
             else
                 Console.WriteLine("Test fehlgeschlagen");
-            while (true)
+
+            if (spf.Anmelden("bernd", "1234") != null)
+                Console.WriteLine("Benutzer eingeloggt");
+            else
+            {
+                Console.WriteLine("Fehler");
+            }
+                while (true)
                 {
                     Socket client = Serversocket.Accept();
                     ServerThread thread = new ServerThread(client);
