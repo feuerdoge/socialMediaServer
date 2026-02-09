@@ -28,7 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.menuPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
+            // 
+            // menuPanel
+            // 
+            this.menuPanel.Location = new System.Drawing.Point(-1, -1);
+            this.menuPanel.Name = "menuPanel";
+            this.menuPanel.Size = new System.Drawing.Size(235, 455);
+            this.menuPanel.TabIndex = 0;
             // 
             // Form1
             // 
@@ -36,6 +44,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.menuPanel);
             this.Name = "Form1";
             this.Text = "s";
             this.ResumeLayout(false);
@@ -43,6 +52,8 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel menuPanel;
     }
 }
 

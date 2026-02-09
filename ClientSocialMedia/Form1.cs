@@ -15,6 +15,7 @@ namespace ClientSocialMedia
     {
         private TextBox tbNutzername;
         private TextBox tbPasswort;
+        private Panel panel;
         public static Client client = new Client();
         public Form1()
         {
@@ -26,10 +27,8 @@ namespace ClientSocialMedia
 
         public void ErstellePanel()
         {
-            Panel panel = new Panel()
-            {
-                Location = new Point(this.Width / 2, this.Height / 2)
-            };
+            panel = new Panel();
+            panel.Location = new Point(this.Width / 2, this.Height / 2);
             this.Controls.Add(panel);
 
             Label anmelden = new Label()
@@ -74,6 +73,35 @@ namespace ClientSocialMedia
             anmeldeButton.Click += anmeldeButton_Click;
         }
 
+        private void zeigeProgram() 
+        {
+            menuPanel.BackColor = Color.White;
+            Button buttonBeitraege = new Button()
+            {
+                Size = new Size(215, 60),
+                Location = new Point(10, 10),
+                BackColor = Color.White,
+                Text = "Beiträge"
+            };
+            Button buttonBeliebt = new Button()
+            {
+                Size = new Size(215, 60),
+                Location = new Point(10, 70),
+                BackColor = Color.White,
+                Text = "Beliebt"
+            };
+            Button buttonChat = new Button()
+            {
+                Size = new Size(215, 60),
+                Location = new Point(10, 130),
+                BackColor = Color.White,
+                Text = "Chat"
+            };
+            menuPanel.Controls.Add(buttonBeitraege);
+            menuPanel.Controls.Add(buttonBeliebt);
+            menuPanel.Controls.Add(buttonChat);
+        }
+
         private void tbNutzername_Click(object sender, EventArgs e) 
         {
             TextBox t = (TextBox)sender;
@@ -91,6 +119,8 @@ namespace ClientSocialMedia
         private void anmeldeButton_Click(object sender, EventArgs e) 
         {
             client.anmelden(tbNutzername.Text, tbPasswort.Text);
+            panel.Hide();
+            zeigeProgram();
         }
     }
 }

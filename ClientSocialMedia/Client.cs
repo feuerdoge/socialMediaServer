@@ -29,7 +29,7 @@ namespace ClientSocialMedia
         public void anmelden(string benutzername, string passwort) 
         {
             string eingabe = $"{benutzername};{passwort}";
-            clientSocket.Write("anmelden;"+eingabe);
+            //clientSocket.Write("anmelden;"+eingabe);
             MessageBox.Show("yes");
         }
     }
