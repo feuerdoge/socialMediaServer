@@ -22,9 +22,11 @@ namespace socialMediaServer
 
         public void HandleConnection()
         {
+            Console.WriteLine("Client hat sich verbunden!");
             while(true) 
             {
                 string befehl = client.ReadLine();
+                Console.WriteLine("Test");
                 if(befehl.Contains("anmelden")) 
                 {
                     Console.WriteLine("Test hat geklappt");

@@ -31,7 +31,6 @@
             this.menuPanel = new System.Windows.Forms.Panel();
             this.profilePic = new System.Windows.Forms.PictureBox();
             this.momentaneAnsicht = new System.Windows.Forms.Panel();
-            this.anzeigeFenster = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,22 +56,12 @@
             this.momentaneAnsicht.Size = new System.Drawing.Size(455, 50);
             this.momentaneAnsicht.TabIndex = 2;
             // 
-            // anzeigeFenster
-            // 
-            this.anzeigeFenster.HideSelection = false;
-            this.anzeigeFenster.Location = new System.Drawing.Point(241, 56);
-            this.anzeigeFenster.Name = "anzeigeFenster";
-            this.anzeigeFenster.Size = new System.Drawing.Size(438, 398);
-            this.anzeigeFenster.TabIndex = 3;
-            this.anzeigeFenster.UseCompatibleStateImageBehavior = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.anzeigeFenster);
             this.Controls.Add(this.momentaneAnsicht);
             this.Controls.Add(this.profilePic);
             this.Controls.Add(this.menuPanel);
@@ -88,7 +77,6 @@
         private System.Windows.Forms.Panel menuPanel;
         private System.Windows.Forms.PictureBox profilePic;
         private System.Windows.Forms.Panel momentaneAnsicht;
-        private System.Windows.Forms.ListView anzeigeFenster;
     }
 }
 

@@ -22,3 +22,15 @@ C:\Users\loli7\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\Cl
 C:\Users\loli7\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSo.C6CEB1D8.Up2Date
 C:\Users\loli7\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.exe
 C:\Users\loli7\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.pdb
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\bin\Debug\ClientSocialMedia.exe.config
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\bin\Debug\ClientSocialMedia.exe
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\bin\Debug\ClientSocialMedia.pdb
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.csproj.AssemblyReference.cache
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.exe.config
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.Form1.resources
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.Properties.Resources.resources
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.csproj.GenerateResource.cache
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSo.C6CEB1D8.Up2Date
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.exe
+D:\Documents\GitHub\socialMediaServer\ClientSocialMedia\obj\Debug\ClientSocialMedia.pdb
