@@ -14,6 +14,7 @@ namespace socialMediaServer
     {
         private SocialMediaPlatform spf;
         public SocketAbi.Socket client;
+        private Nutzer nutzer;
         public ServerThread(SocketAbi.Socket cs) 
         {
             this.client = cs;
@@ -23,14 +24,63 @@ namespace socialMediaServer
         public void HandleConnection()
         {
             Console.WriteLine("Client hat sich verbunden!");
-            while(true) 
+            try
             {
-                string befehl = client.ReadLine();
-                Console.WriteLine("Test");
-                if(befehl.Contains("anmelden")) 
+                while (true)
                 {
-                    Console.WriteLine("Test hat geklappt");
+                    string befehl = client.ReadLine();
+                    Console.WriteLine($"Empfangen: {befehl}");
+
+                    string[] parameter = befehl.Split(';');
+                    if (parameter.Length == 0)
+                        continue;
+                    string command = parameter[0];
+                    switch (command)
+                    {
+                        case "anmelden":
+                            string name = parameter[1];
+                            string password = parameter[2];
+                            Nutzer nutzer = spf.Anmelden(name, password);
+                            if (nutzer != null)
+                            {
+                                this.nutzer = nutzer;
+                                client.Write("+OK Willkommen \n");
+                            }
+                            else
+                            {
+                                client.Write("-Error \n");
+                            }
+                            break;
+                        case "beitrag":
+                            string titel = parameter[1];
+                            string bildDateiname = parameter[2];
+                            string text;
+                            Bild picture = new Bild(bildDateiname);
+                            Beitrag b;
+                            if (parameter.Length >= 4)
+                            {
+                                text = parameter[3];
+                                b = this.nutzer.ErstelleBeitrag(titel, picture, text);
+                            }
+                            else
+                            {
+                                text = null;
+                                b = this.nutzer.ErstelleBeitrag(titel, picture);
+                            }
+                            spf.ErstelleBeitrag(b, picture);
+                            client.Write("+OK Hochgeladen \n");
+                            break;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Fehler: {e.Message}");
+            }
+            finally
+            {
+                client.Close();
+                Console.WriteLine("Client getrennt.");
             }
         }
     }

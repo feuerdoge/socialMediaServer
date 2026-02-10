@@ -3,16 +3,28 @@
   "WorkspaceRootPath": "D:\\Documents\\GitHub\\socialMediaServer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|d:\\documents\\github\\socialmediaserver\\socialmediaserver\\socialmediaplatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\socialmediaplatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|D:\\Documents\\GitHub\\socialMediaServer\\socialmediaserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|d:\\documents\\github\\socialmediaserver\\socialmediaserver\\nutzer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\nutzer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|d:\\documents\\github\\socialmediaserver\\clientsocialmedia\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|solutionrelative:clientsocialmedia\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|D:\\Documents\\GitHub\\socialMediaServer\\socialmediaserver\\serverthread.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\serverthread.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|d:\\documents\\github\\socialmediaserver\\socialmediaserver\\socialmediaplatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\socialmediaplatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|D:\\Documents\\GitHub\\socialMediaServer\\clientsocialmedia\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|solutionrelative:clientsocialmedia\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|d:\\documents\\github\\socialmediaserver\\socialmediaserver\\beitrag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,24 +39,12 @@
       "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|d:\\documents\\github\\socialmediaserver\\clientsocialmedia\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|solutionrelative:clientsocialmedia\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|D:\\Documents\\GitHub\\socialMediaServer\\socialmediaserver\\serverthread.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E43186EA-673A-4F88-A047-2225156566FF}|socialMediaServer\\socialMediaServer.csproj|solutionrelative:socialmediaserver\\serverthread.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|D:\\Documents\\GitHub\\socialMediaServer\\clientsocialmedia\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|solutionrelative:clientsocialmedia\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|D:\\Documents\\GitHub\\socialMediaServer\\clientsocialmedia\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|solutionrelative:clientsocialmedia\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|D:\\Documents\\GitHub\\socialMediaServer\\clientsocialmedia\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{5EF96E84-53F2-49DC-A63F-A3D01EF93A77}|ClientSocialMedia\\ClientSocialMedia.csproj|solutionrelative:clientsocialmedia\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -66,13 +66,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Nutzer.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Nutzer.cs",
               "RelativeDocumentMoniker": "socialMediaServer\\Nutzer.cs",
               "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Nutzer.cs",
               "RelativeToolTip": "socialMediaServer\\Nutzer.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAowBwAAABFAAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAswBwAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-10T17:32:06.299Z",
               "EditorCaption": ""
@@ -80,19 +80,45 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Bild.cs",
-              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Bild.cs",
-              "RelativeDocumentMoniker": "socialMediaServer\\Bild.cs",
-              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Bild.cs",
-              "RelativeToolTip": "socialMediaServer\\Bild.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAeAAAAAAAAAA==",
+              "Title": "SocialMediaPlatform.cs",
+              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\SocialMediaPlatform.cs",
+              "RelativeDocumentMoniker": "socialMediaServer\\SocialMediaPlatform.cs",
+              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\SocialMediaPlatform.cs",
+              "RelativeToolTip": "socialMediaServer\\SocialMediaPlatform.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAArwE4AAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T17:21:34.155Z",
+              "WhenOpened": "2026-02-10T17:05:27.829Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "ServerThread.cs",
+              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\ServerThread.cs",
+              "RelativeDocumentMoniker": "socialMediaServer\\ServerThread.cs",
+              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\ServerThread.cs",
+              "RelativeToolTip": "socialMediaServer\\ServerThread.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwEcAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T13:34:46.354Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Client.cs",
+              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\ClientSocialMedia\\Client.cs",
+              "RelativeDocumentMoniker": "ClientSocialMedia\\Client.cs",
+              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\ClientSocialMedia\\Client.cs",
+              "RelativeToolTip": "ClientSocialMedia\\Client.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACEAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-06T09:28:38.655Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "Beitrag.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Beitrag.cs",
               "RelativeDocumentMoniker": "socialMediaServer\\Beitrag.cs",
@@ -105,33 +131,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SocialMediaPlatform.cs",
-              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\SocialMediaPlatform.cs",
-              "RelativeDocumentMoniker": "socialMediaServer\\SocialMediaPlatform.cs",
-              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\SocialMediaPlatform.cs",
-              "RelativeToolTip": "socialMediaServer\\SocialMediaPlatform.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAASwE4AAABFAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "Bild.cs",
+              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Bild.cs",
+              "RelativeDocumentMoniker": "socialMediaServer\\Bild.cs",
+              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Bild.cs",
+              "RelativeToolTip": "socialMediaServer\\Bild.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T17:05:27.829Z",
+              "WhenOpened": "2026-02-10T17:21:34.155Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Client.cs",
-              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\ClientSocialMedia\\Client.cs",
-              "RelativeDocumentMoniker": "ClientSocialMedia\\Client.cs",
-              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\ClientSocialMedia\\Client.cs",
-              "RelativeToolTip": "ClientSocialMedia\\Client.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T09:28:38.655Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "Form1.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\ClientSocialMedia\\Form1.cs",
               "RelativeDocumentMoniker": "ClientSocialMedia\\Form1.cs",
@@ -144,7 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\ClientSocialMedia\\Program.cs",
               "RelativeDocumentMoniker": "ClientSocialMedia\\Program.cs",
@@ -157,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 5,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\ClientSocialMedia\\Form1.cs",
               "RelativeDocumentMoniker": "ClientSocialMedia\\Form1.cs",
@@ -169,33 +182,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ServerThread.cs",
-              "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\ServerThread.cs",
-              "RelativeDocumentMoniker": "socialMediaServer\\ServerThread.cs",
-              "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\ServerThread.cs",
-              "RelativeToolTip": "socialMediaServer\\ServerThread.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T13:34:46.354Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Server.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Server.cs",
               "RelativeDocumentMoniker": "socialMediaServer\\Server.cs",
               "ToolTip": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Server.cs",
               "RelativeToolTip": "socialMediaServer\\Server.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAArwCMAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAArwBgAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-03T13:26:22.925Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Documents\\GitHub\\socialMediaServer\\socialMediaServer\\Program.cs",
               "RelativeDocumentMoniker": "socialMediaServer\\Program.cs",

@@ -22,21 +22,22 @@ namespace socialMediaServer
 
         public void runServer() 
         {
-            int result = spf.Registrieren("bernd", "1234", "test@gmx.de");
-            if (result == 0)
-                Console.WriteLine("Anmeldung erfolgreich");
-            else if (result == -1)
-                Console.WriteLine("Test erfolgreich: Nutzernamen oder E-Mail bereits vergeben");
-            else
-                Console.WriteLine("Test fehlgeschlagen");
+            // Test:
+            //int result = spf.Registrieren("bernd", "1234", "test@gmx.de");
+            //if (result == 0)
+            //    Console.WriteLine("Anmeldung erfolgreich");
+            //else if (result == -1)
+            //    Console.WriteLine("Test erfolgreich: Nutzernamen oder E-Mail bereits vergeben");
+            //else
+            //    Console.WriteLine("Test fehlgeschlagen");
 
 
 
-            Nutzer n = spf.Anmelden("bernd", "1234");
-            Bild p = new Bild("hallo");
-            Beitrag b = new Beitrag(n, "Hello World", p);
-            spf.ErstelleBeitrag(b, p);
-            Console.WriteLine("Beitrag erfolgreich");
+            //Nutzer n = spf.Anmelden("bernd", "1234");
+            //Bild p = new Bild("hallo");
+            //Beitrag b = new Beitrag(n, "Hello World", p);
+            //spf.ErstelleBeitrag(b, p);
+            //Console.WriteLine("Beitrag erfolgreich");
 
                 while (true)
                 {
