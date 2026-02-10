@@ -12,9 +12,9 @@ namespace socialMediaServer
 {
     public class ServerThread
     {
-        Socket client;
         private SocialMediaPlatform spf;
-        public ServerThread(Socket cs) 
+        public SocketAbi.Socket client;
+        public ServerThread(SocketAbi.Socket cs) 
         {
             this.client = cs;
             spf = new SocialMediaPlatform();
@@ -24,7 +24,11 @@ namespace socialMediaServer
         {
             while(true) 
             {
-                
+                string befehl = client.ReadLine();
+                if(befehl.Contains("anmelden")) 
+                {
+                    Console.WriteLine("Test hat geklappt");
+                }
             }
         }
     }
