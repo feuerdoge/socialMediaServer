@@ -16,6 +16,9 @@ namespace ClientSocialMedia
         private TextBox tbNutzername;
         private TextBox tbPasswort;
         private Panel panel;
+        private Button registrieren;
+        Button anmeldeButton;
+        private bool registerToggle = false;
         public static Client client = new Client();
         public Form1()
         {
@@ -26,7 +29,10 @@ namespace ClientSocialMedia
         public void ErstellePanel()
         {
             panel = new Panel();
-            panel.Location = new Point(this.Width / 2, this.Height / 2);
+            panel.Left = (this.ClientSize.Width - panel.Width + 50) / 2;
+            panel.Top = (this.ClientSize.Height - panel.Height - 20) / 2;
+            panel.Width = this.Width;
+            panel.Height = this.Height;
             this.Controls.Add(panel);
 
             Label anmelden = new Label()
@@ -60,15 +66,32 @@ namespace ClientSocialMedia
             tbNutzername.Click += tbNutzername_Click;
             tbPasswort.Click += tbPasswort_Click;
 
-            Button anmeldeButton = new Button()
+            anmeldeButton = new Button()
             {
-                Size = new Size(100, 50),
+                Size = new Size(150, 25),
                 Location = new Point(0, anmelden.Location.Y + 60),
                 BackColor = Color.White,
                 Text = "Anmelden"
             };
+            registrieren = new Button()
+            {
+                Size = new Size(150, 25),
+                Location = new Point(0, anmelden.Location.Y + 85),
+                BackColor = Color.White,
+                Text = "Noch kein Nutzer?"
+            };
             panel.Controls.Add(anmeldeButton);
-            anmeldeButton.Click += anmeldeButton_Click;
+            panel.Controls.Add(registrieren);
+            if(!registerToggle) 
+            {
+                anmeldeButton.Click += anmeldeButton_Click;
+                registrieren.Click += registrieren_Click;
+            }
+            else if(registerToggle) 
+            {
+                anmeldeButton.Click += NutzerRegistrieren_Click;
+            } 
+                    
         }
 
         private void zeigeProgram() 
@@ -132,9 +155,37 @@ namespace ClientSocialMedia
 
         private void anmeldeButton_Click(object sender, EventArgs e) 
         {
-            client.anmelden(tbNutzername.Text, tbPasswort.Text);
-            panel.Hide();
-            zeigeProgram();
+            if(!registerToggle) 
+            {
+                client.anmelden(tbNutzername.Text, tbPasswort.Text);
+                panel.Hide();
+                zeigeProgram();
+            }
+        }
+        private void registrieren_Click(object sender, EventArgs e) 
+        {
+            if(!registerToggle) 
+            {
+                tbNutzername.Text = "Nutzername...";
+                tbPasswort.Text = "Passwort festlegen...";
+                registrieren.Text = "Anmelden";
+                anmeldeButton.Text = "Registrieren";
+                registerToggle = true;
+            }
+            else 
+            {
+                tbNutzername.Text = "Benutzername...";
+                tbPasswort.Text = "Passwort...";
+                registrieren.Text = "Noch kein Nutzer?";
+                anmeldeButton.Text = "Anmelden";
+                registerToggle = false;
+            }
+            
+        }
+
+        private void NutzerRegistrieren_Click(object sender, EventArgs e) 
+        {
+            
         }
     }
 }

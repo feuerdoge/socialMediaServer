@@ -18,10 +18,10 @@ namespace ClientSocialMedia
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
             this.clientSocket = new SocketAbi.Socket("127.0.0.1", 5555);
-            Verbinden("127.0.0.1", 5555);
+            Verbinden();
         }
 
-        public bool Verbinden(string server, int port) 
+        public bool Verbinden() 
         {
             bool status = clientSocket.Connect();
             return status;
