@@ -17,7 +17,7 @@ namespace ClientSocialMedia
         private TextBox tbPasswort;
         private Panel panel;
         private Button registrieren;
-        Button anmeldeButton;
+        private Button anmeldeButton;
         private bool registerToggle = false;
         public static Client client = new Client();
         public Form1()
@@ -137,8 +137,13 @@ namespace ClientSocialMedia
             menuPanel.Controls.Add(buttonChat);
             menuPanel.Controls.Add(buttonGruppen);
             menuPanel.Controls.Add(buttonSuchen);
-        }
 
+            zeigeInhalte();
+        }
+        private void zeigeInhalte() 
+        {
+            
+        }
         private void tbNutzername_Click(object sender, EventArgs e) 
         {
             TextBox t = (TextBox)sender;
