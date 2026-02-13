@@ -17,7 +17,7 @@ namespace ClientSocialMedia
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
-            this.clientSocket = new SocketAbi.Socket("127.0.0.1", 5555);
+            this.clientSocket = new SocketAbi.Socket("192.168.137.1", 5555);
             Verbinden();
         }
 
@@ -53,7 +53,7 @@ namespace ClientSocialMedia
         }
 
         // Todo: Titel Test; Sämtliche Daten teilen
-        public void Test(string msg)
+        public void BeitraegeAuspacken(string msg)
         {
             string titel = "";
             string[] parts = msg.Split(';');
