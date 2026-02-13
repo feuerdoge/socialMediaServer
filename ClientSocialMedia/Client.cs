@@ -6,7 +6,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using socialMediaServer;
 using SocketAbi;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace ClientSocialMedia
 {
@@ -90,11 +92,34 @@ namespace ClientSocialMedia
                 {
                     byte[] bytes = System.IO.File.ReadAllBytes(path);  // Credits: https://stackoverflow.com/questions/1497997/reliable-way-to-convert-a-file-to-a-byte
                     string picture = Convert.ToBase64String(bytes);
-                    string msg = $"{System.IO.Path.GetFileName(path)}|{picture};";
+                    string msg = $";{System.IO.Path.GetFileName(path)}|{picture}";
                     bilder.Add(msg);
                 }
             }
             return bilder;
         }
+        public void beitragSenden(string titel, List<string> bilder) 
+        {
+            string eingabe = $"{titel};{bilder.Count}";
+            foreach (string bild in bilder) 
+            {
+                eingabe += bild;
+            } 
+            
+            clientSocket.Write("beitrag;" + eingabe + '\n');
+        }
+
+        //public List<Beitrag> beitraegeAnfragen()
+        //{
+        //    clientSocket.Write("neueBeitraege");
+        //    string str;
+        //    str = clientSocket.ReadLine();
+        //    string[] dataRecieved = str.Split(';');
+        //    string[] dataReci
+        //    foreach (string s in dataRecieved)
+        //    {
+        //        string[] parameters = s.Split(',');
+        //    }
+        //}
     }
 }
