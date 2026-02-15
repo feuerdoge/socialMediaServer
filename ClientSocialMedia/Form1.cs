@@ -162,6 +162,7 @@ namespace ClientSocialMedia
         }
         private void EmpfangeDaten() 
         {
+            client.beitraegeAnfragen();
             //Server nach einer Liste aller Beiträge fragen
             //Diese Liste wird interpretiert, d.h das jedes Element dieser Liste von Beiträgen in ein Inhalt gewandelt wird.
             //Diese Inhalte werden auf den FlowLayoutPanel geladen. (inhaltAnzeige.Controls.Add(inhalt))

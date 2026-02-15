@@ -109,17 +109,32 @@ namespace ClientSocialMedia
             clientSocket.Write("beitrag;" + eingabe + '\n');
         }
 
-        //public List<Beitrag> beitraegeAnfragen()
-        //{
-        //    clientSocket.Write("neueBeitraege");
-        //    string str;
-        //    str = clientSocket.ReadLine();
-        //    string[] dataRecieved = str.Split(';');
-        //    string[] dataReci
-        //    foreach (string s in dataRecieved)
-        //    {
-        //        string[] parameters = s.Split(',');
-        //    }
-        //}
+        public List<Beitrag> beitraegeAnfragen()
+        {
+            clientSocket.Write("neueBeitraege");
+            string str;
+            str = clientSocket.ReadLine();
+            string[] dataRecieved = str.Split(';');
+            foreach (string data in dataRecieved)
+            {
+                string[] relevantData = data.Split('|');
+                string titel = relevantData[1];
+                string text = relevantData[2];
+                string autor = relevantData[3];
+                int likes = Convert.ToInt32(relevantData[4]);
+
+                string[] images = data.Split(',');
+                string[] imageData = null;
+                string[] imageName = null;
+                int counter = 0;
+                foreach (string image in images) 
+                {
+                    string[] innerData = image.Split(':');
+                    imageData[counter] = innerData[1];
+                    imageName[counter] = innerData[0];
+                }
+            }
+            return null;
+        }
     }
 }
