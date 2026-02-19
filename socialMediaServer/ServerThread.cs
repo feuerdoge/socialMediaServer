@@ -80,7 +80,7 @@ namespace socialMediaServer
                                 if (pieces.Length != 2)
                                 {
                                     Console.WriteLine("Bild fehlerhaft übertragen");
-                                    client.Write("-;error while transmitting");
+                                    client.Write("-;error while transmitting\n");
                                     continue;
                                 }
                                 string dateiname = pieces[0];
@@ -111,7 +111,7 @@ namespace socialMediaServer
                                 }
                             }
                             // Protokoll: neueBeitraege.anzahlBeitraege.id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
-                            string msg = $"neueBeitaege.{beitraege.Count}.";
+                            string msg = $"neueBeitaege;{beitraege.Count};";
                             foreach (Beitrag b in beitraege)
                             {
                                 List<string> bilderStringList = new List<string>();
@@ -126,6 +126,7 @@ namespace socialMediaServer
                             }
 
                             client.Write(msg + "\n");
+                            Console.WriteLine(msg);
                             break;
                         }
                 }
