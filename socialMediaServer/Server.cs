@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Permissions;
 using System.Text;
@@ -17,6 +18,8 @@ namespace socialMediaServer
         {
             this.Serversocket = new ServerSocket(port);
             spf = new SocialMediaPlatform();
+            if (!Directory.Exists("img"))
+                Directory.CreateDirectory("img");
             runServer();
         }
 
