@@ -31,6 +31,7 @@ namespace socialMediaServer
             {
                 while (true)
                 {
+                    
                     string befehl = client.ReadLine();
                     Console.WriteLine($"Empfangen: {befehl}");
 
@@ -135,12 +136,30 @@ namespace socialMediaServer
                             if (response == -1)
                             {
                                 Console.WriteLine("Fehler beim liken");
-                                client.Write("-;Autor kann nicht selbst liken");
+                                client.Write("-;Autor kann nicht selbst liken\n");
                             }
                             else
                             {
-                                client.Write("+;Liken Erfolgreich");
+                                client.Write("+;Liken Erfolgreich\n");
                             }
+                            break;
+                        case "abonnieren":
+                            int abonnentId = Convert.ToInt32(parameter[1]);
+                            response = spf.Abonnieren(this.nutzer.BenutzerId, abonnentId);
+                            if (response == 0)
+                            {
+                                client.Write("+;Abonnent erfolgreich abonniert\n");
+                            }
+                            else if (response == 1)
+                                client.Write("-;Nutzer kann sich nicht selbst abonnieren\n");
+                            else
+                                client.Write("-;Abonnent wurde bereits vom Nutzer abonniert\n");
+                            break;
+                        case "abonnentenAnzahl":
+                            int nutzerId = Convert.ToInt32(parameter[1]);
+                            anzahl = spf.ErmittelAbonnentenAnzahl(nutzerId);
+                            Console.WriteLine($"Nutzer {nutzerId} hat {anzahl} Abonnenten");
+                            client.Write($"+;{anzahl}\n");
                             break;
                     }
                 }

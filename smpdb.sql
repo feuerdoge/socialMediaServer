@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 20. Feb 2026 um 11:40
+-- Erstellungszeit: 20. Feb 2026 um 12:19
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -24,6 +24,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `abonnement`
+--
+
+CREATE TABLE `abonnement` (
+  `abonnentId` int(11) NOT NULL,
+  `abonnierteNutzerId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `beitrag`
 --
 
@@ -35,14 +46,6 @@ CREATE TABLE `beitrag` (
   `autor` int(11) NOT NULL,
   `likes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Daten für Tabelle `beitrag`
---
-
-INSERT INTO `beitrag` (`beitragid`, `text`, `titel`, `erstelltAm`, `autor`, `likes`) VALUES
-(1, NULL, 'Test', '2026-02-13 12:54:41', 2, 0),
-(2, NULL, 'Test', '2026-02-13 14:00:09', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -83,6 +86,13 @@ INSERT INTO `nutzer` (`nutzerId`, `benutzerName`, `passwort`, `email`, `zuletztA
 --
 
 --
+-- Indizes für die Tabelle `abonnement`
+--
+ALTER TABLE `abonnement`
+  ADD PRIMARY KEY (`abonnentId`,`abonnierteNutzerId`),
+  ADD KEY `abonnierteNutzerFK` (`abonnierteNutzerId`);
+
+--
 -- Indizes für die Tabelle `beitrag`
 --
 ALTER TABLE `beitrag`
@@ -110,13 +120,13 @@ ALTER TABLE `nutzer`
 -- AUTO_INCREMENT für Tabelle `beitrag`
 --
 ALTER TABLE `beitrag`
-  MODIFY `beitragid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `beitragid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `bild`
 --
 ALTER TABLE `bild`
-  MODIFY `bildid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `bildid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `nutzer`
@@ -127,6 +137,13 @@ ALTER TABLE `nutzer`
 --
 -- Constraints der exportierten Tabellen
 --
+
+--
+-- Constraints der Tabelle `abonnement`
+--
+ALTER TABLE `abonnement`
+  ADD CONSTRAINT `abonnentFk` FOREIGN KEY (`abonnentId`) REFERENCES `nutzer` (`nutzerId`),
+  ADD CONSTRAINT `abonnierteNutzerFK` FOREIGN KEY (`abonnierteNutzerId`) REFERENCES `nutzer` (`nutzerId`);
 
 --
 -- Constraints der Tabelle `beitrag`

@@ -214,7 +214,48 @@ namespace socialMediaServer
             return null;
         }
 
-        public int Like (int beitragId, int nutzerId)
+        public int Abonnieren(int nutzerId, int abonnentId)
+        {
+            if (nutzerId == abonnentId)
+                return 1;
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand check = new MySqlCommand(@"
+                SELECT *
+                FROM abonnement
+                WHERE abonnentId = @abonnentId
+                AND abonnierteNutzerId = @nutzerId", conn);
+            check.Parameters.AddWithValue("@abonnentId", abonnentId);
+            check.Parameters.AddWithValue("@nutzerId", nutzerId);
+            int verify = Convert.ToInt32(check.ExecuteScalar());
+            if (verify != 0)
+            {
+                Console.WriteLine("Abonnent wurde bereits vom Nutzer abonniert");
+                return 2;
+            }
+            MySqlCommand insert = new MySqlCommand(@"
+                INSERT INTO abonnement (abonnentId, abonnierteNutzerId)
+                VALUES (@abonnentId, @nutzerId)", conn);
+            insert.Parameters.AddWithValue("@abonnentId", abonnentId);
+            insert.Parameters.AddWithValue("@nutzerId", nutzerId);
+            insert.ExecuteNonQuery();
+            conn.Close();
+            return 0;
+        }
+        public int ErmittelAbonnentenAnzahl(int nutzerId)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand command = new MySqlCommand(@"
+                SELECT COUNT(abonnierteNutzerId)
+                FROM abonnement
+                WHERE abonnentId = @nutzerId", conn);
+            command.Parameters.AddWithValue("@nutzerId", nutzerId);
+            int abonnenten = Convert.ToInt32(command.ExecuteScalar());
+            conn.Close();
+            return abonnenten;
+        }
+        public int Like(int beitragId, int nutzerId)
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
