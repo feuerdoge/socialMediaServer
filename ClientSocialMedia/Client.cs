@@ -16,11 +16,11 @@ namespace ClientSocialMedia
     public class Client
     {
         public SocketAbi.Socket clientSocket;
-
+        private string benutzername;
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
-            this.clientSocket = new SocketAbi.Socket("localhost", 5555);
+            this.clientSocket = new SocketAbi.Socket("10.1.2.186", 5555);
             Verbinden();
         }
 
@@ -29,12 +29,13 @@ namespace ClientSocialMedia
             bool status = clientSocket.Connect();
             return status;
         }
-        public void anmelden(string benutzername, string passwort) 
+        public string anmelden(string benutzername, string passwort) 
         {
             string eingabe = $"{benutzername};{passwort}";
             clientSocket.Write("anmelden;" + eingabe +'\n');
             string msg = clientSocket.ReadLine();
             MessageBox.Show(msg);
+            return msg;
             //List<string> bilder = BilderAuswaehlen();
             //msg = $"beitrag;Hallo Welt;{bilder.Count}";
             //clientSocket.Write($"{msg}{PictureMessage(bilder)};Wow das ist ja ein cooler Beitrag!\n");

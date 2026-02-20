@@ -15,11 +15,13 @@ namespace ClientSocialMedia
     {
         private TextBox tbNutzername;
         private TextBox tbPasswort;
+        private TextBox titelEingabe;
         private Panel panel;
         private Button registrieren;
         private Button anmeldeButton;
         private TextBox email;
         private bool registerToggle = false;
+        public List<string> bilder = new List<string>();
         public static Client client = new Client();
         public Form1()
         {
@@ -107,6 +109,7 @@ namespace ClientSocialMedia
 
         private void zeigeProgram() 
         {
+            erstellen.Show();
             menuPanel.BackColor = Color.White;
             Button buttonBeitraege = new Button()
             {
@@ -153,12 +156,12 @@ namespace ClientSocialMedia
         }
         private void zeigeInhalte() 
         {
-            EmpfangeDaten();
-            inhaltAnzeige.Enabled = true;
-            inhaltAnzeige.Visible = true;
-            Inhalte inhalt = new Inhalte(Client.BilderAuswaehlen(), "Test");
-            client.beitragSenden(inhalt.titel, inhalt.pictures);
-            inhaltAnzeige.Controls.Add(inhalt);
+            //EmpfangeDaten();
+            //inhaltAnzeige.Enabled = true;
+            //inhaltAnzeige.Visible = true;
+            //Inhalte inhalt = new Inhalte(Client.BilderAuswaehlen(), "Test");
+            //client.beitragSenden(inhalt.titel, inhalt.pictures);
+            //inhaltAnzeige.Controls.Add(inhalt);
         }
         private void EmpfangeDaten() 
         {
@@ -195,9 +198,12 @@ namespace ClientSocialMedia
         {
             if(!registerToggle) 
             {
-                client.anmelden(tbNutzername.Text, tbPasswort.Text);
-                panel.Hide();
-                zeigeProgram();
+                string antwort = client.anmelden(tbNutzername.Text, tbPasswort.Text);
+                if (antwort.Contains("+")) 
+                {
+                    panel.Hide();
+                    zeigeProgram();
+                }
             }
             if(registerToggle) 
             {
@@ -234,6 +240,51 @@ namespace ClientSocialMedia
         private void NutzerRegistrieren() 
         {
             client.registrieren(tbNutzername.Text, tbPasswort.Text, email.Text);
+        }
+
+        private void bildauswaehlen_OnClick(object sender, EventArgs e) 
+        {
+            bilder = Client.BilderAuswaehlen();
+        }
+
+        private void erstellen_Click(object sender, EventArgs e)
+        {
+            inhaltAnzeige.Show();
+            beitragsErstellungsPanel.Visible = true;
+            //this.Controls.Add(beitragsErstellungsPanel);
+
+            titelEingabe = new TextBox();
+            beitragsErstellungsPanel.Controls.Add(titelEingabe);
+            titelEingabe.Location = new Point(titelEingabe.Location.X, titelEingabe.Location.Y);
+
+            bilder = new List<string>();
+
+            Button bildauswaehlen = new Button();
+            bildauswaehlen.Location = new Point(bildauswaehlen.Location.X, bildauswaehlen.Location.Y + 30);
+            bildauswaehlen.Width = erstellen.Width;
+            bildauswaehlen.Height = erstellen.Height;
+            bildauswaehlen.Text = "Bild auswählen";
+            beitragsErstellungsPanel.Controls.Add(bildauswaehlen);
+            bildauswaehlen.Click += bildauswaehlen_OnClick;
+
+            Button beitragErstellen = new Button();
+            beitragErstellen.Location = new Point(bildauswaehlen.Location.X, bildauswaehlen.Location.Y + 60);
+            beitragErstellen.Width = erstellen.Width;
+            beitragErstellen.Height = erstellen.Height;
+            beitragErstellen.Text = "Beitrag erstellen";
+            beitragsErstellungsPanel.Controls.Add(beitragErstellen);
+
+            beitragsErstellungsPanel.BringToFront();
+
+            
+            beitragErstellen.Click += beitragErstellen_Click;
+
+        }
+
+        private void beitragErstellen_Click(object sender, EventArgs e) 
+        {
+            client.beitragSenden(titelEingabe.Text, bilder);
+            beitragsErstellungsPanel.Visible = false;
         }
     }
 }

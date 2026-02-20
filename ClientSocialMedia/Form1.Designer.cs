@@ -32,6 +32,8 @@
             this.profilePic = new System.Windows.Forms.PictureBox();
             this.momentaneAnsicht = new System.Windows.Forms.Panel();
             this.inhaltAnzeige = new System.Windows.Forms.FlowLayoutPanel();
+            this.beitragsErstellungsPanel = new System.Windows.Forms.Panel();
+            this.erstellen = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,7 +62,6 @@
             // inhaltAnzeige
             // 
             this.inhaltAnzeige.AutoScroll = true;
-            this.inhaltAnzeige.Enabled = false;
             this.inhaltAnzeige.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.inhaltAnzeige.Location = new System.Drawing.Point(240, 55);
             this.inhaltAnzeige.Name = "inhaltAnzeige";
@@ -69,12 +70,34 @@
             this.inhaltAnzeige.Visible = false;
             this.inhaltAnzeige.WrapContents = false;
             // 
+            // beitragsErstellungsPanel
+            // 
+            this.beitragsErstellungsPanel.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.beitragsErstellungsPanel.Location = new System.Drawing.Point(240, 55);
+            this.beitragsErstellungsPanel.Name = "beitragsErstellungsPanel";
+            this.beitragsErstellungsPanel.Size = new System.Drawing.Size(425, 358);
+            this.beitragsErstellungsPanel.TabIndex = 0;
+            this.beitragsErstellungsPanel.Visible = false;
+            // 
+            // erstellen
+            // 
+            this.erstellen.Location = new System.Drawing.Point(685, 118);
+            this.erstellen.Name = "erstellen";
+            this.erstellen.Size = new System.Drawing.Size(103, 23);
+            this.erstellen.TabIndex = 4;
+            this.erstellen.Text = "Beitrag Erstellen";
+            this.erstellen.UseVisualStyleBackColor = true;
+            this.erstellen.Visible = false;
+            this.erstellen.Click += new System.EventHandler(this.erstellen_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.beitragsErstellungsPanel);
+            this.Controls.Add(this.erstellen);
             this.Controls.Add(this.inhaltAnzeige);
             this.Controls.Add(this.momentaneAnsicht);
             this.Controls.Add(this.profilePic);
@@ -92,6 +115,8 @@
         private System.Windows.Forms.PictureBox profilePic;
         private System.Windows.Forms.Panel momentaneAnsicht;
         private System.Windows.Forms.FlowLayoutPanel inhaltAnzeige;
+        private System.Windows.Forms.Button erstellen;
+        private System.Windows.Forms.Panel beitragsErstellungsPanel;
     }
 }
 
