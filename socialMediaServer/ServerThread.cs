@@ -111,7 +111,7 @@ namespace socialMediaServer
                                 }
                             }
                             // Protokoll: neueBeitraege.anzahlBeitraege.id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
-                            string msg = $"neueBeitaege;{beitraege.Count};";
+                            string msg = $"neueBeitaege.{beitraege.Count}.";
                             foreach (Beitrag b in beitraege)
                             {
                                 List<string> bilderStringList = new List<string>();
