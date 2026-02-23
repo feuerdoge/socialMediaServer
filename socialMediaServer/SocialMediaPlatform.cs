@@ -4,6 +4,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
@@ -280,5 +281,16 @@ namespace socialMediaServer
             conn.Close();
             return 0;
         }
+
+        //public int ErstelleKommentar(int beitragsId, int nutzerId, string text, int? oberKommentar)
+        //{
+        //    MySqlConnection conn = new MySqlConnection(connectionString);
+        //    conn.Open();
+        //    MySqlCommand insert = new MySqlCommand(@"
+        //        INSERT INTO kommentar (nachricht, timestamp, beitragId, autor, oberKommentarId)
+        //        VALUES (@text, @timestamp, @bId, @autorId, @obKommentarId)", conn);
+        //    insert.Parameters.AddWithValue("@text", text);
+        //    insert.Parameters.AddWithValue("@timestamp", Timestamp.)
+        //}
     }
 }

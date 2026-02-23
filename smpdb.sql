@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 20. Feb 2026 um 12:19
+-- Erstellungszeit: 23. Feb 2026 um 20:09
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -47,6 +47,15 @@ CREATE TABLE `beitrag` (
   `likes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `beitrag`
+--
+
+INSERT INTO `beitrag` (`beitragid`, `text`, `titel`, `erstelltAm`, `autor`, `likes`) VALUES
+(1, NULL, 'Hallo', '2026-02-20 12:52:40', 2, 0),
+(2, NULL, 'Test', '2026-02-20 12:55:34', 2, 0),
+(3, NULL, '67676', '2026-02-20 12:58:04', 2, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -57,6 +66,30 @@ CREATE TABLE `bild` (
   `bildid` int(11) NOT NULL,
   `dateiname` text NOT NULL,
   `beitragid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `bild`
+--
+
+INSERT INTO `bild` (`bildid`, `dateiname`, `beitragid`) VALUES
+(2, '332f073f-5544-471c-9ca9-3252331f4bb9.png', 2),
+(3, '9b71cf01-450b-425d-90e1-48fbbc56727a.png', 3),
+(4, 'de5039be-5b97-4409-8790-ed3f560c41d1.png', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `kommentar`
+--
+
+CREATE TABLE `kommentar` (
+  `kommentarid` int(11) NOT NULL,
+  `nachricht` varchar(99) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `beitragId` int(11) NOT NULL,
+  `autor` int(11) NOT NULL,
+  `oberKommentarId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -107,6 +140,15 @@ ALTER TABLE `bild`
   ADD KEY `help` (`beitragid`);
 
 --
+-- Indizes für die Tabelle `kommentar`
+--
+ALTER TABLE `kommentar`
+  ADD PRIMARY KEY (`kommentarid`),
+  ADD KEY `beitragFK` (`beitragId`),
+  ADD KEY `oberKommentarId` (`oberKommentarId`),
+  ADD KEY `asd` (`autor`);
+
+--
 -- Indizes für die Tabelle `nutzer`
 --
 ALTER TABLE `nutzer`
@@ -120,13 +162,19 @@ ALTER TABLE `nutzer`
 -- AUTO_INCREMENT für Tabelle `beitrag`
 --
 ALTER TABLE `beitrag`
-  MODIFY `beitragid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `beitragid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT für Tabelle `bild`
 --
 ALTER TABLE `bild`
-  MODIFY `bildid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bildid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT für Tabelle `kommentar`
+--
+ALTER TABLE `kommentar`
+  MODIFY `kommentarid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `nutzer`
@@ -155,7 +203,15 @@ ALTER TABLE `beitrag`
 -- Constraints der Tabelle `bild`
 --
 ALTER TABLE `bild`
-  ADD CONSTRAINT `help` FOREIGN KEY (`beitragid`) REFERENCES `beitrag` (`beitragid`);
+  ADD CONSTRAINT `help` FOREIGN KEY (`beitragid`) REFERENCES `beitrag` (`beitragid`) ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `kommentar`
+--
+ALTER TABLE `kommentar`
+  ADD CONSTRAINT `asd` FOREIGN KEY (`autor`) REFERENCES `nutzer` (`nutzerId`),
+  ADD CONSTRAINT `beitragFK` FOREIGN KEY (`beitragId`) REFERENCES `beitrag` (`beitragid`),
+  ADD CONSTRAINT `oberKommentarId` FOREIGN KEY (`oberKommentarId`) REFERENCES `kommentar` (`kommentarid`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
