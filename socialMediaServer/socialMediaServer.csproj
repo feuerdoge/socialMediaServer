@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Beitrag.cs" />
     <Compile Include="Bild.cs" />
+    <Compile Include="Kommentar.cs" />
     <Compile Include="Nutzer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

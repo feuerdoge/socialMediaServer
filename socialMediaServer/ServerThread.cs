@@ -161,6 +161,29 @@ namespace socialMediaServer
                             Console.WriteLine($"Nutzer {nutzerId} hat {anzahl} Abonnenten");
                             client.Write($"+;{anzahl}\n");
                             break;
+                        case "kommentar":
+                            beitragId = Convert.ToInt32(parameter[1]);
+                            text = parameter[2];
+                            int? oberKommentarId = null;
+                            if (parameter.Length > 3)
+                                oberKommentarId = Convert.ToInt32(parameter[3]);
+                            spf.ErstelleKommentar(beitragId, this.nutzer.BenutzerId, text, oberKommentarId);
+                            client.Write("+;Kommentar erfolgreich erstellt\n");
+                            break;
+                        case "ladeKommentare":
+                            beitragId = Convert.ToInt32(parameter[1]);
+                            List<Kommentar> kommentare = spf.LadeKommentare(beitragId);
+                            msg = $"kommentare;{kommentare.Count}";
+                            foreach (Kommentar k in kommentare)
+                            {
+                                msg += $";{k.Id}|{k.Nachricht}|{k.AutorId}|{k.Timestamp}|";
+                                if (k.OberKommentarId != null)
+                                    msg += k.OberKommentarId;
+                                else
+                                    msg += "null";
+                            }
+                            client.Write(msg + "\n");
+                            break;
                     }
                 }
             }

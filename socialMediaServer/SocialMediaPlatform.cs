@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using Mysqlx;
 
 namespace socialMediaServer
 {
@@ -224,7 +225,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand check = new MySqlCommand(@"
-                SELECT *
+                SELECT COUNT(*)
                 FROM abonnement
                 WHERE abonnentId = @abonnentId
                 AND abonnierteNutzerId = @nutzerId", conn);
@@ -274,7 +275,7 @@ namespace socialMediaServer
                 return -1;
             MySqlCommand like = new MySqlCommand(@"
                 UPDATE beitrag
-                SET likes += 1
+                SET likes = likes + 1
                 WHERE beitragid = @beitragid", conn);
             like.Parameters.AddWithValue("@beitragid", beitragId);
             like.ExecuteNonQuery();
@@ -282,15 +283,52 @@ namespace socialMediaServer
             return 0;
         }
 
-        //public int ErstelleKommentar(int beitragsId, int nutzerId, string text, int? oberKommentar)
-        //{
-        //    MySqlConnection conn = new MySqlConnection(connectionString);
-        //    conn.Open();
-        //    MySqlCommand insert = new MySqlCommand(@"
-        //        INSERT INTO kommentar (nachricht, timestamp, beitragId, autor, oberKommentarId)
-        //        VALUES (@text, @timestamp, @bId, @autorId, @obKommentarId)", conn);
-        //    insert.Parameters.AddWithValue("@text", text);
-        //    insert.Parameters.AddWithValue("@timestamp", Timestamp.)
-        //}
+        public int ErstelleKommentar(int beitragsId, int nutzerId, string text, int? oberKommentar)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand insert = new MySqlCommand(@"
+                INSERT INTO kommentar (nachricht, beitragId, autor, oberKommentarId)
+                VALUES (@text, @bId, @autorId, @obKommentarId)", conn);
+            insert.Parameters.AddWithValue("@text", text);
+            insert.Parameters.AddWithValue("@bId", beitragsId);
+            insert.Parameters.AddWithValue("autorId", nutzerId);
+            if (oberKommentar != null)
+                insert.Parameters.AddWithValue("@obKommentarId", oberKommentar);
+            else
+                insert.Parameters.AddWithValue("@obKommentarId", DBNull.Value);
+                insert.ExecuteNonQuery();
+            conn.Close();
+            return 0;
+        }
+        
+        public List<Kommentar> LadeKommentare(int beitragId)
+        {
+            List<Kommentar> comments = new List<Kommentar>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand select = new MySqlCommand(@"
+                SELECT kommentarid, nachricht, timestamp, autor, oberKommentarId
+                From kommentar
+                WHERE beitragId = @bId
+                ORDER BY timestamp ASC", conn);
+            select.Parameters.AddWithValue("@bId", beitragId);
+            MySqlDataReader reader = select.ExecuteReader();
+            while (reader.Read())
+            {
+                int kId = reader.GetInt32("kommentarid");
+                string nachricht = reader.GetString("nachricht");
+                DateTime timestamp = reader.GetDateTime("timestamp");
+                int autor = reader.GetInt32("autor");
+                var ordinal = reader.GetOrdinal("oberKommentarId");
+                int? oKid = null;
+                if (!reader.IsDBNull(ordinal))    
+                    oKid = reader.GetInt32(ordinal);
+                Kommentar k = new Kommentar(kId, nachricht, timestamp, autor, oKid);
+                comments.Add(k);
+            }
+            conn.Close();
+            return comments;
+        }
     }
 }
