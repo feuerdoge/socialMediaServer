@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Configuration;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -113,6 +114,16 @@ namespace ClientSocialMedia
             
             clientSocket.Write("beitrag;" + eingabe + '\n');
         }
+
+        public void Like(int beitragId)
+        {
+            string msg = $"like;{beitragId}\n";
+            clientSocket.Write(msg);
+            string reply = clientSocket.ReadLine();
+            MessageBox.Show(reply);
+        }
+
+
 
         public List<Beitrag> beitraegeAnfragen()
         {
