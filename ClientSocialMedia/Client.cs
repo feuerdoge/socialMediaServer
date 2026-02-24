@@ -144,6 +144,48 @@ namespace ClientSocialMedia
                 return 0;
         }
 
+        public void ErstelleKommentar(int beitragId, string nachricht, int? oberKommentarId)
+        {
+            string msg = $"kommentar;{beitragId};{nachricht}";
+            if (oberKommentarId != null)
+                msg += $";{oberKommentarId}";
+            clientSocket.Write(msg + "\n");
+            string reply = clientSocket.ReadLine();
+            MessageBox.Show(reply);
+        }
+
+        public List<Kommentar> LadeKommentare(int beitragId)
+        {
+            string msg = $"ladeKommentare;{beitragId}\n";
+            clientSocket.Write(msg);
+            string data = clientSocket.ReadLine();
+            string[] parts = data.Split(';');
+            if (parts[0] != "kommentare")
+                return null;
+            int anzahl = Convert.ToInt32(parts[1]);
+            List<Kommentar> comments = new List<Kommentar>();
+            
+            for (int i = 0; i < anzahl; i++)
+            {
+                string[] commentData = parts[2 + i].Split('|');
+                int id = Convert.ToInt32(commentData[0]);
+                string nachricht = commentData[1];
+                int autor = Convert.ToInt32(commentData[2]);
+                DateTime timestamp = Convert.ToDateTime(commentData[3]);
+                string oberKommentar = commentData[4];
+                Kommentar k;
+                if (oberKommentar == "null") 
+                {
+                    k = new Kommentar(id, nachricht, timestamp, autor, null);
+                }
+                else
+                {
+                    k = new Kommentar(id, nachricht, timestamp, autor, Convert.ToInt32(oberKommentar));
+                }
+                comments.Add(k);
+            }
+            return comments;
+        }
         public List<Beitrag> beitraegeAnfragen()
         {
             clientSocket.Write("neueBeitraege\n");
