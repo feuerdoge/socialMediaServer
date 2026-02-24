@@ -124,19 +124,20 @@ namespace socialMediaServer
                 WHERE b.erstelltAm > @zuletztAktiv
                 ORDER BY b.erstelltAm DESC
                 LIMIT 10", conn);
-            neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
+            //neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
             neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
             MySqlDataReader reader = neusteBeitraege.ExecuteReader();
             while (reader.Read())
             {
                 beitraege.Add(LeseBeitrag(reader));
             }
+            Console.WriteLine("Test");
             reader.Close();
             if (beitraege.Count < 10)
             {
                 int remaining = 10 - beitraege.Count;
                 MySqlCommand alteBeitraege = new MySqlCommand(@"
-                    SELECT b.beitragId, b.titel, b.text, b.erstelltAm, b.autor, b.likes, u.benutzerName
+                    SELECT b.beitragid, b.titel, b.text, b.erstelltAm, b.autor, b.likes, u.benutzerName
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
                     WHERE b.erstelltAm <= @zuletztAktiv
@@ -149,14 +150,16 @@ namespace socialMediaServer
                 {
                     beitraege.Add(LeseBeitrag(reader));
                 }
+                Console.WriteLine("Test2");
                 reader.Close();
             }
+            Console.WriteLine("Test finish");
             conn.Close();
             return beitraege;
         }
         private Beitrag LeseBeitrag(MySqlDataReader reader)
         {
-            int beitragId = reader.GetInt32("beitragId");
+            int beitragId = reader.GetInt32("beitragid");
             string titel = reader.GetString("titel");
             string text;
             if (reader.IsDBNull(reader.GetOrdinal("text")))
@@ -181,7 +184,7 @@ namespace socialMediaServer
             List<Bild> bilder = new List<Bild>();
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
-            MySqlCommand get = new MySqlCommand("SELECT dateiname FROM bild b.beitragid = @beitragid", conn);
+            MySqlCommand get = new MySqlCommand("SELECT dateiname FROM bild WHERE beitragid = @beitragid", conn);
             get.Parameters.AddWithValue("@beitragid", beitragId);
             MySqlDataReader reader = get.ExecuteReader();
             while (reader.Read())

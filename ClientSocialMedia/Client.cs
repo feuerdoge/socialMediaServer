@@ -138,7 +138,7 @@ namespace ClientSocialMedia
             string reply = clientSocket.ReadLine();
             if (reply.Trim(';')[0] == '+')
             {
-                return Convert.ToInt32(reply.Trim(';')[1]);
+                return Convert.ToInt32(reply.Split(';')[1]);
             }
             else
                 return 0;
