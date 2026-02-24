@@ -123,7 +123,26 @@ namespace ClientSocialMedia
             MessageBox.Show(reply);
         }
 
+        public void Abonnieren(int abonnentId)
+        {
+            string msg = $"abonnieren;{abonnentId}\n";
+            clientSocket.Write(msg);
+            string reply = clientSocket.ReadLine();
+            MessageBox.Show(reply);
+        }
 
+        public int GetAbonnentenAnzahl(int nutzerId)
+        {
+            string msg = $"abonnentenAnzahl;{nutzerId}\n";
+            clientSocket.Write(msg);
+            string reply = clientSocket.ReadLine();
+            if (reply.Trim(';')[0] == '+')
+            {
+                return Convert.ToInt32(reply.Trim(';')[1]);
+            }
+            else
+                return 0;
+        }
 
         public List<Beitrag> beitraegeAnfragen()
         {
