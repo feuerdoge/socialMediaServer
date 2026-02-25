@@ -4,8 +4,10 @@ using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using Mysqlx;
 
 namespace socialMediaServer
 {
@@ -34,13 +36,10 @@ namespace socialMediaServer
 
             foreach (string dateiNamen in bilder)
             {
-                MySqlCommand bild = new MySqlCommand("INSERT INTO bild (dateiname) VALUES (@dateiname); SELECT LAST_INSERT_ID()", conn);
+                MySqlCommand bild = new MySqlCommand("INSERT INTO bild (dateiname, beitragid) VALUES (@dateiname, @beitragid)", conn);
                 bild.Parameters.AddWithValue("@dateiname", dateiNamen);
-                int bildId = Convert.ToInt32(bild.ExecuteScalar());
-                MySqlCommand inhalt = new MySqlCommand("INSERT INTO inhalt (beitragIdFK, bildId) VALUES (@beitragId, @bildId)", conn);
-                inhalt.Parameters.AddWithValue("@beitragId", beitragId);
-                inhalt.Parameters.AddWithValue("@bildId", bildId);
-                inhalt.ExecuteNonQuery();
+                bild.Parameters.AddWithValue("@beitragid", beitragId);
+                bild.ExecuteNonQuery();
             }
             
             conn.Close();
@@ -119,25 +118,26 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand neusteBeitraege = new MySqlCommand(@"
-                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, b.likes, u.benutzerName
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
                 WHERE b.erstelltAm > @zuletztAktiv
                 ORDER BY b.erstelltAm DESC
                 LIMIT 10", conn);
-            neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
+            //neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
             neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
             MySqlDataReader reader = neusteBeitraege.ExecuteReader();
             while (reader.Read())
             {
                 beitraege.Add(LeseBeitrag(reader));
             }
+            Console.WriteLine("Test");
             reader.Close();
             if (beitraege.Count < 10)
             {
                 int remaining = 10 - beitraege.Count;
                 MySqlCommand alteBeitraege = new MySqlCommand(@"
-                    SELECT b.beitragId, b.titel, b.text, b.erstelltAm, b.autor, u.benutzerName
+                    SELECT b.beitragid, b.titel, b.text, b.erstelltAm, b.autor, b.likes, u.benutzerName
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
                     WHERE b.erstelltAm <= @zuletztAktiv
@@ -150,14 +150,16 @@ namespace socialMediaServer
                 {
                     beitraege.Add(LeseBeitrag(reader));
                 }
+                Console.WriteLine("Test2");
                 reader.Close();
             }
+            Console.WriteLine("Test finish");
             conn.Close();
             return beitraege;
         }
         private Beitrag LeseBeitrag(MySqlDataReader reader)
         {
-            int beitragId = reader.GetInt32("beitragId");
+            int beitragId = reader.GetInt32("beitragid");
             string titel = reader.GetString("titel");
             string text;
             if (reader.IsDBNull(reader.GetOrdinal("text")))
@@ -166,11 +168,13 @@ namespace socialMediaServer
                 text = reader.GetString("text");
             DateTime erstelltAm = reader.GetDateTime("erstelltAm");
             int autorId = reader.GetInt32("autor");
+            int likes = reader.GetInt32("likes");
             string autorName = reader.GetString("benutzerName");
 
             Nutzer autor = new Nutzer(autorName, "", "", autorId);
             Beitrag b = new Beitrag(autor, titel, new List<Bild>());
             b.Id = beitragId;
+            b.setAnzahlLikes(likes);
             if (text != null)
                 b.ErstelleText(text);
             return b;
@@ -180,7 +184,7 @@ namespace socialMediaServer
             List<Bild> bilder = new List<Bild>();
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
-            MySqlCommand get = new MySqlCommand("SELECT b.dateiname FROM inhalt i JOIN bild b ON i.bildId = b.bildid WHERE i.beitragIdFK = @beitragid", conn);
+            MySqlCommand get = new MySqlCommand("SELECT dateiname FROM bild WHERE beitragid = @beitragid", conn);
             get.Parameters.AddWithValue("@beitragid", beitragId);
             MySqlDataReader reader = get.ExecuteReader();
             while (reader.Read())
@@ -215,6 +219,119 @@ namespace socialMediaServer
                 }
             }
             return null;
+        }
+
+        public int Abonnieren(int nutzerId, int abonnentId)
+        {
+            if (nutzerId == abonnentId)
+                return 1;
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand check = new MySqlCommand(@"
+                SELECT COUNT(*)
+                FROM abonnement
+                WHERE abonnentId = @abonnentId
+                AND abonnierteNutzerId = @nutzerId", conn);
+            check.Parameters.AddWithValue("@abonnentId", abonnentId);
+            check.Parameters.AddWithValue("@nutzerId", nutzerId);
+            int verify = Convert.ToInt32(check.ExecuteScalar());
+            if (verify != 0)
+            {
+                Console.WriteLine("Abonnent wurde bereits vom Nutzer abonniert");
+                return 2;
+            }
+            MySqlCommand insert = new MySqlCommand(@"
+                INSERT INTO abonnement (abonnentId, abonnierteNutzerId)
+                VALUES (@abonnentId, @nutzerId)", conn);
+            insert.Parameters.AddWithValue("@abonnentId", abonnentId);
+            insert.Parameters.AddWithValue("@nutzerId", nutzerId);
+            insert.ExecuteNonQuery();
+            conn.Close();
+            return 0;
+        }
+        public int ErmittelAbonnentenAnzahl(int nutzerId)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand command = new MySqlCommand(@"
+                SELECT COUNT(abonnierteNutzerId)
+                FROM abonnement
+                WHERE abonnentId = @nutzerId", conn);
+            command.Parameters.AddWithValue("@nutzerId", nutzerId);
+            int abonnenten = Convert.ToInt32(command.ExecuteScalar());
+            conn.Close();
+            return abonnenten;
+        }
+        public int Like(int beitragId, int nutzerId)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand check = new MySqlCommand(@"
+                SELECT beitragid
+                FROM beitrag
+                WHERE autor = @nutzerId
+                AND beitragid = @beitragId", conn);
+            check.Parameters.AddWithValue("@nutzerId", nutzerId);
+            check.Parameters.AddWithValue("@beitragId", beitragId);
+            int verify = Convert.ToInt32(check.ExecuteScalar());
+            if (verify != 0)
+                return -1;
+            MySqlCommand like = new MySqlCommand(@"
+                UPDATE beitrag
+                SET likes = likes + 1
+                WHERE beitragid = @beitragid", conn);
+            like.Parameters.AddWithValue("@beitragid", beitragId);
+            like.ExecuteNonQuery();
+            conn.Close();
+            return 0;
+        }
+
+        public int ErstelleKommentar(int beitragsId, int nutzerId, string text, int? oberKommentar)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand insert = new MySqlCommand(@"
+                INSERT INTO kommentar (nachricht, beitragId, autor, oberKommentarId)
+                VALUES (@text, @bId, @autorId, @obKommentarId)", conn);
+            insert.Parameters.AddWithValue("@text", text);
+            insert.Parameters.AddWithValue("@bId", beitragsId);
+            insert.Parameters.AddWithValue("autorId", nutzerId);
+            if (oberKommentar != null)
+                insert.Parameters.AddWithValue("@obKommentarId", oberKommentar);
+            else
+                insert.Parameters.AddWithValue("@obKommentarId", DBNull.Value);
+                insert.ExecuteNonQuery();
+            conn.Close();
+            return 0;
+        }
+        
+        public List<Kommentar> LadeKommentare(int beitragId)
+        {
+            List<Kommentar> comments = new List<Kommentar>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand select = new MySqlCommand(@"
+                SELECT kommentarid, nachricht, timestamp, autor, oberKommentarId
+                From kommentar
+                WHERE beitragId = @bId
+                ORDER BY timestamp ASC", conn);
+            select.Parameters.AddWithValue("@bId", beitragId);
+            MySqlDataReader reader = select.ExecuteReader();
+            while (reader.Read())
+            {
+                int kId = reader.GetInt32("kommentarid");
+                string nachricht = reader.GetString("nachricht");
+                DateTime timestamp = reader.GetDateTime("timestamp");
+                int autor = reader.GetInt32("autor");
+                var ordinal = reader.GetOrdinal("oberKommentarId");
+                int? oKid = null;
+                if (!reader.IsDBNull(ordinal))    
+                    oKid = reader.GetInt32(ordinal);
+                Kommentar k = new Kommentar(kId, nachricht, timestamp, autor, oKid);
+                comments.Add(k);
+            }
+            conn.Close();
+            return comments;
         }
     }
 }
