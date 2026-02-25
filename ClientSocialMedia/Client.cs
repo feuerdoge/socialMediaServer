@@ -21,7 +21,7 @@ namespace ClientSocialMedia
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
-            this.clientSocket = new SocketAbi.Socket("10.1.2.186", 5555);
+            this.clientSocket = new SocketAbi.Socket("127.0.0.1", 5555);
             Verbinden();
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
@@ -58,9 +59,11 @@ namespace socialMediaServer
                 return -1;
             }
 
+            string hashedPasswort = HashPasswort(passwort);
+
             MySqlCommand insert = new MySqlCommand("INSERT INTO nutzer (benutzerName, passwort, email, zuletztAktiv) VALUES (@benutzerName, @pass, @email, @aktiv)", conn);
             insert.Parameters.AddWithValue("@benutzerName", name);
-            insert.Parameters.AddWithValue("@pass", passwort);
+            insert.Parameters.AddWithValue("@pass", hashedPasswort);
             insert.Parameters.AddWithValue("@email", email);
             insert.Parameters.AddWithValue("@aktiv", DateTime.Now);
             insert.ExecuteNonQuery();
@@ -78,9 +81,14 @@ namespace socialMediaServer
             MySqlCommand search = new MySqlCommand("SELECT nutzerId, passwort, email FROM nutzer WHERE benutzerName=@benutzerName", conn);
             search.Parameters.AddWithValue("@benutzerName", name);
             MySqlDataReader reader = search.ExecuteReader();
-            if (!reader.Read() || reader.GetString("passwort") != passwort)
+            if (!reader.Read())
                 return null;
-            Nutzer n = new Nutzer(name, passwort, reader.GetString("email"), reader.GetInt32("nutzerId"));
+            string savedPass = reader.GetString("passwort");
+            if (!VeriryPasswort(passwort, savedPass))
+            {
+                return null;
+            }
+            Nutzer n = new Nutzer(name, "", reader.GetString("email"), reader.GetInt32("nutzerId"));
             lock (nutzer)
             {
                 nutzer.Add(n);
@@ -332,6 +340,62 @@ namespace socialMediaServer
             }
             conn.Close();
             return comments;
+        }
+
+        private bool VeriryPasswort(string enteredPass, string savedPass)
+        {
+            byte[] hashBytes = Convert.FromBase64String(savedPass);
+            byte[] salt = new byte[16];
+            Buffer.BlockCopy(hashBytes, 0, salt, 0, 16);
+
+            byte[] passwortBytes = Encoding.UTF8.GetBytes(enteredPass);
+            byte[] saltedPasswort = new byte[passwortBytes.Length + salt.Length];
+
+            Buffer.BlockCopy(passwortBytes, 0, saltedPasswort, 0, passwortBytes.Length);
+            Buffer.BlockCopy(salt, 0, saltedPasswort, passwortBytes.Length, salt.Length);
+
+            using (SHA256Managed sha256 = new SHA256Managed())
+            {
+                byte[] neuerHash = sha256.ComputeHash(saltedPasswort);
+                for (int i = 0; i < neuerHash.Length; i++)
+                {
+                    if (hashBytes[i + 16] != neuerHash[i])
+                    {
+                        return false;
+                    } 
+                }
+            }
+            return true;
+        }
+
+        private string HashPasswort(string passwort)
+        {
+            byte[] salt = GenerateSalt();
+            using (SHA256Managed sHA256 = new SHA256Managed())
+            {
+                byte[] passwortBytes = Encoding.UTF8.GetBytes(passwort);
+                byte[] saltedPasswort = new byte[passwortBytes.Length + salt.Length];
+
+                Buffer.BlockCopy(passwortBytes, 0, saltedPasswort, 0, passwortBytes.Length);
+                Buffer.BlockCopy(salt, 0, saltedPasswort, passwortBytes.Length, salt.Length);
+
+                byte[] hashedBytes = sHA256.ComputeHash(saltedPasswort);
+
+                byte[] hashedPasswordWithSalt = new byte[hashedBytes.Length + salt.Length];
+                Buffer.BlockCopy(salt, 0, hashedPasswordWithSalt, 0, salt.Length);
+                Buffer.BlockCopy(hashedBytes, 0, hashedPasswordWithSalt, salt.Length, hashedBytes.Length);
+
+                return Convert.ToBase64String(hashedPasswordWithSalt);
+            }
+        }
+        private byte[] GenerateSalt()
+        {
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                byte[] salt = new byte[16];
+                rng.GetBytes(salt);
+                return salt;
+            }
         }
     }
 }
