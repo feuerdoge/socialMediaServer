@@ -107,7 +107,7 @@ namespace ClientSocialMedia
         }
         public void beitragSenden(string titel, List<string> bilder) 
         {
-            string eingabe = $"{titel};{bilder.Count}";
+            string eingabe = $"{titel};{bilder.Count}.";
             foreach (string bild in bilder) 
             {
                 eingabe += bild;
@@ -238,7 +238,9 @@ namespace ClientSocialMedia
                         string imageData = innerData[1];
                         byte[] imageBytes = Convert.FromBase64String(imageData);
                         File.WriteAllBytes(imageName, imageBytes);
-                        bilder.Add(new Bild(imageName));
+                        Bild bild = new Bild(imageName);
+                        bild.bilddata = imageData;
+                        bilder.Add(bild);
                     }
                 }
                 Beitrag b = new Beitrag(new Nutzer(autor, "", "", 0), titel, bilder);

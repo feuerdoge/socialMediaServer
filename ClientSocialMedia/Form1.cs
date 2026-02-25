@@ -1,4 +1,5 @@
-﻿using System;
+﻿using socialMediaServer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,6 +23,7 @@ namespace ClientSocialMedia
         private TextBox email;
         private bool registerToggle = false;
         public List<string> bilder = new List<string>();
+        private List<Beitrag> beitraege = new List<Beitrag>();
         public static Client client = new Client();
         public Form1()
         {
@@ -156,16 +158,23 @@ namespace ClientSocialMedia
         }
         private void zeigeInhalte() 
         {
-            //EmpfangeDaten();
-            //inhaltAnzeige.Enabled = true;
-            //inhaltAnzeige.Visible = true;
-            //Inhalte inhalt = new Inhalte(Client.BilderAuswaehlen(), "Test");
-            //client.beitragSenden(inhalt.titel, inhalt.pictures);
-            //inhaltAnzeige.Controls.Add(inhalt);
+            EmpfangeDaten();
+            inhaltAnzeige.Enabled = true;
+            inhaltAnzeige.Visible = true;
+            Inhalte inhalt = new Inhalte(Client.BilderAuswaehlen(), "Test");
+            inhaltAnzeige.Controls.Add(inhalt);
         }
         private void EmpfangeDaten() 
         {
-            client.beitraegeAnfragen();
+            beitraege = client.beitraegeAnfragen();
+            foreach(Beitrag beitraege in beitraege) 
+            {
+                Inhalte inhalt = new Inhalte(null, beitraege.Titel);
+                foreach(Bild b in beitraege.Bilder) 
+                {
+                    inhalt.pictures.Add(b.bilddata);
+                }
+            }
             //Server nach einer Liste aller Beiträge fragen
             //Diese Liste wird interpretiert, d.h das jedes Element dieser Liste von Beiträgen in ein Inhalt gewandelt wird.
             //Diese Inhalte werden auf den FlowLayoutPanel geladen. (inhaltAnzeige.Controls.Add(inhalt))
