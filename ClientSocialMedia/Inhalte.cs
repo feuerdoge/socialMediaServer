@@ -19,6 +19,7 @@ namespace ClientSocialMedia
         public Inhalte(List<string> pictures, string titel)
         {
             InitializeComponent();
+            pictures = new List<string>();
             this.pictures = pictures;
             this.titel = titel;
             setDaten(titel, pictures);
@@ -27,16 +28,20 @@ namespace ClientSocialMedia
         public void setDaten(string titel, List<string> bilder) 
         {
             this.beitragTitel.Text = titel;
-            konvertiereBilder(bilder);
-            this.beitragBild.BackgroundImage = anzeigeBilder[0];
+            if (bilder.Count != 0)
+            {
+                konvertiereBilder(bilder);
+                this.beitragBild.BackgroundImage = anzeigeBilder[0];
+            }
         }
 
         public void konvertiereBilder(List<string> bilder)
         {
+
             foreach(string str in bilder)
             {
-                string[] newData = str.Split('|');
-                byte[] imageBytes = Convert.FromBase64String(newData[1]);
+                
+                byte[] imageBytes = Convert.FromBase64String(str);
                 //MemoryStream ms = new MemoryStream();
                 Image x = (Bitmap)((new ImageConverter()).ConvertFrom(imageBytes));
                 foreach (var b in imageBytes) 

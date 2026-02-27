@@ -174,6 +174,7 @@ namespace ClientSocialMedia
                 Inhalte inhalt = new Inhalte(null, beitraege.Titel);
                 foreach(Bild b in beitraege.Bilder) 
                 {
+
                     inhalt.pictures.Add(b.bilddata);
                 }
                 inhalt.setDaten(beitraege.Titel, inhalt.pictures);
