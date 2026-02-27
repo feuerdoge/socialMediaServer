@@ -214,16 +214,42 @@ namespace socialMediaServer
             }
             return result;
         }
-        public Nutzer SucheNutzer(string name)
+        public Nutzer SucheNutzer(int nutzerId)
         {
-            foreach (Nutzer n in nutzer)
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand get = new MySqlCommand(@"
+                SELECT benutzerName, email, zuletztAktiv
+                FROM nutzer
+                WHERE nutzerId = @nutzerId", conn);
+            get.Parameters.AddWithValue("@nutzerId", nutzerId);
+            MySqlDataReader reader = get.ExecuteReader();
+            Nutzer n = null;
+            while (reader.Read())
             {
-                if (n.BenutzerName == name)
-                {
-                    return n;
-                }
+                string name = reader.GetString("benutzerName");
+                string email = reader.GetString("email");
+                DateTime time = reader.GetDateTime("zuletztAktiv");
+                n = new Nutzer(name, "", email, nutzerId);
+                n.ZuletztAktiv = time;
             }
-            return null;
+            conn.Close();
+            return n;
+        }
+
+        public void AktualisiereProfil(int nutzerId, string name, string email)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand update = new MySqlCommand(@"
+                UPDATE nutzer
+                SET benutzerName = @name, email = @email
+                WHERE nutzerId = @id", conn);
+            update.Parameters.AddWithValue("@name", name);
+            update.Parameters.AddWithValue("@email", email);
+            update.Parameters.AddWithValue("@id", nutzerId);
+            update.ExecuteNonQuery();
+            conn.Close();
         }
 
         public int Abonnieren(int nutzerId, int abonnentId)

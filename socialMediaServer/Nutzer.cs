@@ -18,7 +18,7 @@ namespace socialMediaServer
         private string email;
         public string Email { get => email; }
         private DateTime zuletztAktiv;
-        public DateTime ZuletztAktiv { get => zuletztAktiv; }
+        public DateTime ZuletztAktiv { get; set; }
         private List<Nutzer> abonnenten;
         private List<Nutzer> abonnierteNutzer;
         public List<Nutzer> AbonnierteNutzer { get => abonnierteNutzer; }
