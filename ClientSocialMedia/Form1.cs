@@ -161,12 +161,14 @@ namespace ClientSocialMedia
             EmpfangeDaten();
             inhaltAnzeige.Enabled = true;
             inhaltAnzeige.Visible = true;
-            Inhalte inhalt = new Inhalte(Client.BilderAuswaehlen(), "Test");
-            inhaltAnzeige.Controls.Add(inhalt);
         }
         private void EmpfangeDaten() 
         {
             beitraege = client.beitraegeAnfragen();
+            if(beitraege == null) 
+            {
+                return;
+            }
             foreach(Beitrag beitraege in beitraege) 
             {
                 Inhalte inhalt = new Inhalte(null, beitraege.Titel);
@@ -174,6 +176,7 @@ namespace ClientSocialMedia
                 {
                     inhalt.pictures.Add(b.bilddata);
                 }
+                inhalt.setDaten(beitraege.Titel, inhalt.pictures);
             }
             //Server nach einer Liste aller Beiträge fragen
             //Diese Liste wird interpretiert, d.h das jedes Element dieser Liste von Beiträgen in ein Inhalt gewandelt wird.
@@ -294,6 +297,7 @@ namespace ClientSocialMedia
         {
             client.beitragSenden(titelEingabe.Text, bilder);
             beitragsErstellungsPanel.Visible = false;
+            EmpfangeDaten();
         }
     }
 }
