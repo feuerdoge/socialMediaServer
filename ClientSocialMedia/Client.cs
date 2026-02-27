@@ -107,7 +107,7 @@ namespace ClientSocialMedia
         }
         public void beitragSenden(string titel, List<string> bilder) 
         {
-            string eingabe = $"{titel};{bilder.Count}.";
+            string eingabe = $"{titel};{bilder.Count}";
             foreach (string bild in bilder) 
             {
                 eingabe += bild;
@@ -192,6 +192,10 @@ namespace ClientSocialMedia
             clientSocket.Write("neueBeitraege\n");
             string str;
             str = clientSocket.ReadLine();
+            if(str == "neueBeitaege.0.") 
+            {
+                return null;
+            }
             //string[] dataRecieved = str.Split(';');
             //foreach (string data in dataRecieved)
             //{
@@ -214,42 +218,46 @@ namespace ClientSocialMedia
             //}
             //return null;
             List<Beitrag> beitraege = new List<Beitrag>();
+            string[] dataDetail = str.Split('.');
             string[] dataReceived = str.Split(';');
-            int anzahl = Convert.ToInt32(dataReceived[1]);
+            int anzahl = Convert.ToInt32(dataDetail[1]);
             for (int i= 0; i < anzahl; i++)
             {
-                string beitragString = dataReceived[i + 2];
-                string[] relevantData = beitragString.Split('|');
-                int id = Convert.ToInt32(relevantData[0]);
-                string titel = relevantData[1];
-                string text = relevantData[2];
-                string autor = relevantData[3];
-                List<Bild> bilder = new List<Bild>();
-                int likes = Convert.ToInt32(relevantData[4]);
-                DateTime timestamp = Convert.ToDateTime(relevantData[5]);
-                string[] images = relevantData[6].Split(',');
-
-                foreach (string image in images)
+                foreach(string stri in dataReceived) 
                 {
-                    string[] innerData = image.Split(':');
-                    if (innerData.Length == 2)
+                    string[] relevantData = stri.Split('|');
+                    int id = Convert.ToInt32(dataDetail[2]);
+                    string titel = relevantData[1];
+                    string text = relevantData[2];
+                    string autor = relevantData[3];
+                    List<Bild> bilder = new List<Bild>();
+                    int likes = Convert.ToInt32(relevantData[4]);
+                    DateTime timestamp = Convert.ToDateTime(relevantData[5]);
+                    string[] images = relevantData[6].Split(',');
+
+                    foreach (string image in images)
                     {
-                        string imageName = innerData[0];
-                        string imageData = innerData[1];
-                        byte[] imageBytes = Convert.FromBase64String(imageData);
-                        File.WriteAllBytes(imageName, imageBytes);
-                        Bild bild = new Bild(imageName);
-                        bild.bilddata = imageData;
-                        bilder.Add(bild);
+                        string[] innerData = image.Split(':');
+                        if (innerData.Length == 2)
+                        {
+                            string imageName = innerData[0];
+                            string imageData = innerData[1];
+                            byte[] imageBytes = Convert.FromBase64String(imageData);
+                            File.WriteAllBytes(imageName, imageBytes);
+                            Bild bild = new Bild(imageName);
+                            bild.bilddata = imageData;
+                            bilder.Add(bild);
+                        }
                     }
+                    Beitrag b = new Beitrag(new Nutzer(autor, "", "", 0), titel, bilder);
+                    b.Id = id;
+                    b.setAnzahlLikes(likes);
+                    b.setGeposted(timestamp);
+                    if (!string.IsNullOrEmpty(text))
+                        b.ErstelleText(text);
+                    beitraege.Add(b);
                 }
-                Beitrag b = new Beitrag(new Nutzer(autor, "", "", 0), titel, bilder);
-                b.Id = id;
-                b.setAnzahlLikes(likes);
-                b.setGeposted(timestamp);
-                if (!string.IsNullOrEmpty(text))
-                    b.ErstelleText(text);
-                beitraege.Add(b);
+                
             }
             return beitraege;
         }
