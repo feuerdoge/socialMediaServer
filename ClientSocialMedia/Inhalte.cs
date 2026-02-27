@@ -43,7 +43,7 @@ namespace ClientSocialMedia
                 
                 byte[] imageBytes = Convert.FromBase64String(str);
                 //MemoryStream ms = new MemoryStream();
-                Image x = (Bitmap)((new ImageConverter()).ConvertFrom(imageBytes));
+                Image x = (Bitmap)new ImageConverter().ConvertFrom(imageBytes);
                 foreach (var b in imageBytes) 
                 {
                     
