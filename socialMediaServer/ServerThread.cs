@@ -125,9 +125,8 @@ namespace socialMediaServer
                                 msg += $"{b.Id}|{b.Titel}|{b.Text}|{b.Autor.BenutzerName}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
                                 msg += ";";
                             }
-
-                            client.Write(msg + "\n");
                             Console.WriteLine(msg);
+                            client.Write(msg + "\n");
                             break;
 
                         case "like":   // like;2 (BeitragId)

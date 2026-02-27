@@ -139,7 +139,6 @@ namespace socialMediaServer
             {
                 beitraege.Add(LeseBeitrag(reader));
             }
-            Console.WriteLine("Test");
             reader.Close();
             if (beitraege.Count < 10)
             {
@@ -158,10 +157,8 @@ namespace socialMediaServer
                 {
                     beitraege.Add(LeseBeitrag(reader));
                 }
-                Console.WriteLine("Test2");
                 reader.Close();
             }
-            Console.WriteLine("Test finish");
             conn.Close();
             return beitraege;
         }
