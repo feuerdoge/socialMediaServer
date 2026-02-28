@@ -164,6 +164,7 @@ namespace ClientSocialMedia
         }
         private void EmpfangeDaten() 
         {
+            inhaltAnzeige.Controls.Clear();
             beitraege = client.beitraegeAnfragen();
             if(beitraege == null) 
             {
@@ -178,6 +179,7 @@ namespace ClientSocialMedia
                     inhalt.pictures.Add(b.bilddata);
                 }
                 inhalt.setDaten(beitraege.Titel, inhalt.pictures);
+                inhaltAnzeige.Controls.Add(inhalt);
             }
             //Server nach einer Liste aller Beiträge fragen
             //Diese Liste wird interpretiert, d.h das jedes Element dieser Liste von Beiträgen in ein Inhalt gewandelt wird.

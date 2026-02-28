@@ -196,17 +196,20 @@ namespace ClientSocialMedia
             {
                 return null;
             }
+            // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
             List<Beitrag> beitraege = new List<Beitrag>();
-            string[] dataDetail = str.Split('?');
-            string[] detailPlus = dataDetail[2].Split(';');
             string[] dataReceived = str.Split(';');
-            int anzahl = Convert.ToInt32(dataDetail[1]);
-            for (int i= 0; i < anzahl; i++)
+            string[] dataDetails = dataReceived[0].Split('?');
+            foreach (string s in dataReceived) 
             {
-              
-                string stri = detailPlus[i];
-                string[] relevantData = stri.Split('|');
-                int id = Convert.ToInt32(relevantData[0]);
+                if(string.IsNullOrWhiteSpace(s))
+                {
+                    continue;
+
+                }
+                string[] relevantData = s.Split('|');
+                string[] newRelevant = relevantData[0].Split('?');
+                int id = Convert.ToInt32(newRelevant[2]);
                 string titel = relevantData[1];
                 string text = relevantData[2];
                 string autor = relevantData[3];
@@ -236,9 +239,8 @@ namespace ClientSocialMedia
                 if (!string.IsNullOrEmpty(text))
                     b.ErstelleText(text);
                 beitraege.Add(b);
-                
-                
             }
+            
             return beitraege;
         }
     }

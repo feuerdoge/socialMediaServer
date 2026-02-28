@@ -100,7 +100,7 @@ namespace socialMediaServer
                                 text = parameter[3 + anzahl];
                                          
                             spf.ErstelleBeitrag(this.nutzer, titel, text, dateinamen);
-                            client.Write("+;Hochgeladen\n");
+                            //client.Write("+;Hochgeladen\n");
                             break;
                         case "neueBeitraege":
                             List<Beitrag> beitraege = spf.ErmittleNeueBeitraege(this.nutzer);
@@ -112,7 +112,11 @@ namespace socialMediaServer
                                 }
                             }
                             // Protokoll: neueBeitraege.anzahlBeitraege.id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
-                            string msg = $"neueBeitaege?{beitraege.Count}?";
+                            string msg = "";
+                            if(beitraege.Count == 0) 
+                            {
+                                msg = $"neueBeitaege?{beitraege.Count}?";
+                            }
                             foreach (Beitrag b in beitraege)
                             {
                                 List<string> bilderStringList = new List<string>();
@@ -122,9 +126,10 @@ namespace socialMediaServer
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
-                                msg += $"{b.Id}|{b.Titel}|{b.Text}|{b.Autor.BenutzerName}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
+                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{b.Titel}|{b.Text}|{b.Autor.BenutzerName}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
                                 msg += ";";
                             }
+                            
                             Console.WriteLine(msg);
                             client.Write(msg + "\n");
                             break;
