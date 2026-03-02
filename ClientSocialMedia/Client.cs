@@ -241,5 +241,28 @@ namespace ClientSocialMedia
             }
             return beitraege;
         }
+        
+        public Nutzer LadeProfil()
+        {
+            clientSocket.Write("ladeProfil\n");
+            string msg = clientSocket.ReadLine();
+            string[] parts = msg.Split(';');
+            string name = parts[1];
+            string email = parts[2];
+            int id = Convert.ToInt32(parts[3]);
+            DateTime zuletztAktiv = Convert.ToDateTime(parts[4]);
+            int abonnenten = Convert.ToInt32(parts[5]);
+            Nutzer n = new Nutzer(name, "", email, id);
+            n.ZuletztAktiv = zuletztAktiv;
+            n.AbonnentenAnzahl = abonnenten;
+            return n;
+        }
+
+        public string ProfilAktualisieren(string name, string email)
+        {
+            string msg = $"updateProfile;{name};{email}\n";
+            clientSocket.Write(msg);
+            return clientSocket.ReadLine();
+        }
     }
 }

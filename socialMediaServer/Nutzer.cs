@@ -25,6 +25,7 @@ namespace socialMediaServer
         private List<Beitrag> beitraege;
         public List<Beitrag> Beitraege { get => beitraege; }
         private List<Bild> bilder;
+        public int AbonnentenAnzahl { get; set; }
 
         public Nutzer(string name, string passwort, string email, int benutzerId)
         {
@@ -37,6 +38,7 @@ namespace socialMediaServer
             abonnierteNutzer = new List<Nutzer>();
             beitraege = new List<Beitrag>();
             bilder = new List<Bild>();
+            AbonnentenAnzahl = 0;
         }
 
         public void Abonnieren(Nutzer n)

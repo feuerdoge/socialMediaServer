@@ -77,7 +77,7 @@ namespace socialMediaServer
                             for (int i = 0; i < anzahl; i++)
                             {
                                 string[] pieces = parameter[3 + i].Split('|');
-                                
+
                                 if (pieces.Length != 2)
                                 {
                                     Console.WriteLine("Bild fehlerhaft übertragen");
@@ -98,15 +98,15 @@ namespace socialMediaServer
                             string text = null;
                             if (parameter.Length > 3 + anzahl)
                                 text = parameter[3 + anzahl];
-                                         
+
                             spf.ErstelleBeitrag(this.nutzer, titel, text, dateinamen);
                             client.Write("+;Hochgeladen\n");
                             break;
                         case "neueBeitraege":
                             List<Beitrag> beitraege = spf.ErmittleNeueBeitraege(this.nutzer);
-                            foreach(Beitrag b in beitraege)
+                            foreach (Beitrag b in beitraege)
                             {
-                                foreach(Bild bild in spf.HoleBilder(b.Id))
+                                foreach (Bild bild in spf.HoleBilder(b.Id))
                                 {
                                     b.Hinzufuegen(bild);
                                 }
@@ -116,7 +116,7 @@ namespace socialMediaServer
                             foreach (Beitrag b in beitraege)
                             {
                                 List<string> bilderStringList = new List<string>();
-                                foreach(Bild img in b.Bilder)
+                                foreach (Bild img in b.Bilder)
                                 {
                                     string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", img.Dateiname)));
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
@@ -182,6 +182,17 @@ namespace socialMediaServer
                                     msg += "null";
                             }
                             client.Write(msg + "\n");
+                            break;
+                        case "loadProfile":
+                            int abonnenten = spf.ErmittelAbonnentenAnzahl(this.nutzer.BenutzerId);
+                            msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten}";
+                            client.Write(msg + "\n");
+                            break;
+                        case "updateProfile":
+                            name = parameter[1];
+                            email = parameter[2];
+                            spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
+                            client.Write("+;Profil aktualisiert\n");
                             break;
                     }
                 }

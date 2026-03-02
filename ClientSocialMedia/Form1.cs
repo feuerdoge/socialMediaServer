@@ -113,6 +113,21 @@ namespace ClientSocialMedia
         {
             erstellen.Show();
             menuPanel.BackColor = Color.White;
+            Button buttonProfil = new Button()
+            {
+                Size = new Size(215, 60),
+                Location = new Point(10, 10),
+                BackColor= Color.White,
+                Text = "Profil"
+            };
+            buttonProfil.Click += (s, e) =>
+            {
+                inhaltAnzeige.Controls.Clear();
+                ProfileControl profil = new ProfileControl();
+                profil.Dock = DockStyle.Fill;
+                inhaltAnzeige.Controls.Add(profil);
+            };
+
             Button buttonBeitraege = new Button()
             {
                 Size = new Size(215, 60),
@@ -148,6 +163,7 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Suchen"
             };
+            menuPanel.Controls.Add(buttonProfil);
             menuPanel.Controls.Add(buttonBeitraege);
             menuPanel.Controls.Add(buttonBeliebt);
             menuPanel.Controls.Add(buttonChat);
