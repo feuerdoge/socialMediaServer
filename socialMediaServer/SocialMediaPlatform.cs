@@ -198,6 +198,28 @@ namespace socialMediaServer
             }
             return bilder;
         }
+
+        public int ChangePassword(string oldPassword, string newPassword, int nutzerId)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand get = new MySqlCommand("SELECT passwort FROM nutzer WHERE nutzerId = @id", conn);
+            get.Parameters.AddWithValue("@id", nutzerId);
+            MySqlDataReader reader = get.ExecuteReader();
+            string saved = "";
+            if (reader.Read())
+                saved = reader.GetString("passwort");
+            reader.Close();
+            if (!VeriryPasswort(oldPassword, saved))
+                return -1;
+            string hashed = HashPasswort(newPassword);
+            MySqlCommand update = new MySqlCommand("UPDATE nutzer SET passwort = @p WHERE nutzerId = @id", conn);
+            update.Parameters.AddWithValue("@p", hashed);
+            update.Parameters.AddWithValue("@id", nutzerId);
+            update.ExecuteNonQuery();
+            conn.Close();
+            return 0;
+        }
         public List<Nutzer> ErmittleAbonnierteNutzerMitNeuenBeitraegen(Nutzer n)
         {
             List<Nutzer> result = new List<Nutzer>();

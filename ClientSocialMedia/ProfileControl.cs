@@ -19,9 +19,10 @@ namespace ClientSocialMedia
             LadeProfil();
         }
 
-        private void LadeProfil()
+        private async void LadeProfil()
         {
-            Nutzer n = Form1.client.LadeProfil();
+            Nutzer n = await Task.Run(() => Form1.client.LadeProfil());
+            abonnentenLb.Text = $"Aktuelle Abonnenten: {n.AbonnentenAnzahl}";
             nameTb.Text = n.BenutzerName;
             mailTb.Text = n.Email; 
         }
@@ -30,6 +31,36 @@ namespace ClientSocialMedia
         {
             string reply = Form1.client.ProfilAktualisieren(nameTb.Text, mailTb.Text);
             MessageBox.Show(reply);
+            LadeProfil();
+        }
+
+        private void passwortBtn_Click(object sender, EventArgs e)
+        {
+            passwortPanel.Visible = true;
+            saveBtn.Visible = false;
+
+
+        }
+
+        private void savePassword_Click(object sender, EventArgs e)
+        {
+            if (textBox2.Text != textBox3.Text)
+            {
+                MessageBox.Show("Das bestätigungs Passwort stimmt nicht mit dem neuen überein");
+                return;
+            }
+            string reply = Form1.client.PasswortAktualisieren(textBox1.Text, textBox2.Text);
+            if (reply.Split(';')[0] == "-")
+            {
+                MessageBox.Show(reply.Split(';')[1]);
+                return;
+            }
+            else
+            {
+                MessageBox.Show(reply.Split(';')[1]);
+            }
+            passwortPanel.Visible = false;
+            saveBtn.Visible = true;
         }
     }
 }

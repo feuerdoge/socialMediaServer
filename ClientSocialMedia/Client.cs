@@ -246,7 +246,7 @@ namespace ClientSocialMedia
         
         public Nutzer LadeProfil()
         {
-            clientSocket.Write("ladeProfil\n");
+            clientSocket.Write("loadProfile\n");
             string msg = clientSocket.ReadLine();
             string[] parts = msg.Split(';');
             string name = parts[1];
@@ -263,6 +263,13 @@ namespace ClientSocialMedia
         public string ProfilAktualisieren(string name, string email)
         {
             string msg = $"updateProfile;{name};{email}\n";
+            clientSocket.Write(msg);
+            return clientSocket.ReadLine();
+        }
+
+        public string PasswortAktualisieren(string old, string newP)
+        {
+            string msg = $"updatePasswort;{old};{newP}\n";
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
         }

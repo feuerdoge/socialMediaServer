@@ -124,7 +124,8 @@ namespace ClientSocialMedia
             {
                 inhaltAnzeige.Controls.Clear();
                 ProfileControl profil = new ProfileControl();
-                profil.Dock = DockStyle.Fill;
+                profil.Left = (inhaltAnzeige.Width - profil.Width) / 2;
+                profil.Top = (inhaltAnzeige.Height - profil.Height) / 2;
                 inhaltAnzeige.Controls.Add(profil);
             };
 
