@@ -126,10 +126,12 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand neusteBeitraege = new MySqlCommand(@"
-                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, b.likes, u.benutzerName
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
+                LEFT JOIN likes l ON b.beitragid = l.beitragId
                 WHERE b.erstelltAm > @zuletztAktiv
+                GROUP BY b.beitragid
                 ORDER BY b.erstelltAm DESC
                 LIMIT 10", conn);
             //neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
@@ -144,10 +146,12 @@ namespace socialMediaServer
             {
                 int remaining = 10 - beitraege.Count;
                 MySqlCommand alteBeitraege = new MySqlCommand(@"
-                    SELECT b.beitragid, b.titel, b.text, b.erstelltAm, b.autor, b.likes, u.benutzerName
+                    SELECT b.beitragid, b.titel, b.text, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
+                    LEFT JOIN likes l ON b.beitragid = l.beitragId
                     WHERE b.erstelltAm <= @zuletztAktiv
+                    GROUP BY b.beitragid
                     ORDER BY b.erstelltAm DESC
                     LIMIT @max", conn);
                 alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
@@ -179,19 +183,12 @@ namespace socialMediaServer
             Nutzer autor = new Nutzer(autorName, "", "", autorId);
             Beitrag b = new Beitrag(autor, titel, new List<Bild>());
             b.Id = beitragId;
-            b.setAnzahlLikes(likes);
+            b.setAnzahlLikes(reader.GetInt32("likes"));
             if (text != null)
                 b.ErstelleText(text);
             return b;
         }
 
-        public int ErmittleLikes(int beitragId)
-        {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand get = new MySqlCommand("SELECT COUNT(nutzerId) FROM likes WHERE beitragId = @b", conn);
-            get.Parameters.AddWithValue("@b", beitragId);
-        }
         public List<Bild> HoleBilder(int beitragId)
         {
             List<Bild> bilder = new List<Bild>();
@@ -328,10 +325,10 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand check = new MySqlCommand(@"
-                SELECT beitragid
-                FROM beitrag
-                WHERE autor = @nutzerId
-                AND beitragid = @beitragId", conn);
+                SELECT beitragId
+                FROM likes
+                WHERE nutzerId = @nutzerId
+                AND beitragId = @beitragId", conn);
             check.Parameters.AddWithValue("@nutzerId", nutzerId);
             check.Parameters.AddWithValue("@beitragId", beitragId);
             int verify = Convert.ToInt32(check.ExecuteScalar());

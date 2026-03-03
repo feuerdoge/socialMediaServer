@@ -116,12 +116,11 @@ namespace ClientSocialMedia
             clientSocket.Write("beitrag;" + eingabe + '\n');
         }
 
-        public void Like(int beitragId)
+        public string Like(int beitragId)
         {
             string msg = $"like;{beitragId}\n";
             clientSocket.Write(msg);
-            string reply = clientSocket.ReadLine();
-            MessageBox.Show(reply);
+            return clientSocket.ReadLine();
         }
 
         public void Abonnieren(int abonnentId)

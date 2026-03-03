@@ -1,4 +1,5 @@
-﻿using System;
+﻿using socialMediaServer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,19 +18,32 @@ namespace ClientSocialMedia
         public string titel;
         public List<Image> anzeigeBilder = new List<Image>();
         private int scrollIndex = 0;
-        public Inhalte(List<string> pictures, string titel)
+        private int beitragId;
+        private Beitrag beitrag;
+        //public Inhalte(List<string> pictures, string titel, int beitragId)
+        //{
+        //    InitializeComponent();
+        //    pictures = new List<string>();
+        //    this.pictures = pictures;
+        //    this.titel = titel;
+        //    this.beitragId = beitragId;
+        //    setDaten(titel, pictures);
+        //}
+        public Inhalte(Beitrag beitrag)
         {
             InitializeComponent();
             pictures = new List<string>();
-            this.pictures = pictures;
-            this.titel = titel;
+            this.beitrag = beitrag;
+            this.pictures = new List<string>();
+            this.titel = beitrag.Titel;
+            this.beitragId = beitrag.Id;
             setDaten(titel, pictures);
-            
         }
 
         public void setDaten(string titel, List<string> bilder) 
         {
             this.beitragTitel.Text = titel;
+            likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes()}";
             if (bilder.Count != 0)
             {
                 konvertiereBilder(bilder);
@@ -88,6 +102,15 @@ namespace ClientSocialMedia
             }
             if (scrollIndex == 0)
                 last.Visible = false;
+        }
+
+        private void likeBtn_Click(object sender, EventArgs e)
+        {
+            string reply = Form1.client.Like(beitragId);
+            string[] parts = reply.Split(';');
+            MessageBox.Show(parts[1]);
+            if (parts[0] == "+")
+                likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes() + 1}";
         }
     }
 }

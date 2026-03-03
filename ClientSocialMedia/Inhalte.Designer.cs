@@ -34,6 +34,8 @@
             this.last = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.Kommentarsektion = new System.Windows.Forms.Label();
+            this.likeBtn = new System.Windows.Forms.Button();
+            this.likesLb = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).BeginInit();
             this.SuspendLayout();
             // 
@@ -95,11 +97,33 @@
             this.Kommentarsektion.TabIndex = 5;
             this.Kommentarsektion.Text = "Kommentare";
             // 
+            // likeBtn
+            // 
+            this.likeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.likeBtn.Location = new System.Drawing.Point(49, 244);
+            this.likeBtn.Name = "likeBtn";
+            this.likeBtn.Size = new System.Drawing.Size(34, 35);
+            this.likeBtn.TabIndex = 6;
+            this.likeBtn.Text = "👍";
+            this.likeBtn.UseVisualStyleBackColor = true;
+            this.likeBtn.Click += new System.EventHandler(this.likeBtn_Click);
+            // 
+            // likesLb
+            // 
+            this.likesLb.AutoSize = true;
+            this.likesLb.Location = new System.Drawing.Point(101, 258);
+            this.likesLb.Name = "likesLb";
+            this.likesLb.Size = new System.Drawing.Size(70, 13);
+            this.likesLb.TabIndex = 7;
+            this.likesLb.Text = "Anzahl Likes:";
+            // 
             // Inhalte
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.Controls.Add(this.likesLb);
+            this.Controls.Add(this.likeBtn);
             this.Controls.Add(this.Kommentarsektion);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.last);
@@ -122,5 +146,7 @@
         private System.Windows.Forms.Button last;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label Kommentarsektion;
+        private System.Windows.Forms.Button likeBtn;
+        private System.Windows.Forms.Label likesLb;
     }
 }

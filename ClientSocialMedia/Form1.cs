@@ -189,7 +189,7 @@ namespace ClientSocialMedia
             }
             foreach(Beitrag beitraege in beitraege) 
             {
-                Inhalte inhalt = new Inhalte(null, beitraege.Titel);
+                Inhalte inhalt = new Inhalte(beitraege);
                 foreach(Bild b in beitraege.Bilder) 
                 {
 
