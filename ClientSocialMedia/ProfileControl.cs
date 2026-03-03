@@ -55,6 +55,11 @@ namespace ClientSocialMedia
                 MessageBox.Show("Das bestätigungs Passwort stimmt nicht mit dem neuen überein");
                 return;
             }
+            else if (textBox2.Text.Length < 4)
+            {
+                MessageBox.Show("Das Passwort muss mindestens 4 Zeichen lang sein");
+                return;
+            }
             string reply = Form1.client.PasswortAktualisieren(textBox1.Text, textBox2.Text);
             if (reply.Split(';')[0] == "-")
             {
