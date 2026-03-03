@@ -56,28 +56,39 @@ namespace ClientSocialMedia
             if (scrollIndex < anzeigeBilder.Count)
             {
                 next.Visible = true;
-                scrollIndex++;
+                
                 this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
             }
             if(scrollIndex == anzeigeBilder.Count) 
             {
-                next.Visible = true;   
+                next.Visible = false;
+                scrollIndex--;
             }
+            if (scrollIndex != 0)
+            {
+                last.Visible = true;
+            }
+            scrollIndex++;
         }
 
         private void last_Click(object sender, EventArgs e)
         {
-            if(scrollIndex > 0) 
+            if (scrollIndex > -1) 
             {
                 last.Visible = true;
-                scrollIndex--;
+                
                 this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
             }
             if(scrollIndex == 0) 
             {
                 last.Visible = false;
+                scrollIndex++;
             }
-            
+            if (scrollIndex != anzeigeBilder.Count)
+            {
+                next.Visible = true;
+            }
+            scrollIndex--;
         }
     }
 }
