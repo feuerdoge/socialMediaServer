@@ -173,7 +173,7 @@ namespace socialMediaServer
                 text = reader.GetString("text");
             DateTime erstelltAm = reader.GetDateTime("erstelltAm");
             int autorId = reader.GetInt32("autor");
-            int likes = reader.GetInt32("likes");
+            
             string autorName = reader.GetString("benutzerName");
 
             Nutzer autor = new Nutzer(autorName, "", "", autorId);
@@ -183,6 +183,13 @@ namespace socialMediaServer
             if (text != null)
                 b.ErstelleText(text);
             return b;
+        }
+
+        public int ErmittleLikes(int beitragId)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand get = new MySqlCommand();
         }
         public List<Bild> HoleBilder(int beitragId)
         {
@@ -330,10 +337,10 @@ namespace socialMediaServer
             if (verify != 0)
                 return -1;
             MySqlCommand like = new MySqlCommand(@"
-                UPDATE beitrag
-                SET likes = likes + 1
-                WHERE beitragid = @beitragid", conn);
-            like.Parameters.AddWithValue("@beitragid", beitragId);
+                INSERT INTO likes (beitragId, nutzerId)
+                VALUES (@bId, @nId)", conn);
+            like.Parameters.AddWithValue("@bId", beitragId);
+            like.Parameters.AddWithValue("@nId", nutzerId);
             like.ExecuteNonQuery();
             conn.Close();
             return 0;
