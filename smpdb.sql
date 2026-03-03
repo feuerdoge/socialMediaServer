@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2026 at 06:53 PM
+-- Generation Time: Mar 03, 2026 at 08:27 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -120,18 +120,19 @@ CREATE TABLE `nutzer` (
   `benutzerName` text NOT NULL,
   `passwort` text NOT NULL,
   `email` text NOT NULL,
-  `zuletztAktiv` datetime NOT NULL
+  `zuletztAktiv` datetime NOT NULL,
+  `profilBild` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `nutzer`
 --
 
-INSERT INTO `nutzer` (`nutzerId`, `benutzerName`, `passwort`, `email`, `zuletztAktiv`) VALUES
-(1, 'Nutzername...', 'Passwort festlegen...', 'Email Eingeben', '2026-02-13 12:14:59'),
-(2, 'hilfe', '234', 'hilfe@gmail.com', '2026-02-13 12:16:50'),
-(3, 'mario', '6s75CRWQqAYMe/ubQeHA5QvRFkmSvt8ItvKWRQ5Zc7Sj76P2+Bud/nsnOF21/GTb', 'ashdu@ask.de', '2026-03-02 20:19:06'),
-(4, 'bitte', 'yLXuLEZXESjvzD3Lem9oD0HR7lauLQxnXRw82UUgV03zPkJP1VTnxL9jio3ndZ/k', 'hilfe@sdas', '2026-03-03 18:46:51');
+INSERT INTO `nutzer` (`nutzerId`, `benutzerName`, `passwort`, `email`, `zuletztAktiv`, `profilBild`) VALUES
+(1, 'Nutzername...', 'Passwort festlegen...', 'Email Eingeben', '2026-02-13 12:14:59', NULL),
+(2, 'hilfe', '234', 'hilfe@gmail.com', '2026-02-13 12:16:50', NULL),
+(3, 'mario', '6s75CRWQqAYMe/ubQeHA5QvRFkmSvt8ItvKWRQ5Zc7Sj76P2+Bud/nsnOF21/GTb', 'ashdu@ask.de', '2026-03-02 20:19:06', NULL),
+(4, 'bitte', 'yLXuLEZXESjvzD3Lem9oD0HR7lauLQxnXRw82UUgV03zPkJP1VTnxL9jio3ndZ/k', 'hilfe@sdas', '2026-03-03 18:46:51', '074049e2-5b98-4ba9-83e9-b1f76a90b965.jpg');
 
 --
 -- Indexes for dumped tables
