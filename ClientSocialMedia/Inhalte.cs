@@ -53,29 +53,29 @@ namespace ClientSocialMedia
 
         private void next_Click(object sender, EventArgs e)
         {
-            if (scrollIndex < anzeigeBilder.Count)
+            if (scrollIndex == anzeigeBilder.Count)
             {
-                next.Visible = true;
+                next.Visible = false;
+                return;
+            }
+            else
+            {
                 scrollIndex++;
                 this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
-            }
-            if(scrollIndex == anzeigeBilder.Count) 
-            {
-                next.Visible = true;   
             }
         }
 
         private void last_Click(object sender, EventArgs e)
         {
-            if(scrollIndex > 0) 
-            {
-                last.Visible = true;
-                scrollIndex--;
-                this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
-            }
             if(scrollIndex == 0) 
             {
                 last.Visible = false;
+                return;
+            }
+            else 
+            {
+                scrollIndex--;
+                this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
             }
             
         }
