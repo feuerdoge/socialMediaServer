@@ -21,7 +21,7 @@ namespace ClientSocialMedia
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
-            this.clientSocket = new SocketAbi.Socket("127.0.0.1", 5555);
+            this.clientSocket = new SocketAbi.Socket("localhost", 5555);
             Verbinden();
         }
 
@@ -198,6 +198,10 @@ namespace ClientSocialMedia
             }
             // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
             List<Beitrag> beitraege = new List<Beitrag>();
+            if(str == null) 
+            {
+                return null;
+            }
             string[] dataReceived = str.Split(';');
             string[] dataDetails = dataReceived[0].Split('?');
             foreach (string s in dataReceived) 
