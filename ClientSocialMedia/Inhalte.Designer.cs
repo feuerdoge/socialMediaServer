@@ -32,15 +32,18 @@
             this.beitragBild = new System.Windows.Forms.PictureBox();
             this.next = new System.Windows.Forms.Button();
             this.last = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.Kommentarsektion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).BeginInit();
             this.SuspendLayout();
             // 
             // beitragTitel
             // 
             this.beitragTitel.AutoSize = true;
-            this.beitragTitel.Location = new System.Drawing.Point(58, 9);
+            this.beitragTitel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.beitragTitel.Location = new System.Drawing.Point(127, 11);
             this.beitragTitel.Name = "beitragTitel";
-            this.beitragTitel.Size = new System.Drawing.Size(27, 13);
+            this.beitragTitel.Size = new System.Drawing.Size(53, 25);
             this.beitragTitel.TabIndex = 0;
             this.beitragTitel.Text = "Titel";
             // 
@@ -48,39 +51,62 @@
             // 
             this.beitragBild.BackgroundImage = global::ClientSocialMedia.Properties.Resources.empty;
             this.beitragBild.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.beitragBild.Location = new System.Drawing.Point(3, 36);
+            this.beitragBild.Location = new System.Drawing.Point(49, 39);
             this.beitragBild.Name = "beitragBild";
-            this.beitragBild.Size = new System.Drawing.Size(144, 111);
+            this.beitragBild.Size = new System.Drawing.Size(224, 199);
             this.beitragBild.TabIndex = 1;
             this.beitragBild.TabStop = false;
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(122, 74);
+            this.next.Location = new System.Drawing.Point(256, 126);
             this.next.Name = "next";
             this.next.Size = new System.Drawing.Size(28, 23);
             this.next.TabIndex = 2;
             this.next.Text = "Nxt";
             this.next.UseVisualStyleBackColor = true;
+            this.next.Click += new System.EventHandler(this.next_Click);
             // 
             // last
             // 
-            this.last.Location = new System.Drawing.Point(0, 74);
+            this.last.Location = new System.Drawing.Point(35, 126);
             this.last.Name = "last";
             this.last.Size = new System.Drawing.Size(28, 23);
             this.last.TabIndex = 3;
             this.last.Text = "Lst";
             this.last.UseVisualStyleBackColor = true;
+            this.last.Click += new System.EventHandler(this.last_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 310);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(310, 162);
+            this.flowLayoutPanel1.TabIndex = 4;
+            // 
+            // Kommentarsektion
+            // 
+            this.Kommentarsektion.AutoSize = true;
+            this.Kommentarsektion.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Kommentarsektion.Location = new System.Drawing.Point(3, 282);
+            this.Kommentarsektion.Name = "Kommentarsektion";
+            this.Kommentarsektion.Size = new System.Drawing.Size(133, 25);
+            this.Kommentarsektion.TabIndex = 5;
+            this.Kommentarsektion.Text = "Kommentare";
             // 
             // Inhalte
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.Controls.Add(this.Kommentarsektion);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.last);
             this.Controls.Add(this.next);
             this.Controls.Add(this.beitragBild);
             this.Controls.Add(this.beitragTitel);
             this.Name = "Inhalte";
+            this.Size = new System.Drawing.Size(316, 475);
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -93,5 +119,7 @@
         private System.Windows.Forms.PictureBox beitragBild;
         private System.Windows.Forms.Button next;
         private System.Windows.Forms.Button last;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label Kommentarsektion;
     }
 }

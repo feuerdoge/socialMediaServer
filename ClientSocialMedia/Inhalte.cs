@@ -16,6 +16,7 @@ namespace ClientSocialMedia
         public List<string> pictures;
         public string titel;
         public List<Image> anzeigeBilder = new List<Image>();
+        private int scrollIndex = 0;
         public Inhalte(List<string> pictures, string titel)
         {
             InitializeComponent();
@@ -48,6 +49,35 @@ namespace ClientSocialMedia
                     anzeigeBilder.Add(new Bitmap(img));
                 }
             }
+        }
+
+        private void next_Click(object sender, EventArgs e)
+        {
+            if (scrollIndex < anzeigeBilder.Count)
+            {
+                next.Visible = true;
+                scrollIndex++;
+                this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
+            }
+            if(scrollIndex == anzeigeBilder.Count) 
+            {
+                next.Visible = true;   
+            }
+        }
+
+        private void last_Click(object sender, EventArgs e)
+        {
+            if(scrollIndex > 0) 
+            {
+                last.Visible = true;
+                scrollIndex--;
+                this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
+            }
+            if(scrollIndex == 0) 
+            {
+                last.Visible = false;
+            }
+            
         }
     }
 }
