@@ -24,6 +24,7 @@ namespace ClientSocialMedia
             this.pictures = pictures;
             this.titel = titel;
             setDaten(titel, pictures);
+            
         }
 
         public void setDaten(string titel, List<string> bilder) 
@@ -33,6 +34,10 @@ namespace ClientSocialMedia
             {
                 konvertiereBilder(bilder);
                 this.beitragBild.BackgroundImage = anzeigeBilder[0];
+            }
+            if (anzeigeBilder.Count == 1)
+            {
+                next.Visible = false;
             }
         }
 
@@ -53,16 +58,19 @@ namespace ClientSocialMedia
 
         private void next_Click(object sender, EventArgs e)
         {
-            if (scrollIndex == anzeigeBilder.Count)
+            if (scrollIndex == anzeigeBilder.Count - 1)
             {
                 next.Visible = false;
                 return;
             }
             else
             {
+                last.Visible = true;
                 scrollIndex++;
                 this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
             }
+            if (scrollIndex == anzeigeBilder.Count - 1)
+                next.Visible = false;
         }
 
         private void last_Click(object sender, EventArgs e)
@@ -74,14 +82,12 @@ namespace ClientSocialMedia
             }
             else 
             {
+                next.Visible = true;
                 scrollIndex--;
                 this.beitragBild.BackgroundImage = anzeigeBilder[scrollIndex];
             }
-            if (scrollIndex != anzeigeBilder.Count)
-            {
-                next.Visible = true;
-            }
-            scrollIndex--;
+            if (scrollIndex == 0)
+                last.Visible = false;
         }
     }
 }
