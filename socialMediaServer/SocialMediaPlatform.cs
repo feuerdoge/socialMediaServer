@@ -189,7 +189,8 @@ namespace socialMediaServer
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
-            MySqlCommand get = new MySqlCommand();
+            MySqlCommand get = new MySqlCommand("SELECT COUNT(nutzerId) FROM likes WHERE beitragId = @b", conn);
+            get.Parameters.AddWithValue("@b", beitragId);
         }
         public List<Bild> HoleBilder(int beitragId)
         {
