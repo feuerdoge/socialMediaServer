@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,15 @@ namespace ClientSocialMedia
             abonnentenLb.Text = $"Aktuelle Abonnenten: {n.AbonnentenAnzahl}";
             nameTb.Text = n.BenutzerName;
             mailTb.Text = n.Email; 
+            if (n.ProfilBild != null)
+            {
+                byte[] pictureBytes = Convert.FromBase64String(n.ProfilBild);
+                using (MemoryStream ms = new MemoryStream(pictureBytes))
+                {
+                    Image img = Image.FromStream(ms);
+                    profilePictureBox.Image = img;
+                }
+            }
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
@@ -38,11 +48,13 @@ namespace ClientSocialMedia
         {
             if (!passwortPanel.Visible)
             {
+                profilePictureBtn.Visible = false;
                 passwortPanel.Visible = true;
                 saveBtn.Visible = false;
             }
             else
             {
+                profilePictureBtn.Visible = true;
                 passwortPanel.Visible = false;
                 saveBtn.Visible = true;
             }
@@ -72,6 +84,24 @@ namespace ClientSocialMedia
             }
             passwortPanel.Visible = false;
             saveBtn.Visible = true;
+        }
+
+        private void profilePictureBtn_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "Profilbild auswählen";
+            dialog.Filter = "Bilder (*.png;*.jpg;*.jpeg)|*.png;*jpg;*jpeg";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = dialog.FileName;
+                string fileName = Path.GetFileName(filePath);
+
+                profilePictureBox.Image = Image.FromFile(filePath);
+
+                string pictureBytes = Convert.ToBase64String(File.ReadAllBytes(filePath));
+                string reply = Form1.client.ProfilBild(fileName, pictureBytes);
+                MessageBox.Show(reply);
+            }
         }
     }
 }

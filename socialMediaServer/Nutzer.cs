@@ -24,7 +24,7 @@ namespace socialMediaServer
         public List<Beitrag> Beitraege { get => beitraege; }
         private List<Bild> bilder;
         public int AbonnentenAnzahl { get; set; }
-
+        public string ProfilBild { get; set; }
         public Nutzer(string name, string passwort, string email, int benutzerId)
         {
             this.benutzerId = benutzerId;

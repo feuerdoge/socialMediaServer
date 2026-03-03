@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Permissions;
 using System.Text;
@@ -190,17 +191,47 @@ namespace socialMediaServer
                             break;
                         case "loadProfile":
                             int abonnenten = spf.ErmittelAbonnentenAnzahl(this.nutzer.BenutzerId);
-                            msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten}";
+                            if (this.nutzer.ProfilBild == null)
+                                msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten}";
+                            else
+                            {
+                                byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", this.nutzer.ProfilBild));
+                                string pictureString = Convert.ToBase64String(picture);
+                                msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten};{pictureString}";
+                            }
                             Console.WriteLine(msg);
                             client.Write(msg + "\n");
                             break;
                         case "updateProfile":
                             name = parameter[1];
                             email = parameter[2];
-                            spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
+                            if (parameter.Length > 3)
+                            {
+                                string file = parameter[3];
+                                string base64 = parameter[4];
+                                byte[] pictureBytes = Convert.FromBase64String(base64);
+                                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file);
+                                File.WriteAllBytes(Path.Combine(imgOrdner, "profile", fileName), pictureBytes);
+                                this.nutzer.ProfilBild = fileName;
+                            }
+                            else 
+                                spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
                             this.nutzer.Email = email;
                             this.nutzer.BenutzerName = name;
                             client.Write("+;Profil aktualisiert\n");
+                            break;
+                        case "addProfilePicture":
+                            string filename = parameter[1];
+                            string base64s = parameter[2];
+                            byte[] pictureByte = Convert.FromBase64String(base64s);
+                            string unique = Guid.NewGuid().ToString() + Path.GetExtension(filename);
+                            if (this.nutzer.ProfilBild != null)
+                                File.Delete(Path.Combine(imgOrdner, "profile", this.nutzer.ProfilBild));
+                            File.WriteAllBytes(Path.Combine(imgOrdner, "profile", unique), pictureByte);
+                            this.nutzer.ProfilBild = unique;
+                            spf.AktualisiereProfilBild(this.nutzer.BenutzerId, unique);
+                            Console.WriteLine("");
+                            client.Write("+;Profilbild hinzugefügt\n");
                             break;
                         case "updatePasswort":
                             string old = parameter[1];

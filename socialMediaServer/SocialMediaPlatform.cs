@@ -78,7 +78,7 @@ namespace socialMediaServer
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
-            MySqlCommand search = new MySqlCommand("SELECT nutzerId, passwort, email FROM nutzer WHERE benutzerName=@benutzerName", conn);
+            MySqlCommand search = new MySqlCommand("SELECT nutzerId, passwort, email, profilBild FROM nutzer WHERE benutzerName=@benutzerName", conn);
             search.Parameters.AddWithValue("@benutzerName", name);
             MySqlDataReader reader = search.ExecuteReader();
             if (!reader.Read())
@@ -89,6 +89,11 @@ namespace socialMediaServer
                 return null;
             }
             Nutzer n = new Nutzer(name, "", reader.GetString("email"), reader.GetInt32("nutzerId"));
+            int ordinale = reader.GetOrdinal("profilBild");
+            if (!reader.IsDBNull(ordinale))
+                n.ProfilBild = reader.GetString(ordinale);
+            else
+                n.ProfilBild = null;
             lock (nutzer)
             {
                 nutzer.Add(n);
@@ -275,6 +280,20 @@ namespace socialMediaServer
             update.Parameters.AddWithValue("@name", name);
             update.Parameters.AddWithValue("@email", email);
             update.Parameters.AddWithValue("@id", nutzerId);
+            update.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public void AktualisiereProfilBild(int nutzerId, string filename)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand update = new MySqlCommand(@"
+                UPDATE nutzer
+                SET profilBild = @p
+                WHERE nutzerId = @id", conn);
+            update.Parameters.AddWithValue("@id", nutzerId);
+            update.Parameters.AddWithValue("@p", filename);
             update.ExecuteNonQuery();
             conn.Close();
         }

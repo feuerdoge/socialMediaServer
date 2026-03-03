@@ -20,6 +20,8 @@ namespace socialMediaServer
             spf = new SocialMediaPlatform();
             if (!Directory.Exists("img"))
                 Directory.CreateDirectory("img");
+            if (!Directory.Exists("img\\profile"))
+                Directory.CreateDirectory("img\\profile");
             runServer();
         }
 

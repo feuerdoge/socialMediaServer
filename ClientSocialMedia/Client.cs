@@ -260,12 +260,25 @@ namespace ClientSocialMedia
             Nutzer n = new Nutzer(name, "", email, id);
             n.ZuletztAktiv = zuletztAktiv;
             n.AbonnentenAnzahl = abonnenten;
+            if (parts.Length > 6)
+            {
+                string base64 = parts[6];
+                n.ProfilBild = base64;
+            }
+
             return n;
         }
 
         public string ProfilAktualisieren(string name, string email)
         {
             string msg = $"updateProfile;{name};{email}\n";
+            clientSocket.Write(msg);
+            return clientSocket.ReadLine();
+        }
+
+        public string ProfilBild(string fileName, string picture)
+        {
+            string msg = $"addProfilePicture;{fileName};{picture}\n";
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
         }
