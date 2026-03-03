@@ -75,6 +75,7 @@
             this.last.TabIndex = 3;
             this.last.Text = "Lst";
             this.last.UseVisualStyleBackColor = true;
+            this.last.Visible = false;
             this.last.Click += new System.EventHandler(this.last_Click);
             // 
             // flowLayoutPanel1
