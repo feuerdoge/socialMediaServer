@@ -36,10 +36,16 @@ namespace ClientSocialMedia
 
         private void passwortBtn_Click(object sender, EventArgs e)
         {
-            passwortPanel.Visible = true;
-            saveBtn.Visible = false;
-
-
+            if (!passwortPanel.Visible)
+            {
+                passwortPanel.Visible = true;
+                saveBtn.Visible = false;
+            }
+            else
+            {
+                passwortPanel.Visible = false;
+                saveBtn.Visible = true;
+            }
         }
 
         private void savePassword_Click(object sender, EventArgs e)

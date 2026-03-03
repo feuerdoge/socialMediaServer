@@ -11,12 +11,10 @@ namespace socialMediaServer
     {
         private int benutzerId;
         public int BenutzerId { get => benutzerId; }
-        private string benutzerName;
-        public string BenutzerName { get => benutzerName; }
+        public string BenutzerName { get; set; }
         private string passwort;
         public string Passwort { get => passwort; }
-        private string email;
-        public string Email { get => email; }
+        public string Email { get; set; }
         private DateTime zuletztAktiv;
         public DateTime ZuletztAktiv { get; set; }
         private List<Nutzer> abonnenten;
@@ -30,9 +28,9 @@ namespace socialMediaServer
         public Nutzer(string name, string passwort, string email, int benutzerId)
         {
             this.benutzerId = benutzerId;
-            this.benutzerName = name;
+            this.BenutzerName = name;
             this.passwort = passwort;
-            this.email = email;
+            this.Email = email;
             zuletztAktiv = DateTime.Now;
             abonnenten = new List<Nutzer>();
             abonnierteNutzer = new List<Nutzer>();

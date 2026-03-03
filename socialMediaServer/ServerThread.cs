@@ -190,7 +190,6 @@ namespace socialMediaServer
                             break;
                         case "loadProfile":
                             int abonnenten = spf.ErmittelAbonnentenAnzahl(this.nutzer.BenutzerId);
-                            Console.WriteLine("He");
                             msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten}";
                             Console.WriteLine(msg);
                             client.Write(msg + "\n");
@@ -199,6 +198,8 @@ namespace socialMediaServer
                             name = parameter[1];
                             email = parameter[2];
                             spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
+                            this.nutzer.Email = email;
+                            this.nutzer.BenutzerName = name;
                             client.Write("+;Profil aktualisiert\n");
                             break;
                         case "updatePasswort":
