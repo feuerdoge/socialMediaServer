@@ -344,10 +344,10 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand check = new MySqlCommand(@"
-                SELECT beitragId
-                FROM likes
-                WHERE nutzerId = @nutzerId
-                AND beitragId = @beitragId", conn);
+                SELECT beitragid
+                FROM beitrag
+                WHERE autor = @nutzerId
+                AND beitragid = @beitragId", conn);
             check.Parameters.AddWithValue("@nutzerId", nutzerId);
             check.Parameters.AddWithValue("@beitragId", beitragId);
             int verify = Convert.ToInt32(check.ExecuteScalar());
