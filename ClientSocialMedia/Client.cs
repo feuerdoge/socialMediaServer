@@ -123,12 +123,11 @@ namespace ClientSocialMedia
             return clientSocket.ReadLine();
         }
 
-        public void Abonnieren(int abonnentId)
+        public string Abonnieren(int abonnentId)
         {
             string msg = $"abonnieren;{abonnentId}\n";
             clientSocket.Write(msg);
-            string reply = clientSocket.ReadLine();
-            MessageBox.Show(reply);
+            return clientSocket.ReadLine();
         }
 
         public int GetAbonnentenAnzahl(int nutzerId)
@@ -215,7 +214,7 @@ namespace ClientSocialMedia
                 int id = Convert.ToInt32(newRelevant[2]);
                 string titel = relevantData[1];
                 string text = relevantData[2];
-                string autor = relevantData[3];
+                int autor = Convert.ToInt32(relevantData[3]);
                 List<Bild> bilder = new List<Bild>();
                 int likes = Convert.ToInt32(relevantData[4]);
                 DateTime timestamp = Convert.ToDateTime(relevantData[5]);
@@ -235,7 +234,7 @@ namespace ClientSocialMedia
                         bilder.Add(bild);
                     }
                 }
-                Beitrag b = new Beitrag(new Nutzer(autor, "", "", 0), titel, bilder);
+                Beitrag b = new Beitrag(new Nutzer("Nutzer", "", "", autor), titel, bilder);
                 b.Id = id;
                 b.setAnzahlLikes(likes);
                 b.setGeposted(timestamp);

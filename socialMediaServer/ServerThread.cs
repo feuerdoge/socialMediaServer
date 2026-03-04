@@ -127,7 +127,7 @@ namespace socialMediaServer
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
-                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{b.Titel}|{b.Text}|{b.Autor.BenutzerName}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
+                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{b.Titel}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
                                 msg += ";";
                             }
                             

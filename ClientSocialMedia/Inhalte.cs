@@ -112,5 +112,12 @@ namespace ClientSocialMedia
             if (parts[0] == "+")
                 likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes() + 1}";
         }
+
+        private void abonnierenBtn_Click(object sender, EventArgs e)
+        {
+            string reply = Form1.client.Abonnieren(beitrag.Autor.BenutzerId);
+            string[] parts = reply.Split(';');
+            MessageBox.Show(parts[1]);
+        }
     }
 }
