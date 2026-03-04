@@ -22,6 +22,7 @@ namespace ClientSocialMedia
 
         private async void LadeProfil()
         {
+            Cursor = Cursors.WaitCursor;
             Nutzer n = await Task.Run(() => Form1.client.LadeProfil());
             abonnentenLb.Text = $"Aktuelle Abonnenten: {n.AbonnentenAnzahl}";
             nameTb.Text = n.BenutzerName;
@@ -35,6 +36,7 @@ namespace ClientSocialMedia
                     profilePictureBox.Image = img;
                 }
             }
+            Cursor = Cursors.Default;
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
@@ -90,7 +92,7 @@ namespace ClientSocialMedia
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "Profilbild auswählen";
-            dialog.Filter = "Bilder (*.png;*.jpg;*.jpeg)|*.png;*jpg;*jpeg";
+            dialog.Filter = "Bilder (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string filePath = dialog.FileName;

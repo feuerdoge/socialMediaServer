@@ -76,12 +76,15 @@
             // 
             // saveBtn
             // 
+            this.saveBtn.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveBtn.ForeColor = System.Drawing.Color.White;
             this.saveBtn.Location = new System.Drawing.Point(149, 309);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(94, 31);
             this.saveBtn.TabIndex = 3;
             this.saveBtn.Text = "Speichern";
-            this.saveBtn.UseVisualStyleBackColor = true;
+            this.saveBtn.UseVisualStyleBackColor = false;
             this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
             // 
             // abonnentenLb
@@ -168,6 +171,7 @@
             // 
             // passwortBtn
             // 
+            this.passwortBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.passwortBtn.Location = new System.Drawing.Point(8, 313);
             this.passwortBtn.Name = "passwortBtn";
             this.passwortBtn.Size = new System.Drawing.Size(103, 23);
@@ -190,9 +194,10 @@
             // 
             // profilePictureBtn
             // 
+            this.profilePictureBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.profilePictureBtn.Location = new System.Drawing.Point(23, 202);
             this.profilePictureBtn.Name = "profilePictureBtn";
-            this.profilePictureBtn.Size = new System.Drawing.Size(93, 23);
+            this.profilePictureBtn.Size = new System.Drawing.Size(105, 23);
             this.profilePictureBtn.TabIndex = 14;
             this.profilePictureBtn.TabStop = false;
             this.profilePictureBtn.Text = "Profil hinzufügen";
@@ -203,6 +208,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.profilePictureBtn);
             this.Controls.Add(this.profilePictureBox);
             this.Controls.Add(this.passwortBtn);
