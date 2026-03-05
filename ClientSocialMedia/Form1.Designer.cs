@@ -39,16 +39,19 @@
             // 
             // menuPanel
             // 
-            this.menuPanel.Location = new System.Drawing.Point(-1, -1);
+            this.menuPanel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.menuPanel.Location = new System.Drawing.Point(0, 0);
             this.menuPanel.Name = "menuPanel";
-            this.menuPanel.Size = new System.Drawing.Size(235, 455);
+            this.menuPanel.Size = new System.Drawing.Size(235, 450);
             this.menuPanel.TabIndex = 0;
             // 
             // profilePic
             // 
-            this.profilePic.Location = new System.Drawing.Point(685, -1);
+            this.profilePic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.profilePic.Location = new System.Drawing.Point(738, 12);
             this.profilePic.Name = "profilePic";
-            this.profilePic.Size = new System.Drawing.Size(116, 113);
+            this.profilePic.Size = new System.Drawing.Size(50, 50);
+            this.profilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.profilePic.TabIndex = 1;
             this.profilePic.TabStop = false;
             // 
@@ -63,9 +66,9 @@
             // 
             this.inhaltAnzeige.AutoScroll = true;
             this.inhaltAnzeige.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.inhaltAnzeige.Location = new System.Drawing.Point(240, 55);
+            this.inhaltAnzeige.Location = new System.Drawing.Point(235, 0);
             this.inhaltAnzeige.Name = "inhaltAnzeige";
-            this.inhaltAnzeige.Size = new System.Drawing.Size(439, 383);
+            this.inhaltAnzeige.Size = new System.Drawing.Size(497, 450);
             this.inhaltAnzeige.TabIndex = 3;
             this.inhaltAnzeige.Visible = false;
             this.inhaltAnzeige.WrapContents = false;

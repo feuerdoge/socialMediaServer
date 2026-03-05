@@ -259,13 +259,20 @@ namespace ClientSocialMedia
             Nutzer n = new Nutzer(name, "", email, id);
             n.ZuletztAktiv = zuletztAktiv;
             n.AbonnentenAnzahl = abonnenten;
-            if (parts.Length > 6)
-            {
-                string base64 = parts[6];
-                n.ProfilBild = base64;
-            }
+            string base64 = parts[6];
+            n.ProfilBild = base64;
+            
 
             return n;
+        }
+
+        public byte[] LadeProfilePicture()
+        {
+            clientSocket.Write("loadProfile\n");
+            string msg = clientSocket.ReadLine();
+            string[] parts = msg.Split(';');
+            string base64 = parts[6];
+            return Convert.FromBase64String(base64);
         }
 
         public string ProfilAktualisieren(string name, string email)

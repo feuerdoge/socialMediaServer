@@ -14,6 +14,7 @@ namespace ClientSocialMedia
 {
     public partial class ProfileControl : UserControl
     {
+        public Action<Image> OnProfileChange;
         public ProfileControl()
         {
             InitializeComponent();
@@ -99,7 +100,7 @@ namespace ClientSocialMedia
                 string fileName = Path.GetFileName(filePath);
 
                 profilePictureBox.Image = Image.FromFile(filePath);
-
+                OnProfileChange?.Invoke(Image.FromFile(filePath));
                 string pictureBytes = Convert.ToBase64String(File.ReadAllBytes(filePath));
                 string reply = Form1.client.ProfilBild(fileName, pictureBytes);
                 MessageBox.Show(reply);

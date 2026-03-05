@@ -192,7 +192,11 @@ namespace socialMediaServer
                         case "loadProfile":
                             int abonnenten = spf.ErmittelAbonnentenAnzahl(this.nutzer.BenutzerId);
                             if (this.nutzer.ProfilBild == null)
-                                msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten}";
+                            {
+                                byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
+                                string pictureString = Convert.ToBase64String(picture);
+                                msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten};{pictureString}";
+                            }
                             else
                             {
                                 byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", this.nutzer.ProfilBild));

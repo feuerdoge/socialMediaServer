@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -31,6 +32,16 @@ namespace ClientSocialMedia
             ErstellePanel();
         }
 
+        public void UpdateProfilePicture()
+        {
+            byte[] profileBytes = client.LadeProfilePicture();
+            using (MemoryStream ms = new MemoryStream(profileBytes))
+            {
+                Image img = Image.FromStream(ms);
+                profilePic.Image = img;
+            }
+            profilePic.BringToFront();
+        }
         public void ErstellePanel()
         {
             panel = new Panel();
@@ -124,8 +135,10 @@ namespace ClientSocialMedia
             {
                 inhaltAnzeige.Controls.Clear();
                 ProfileControl profil = new ProfileControl();
-                profil.Left = (inhaltAnzeige.Width - profil.Width) / 2;
-                profil.Top = (inhaltAnzeige.Height - profil.Height) / 2;
+                profil.OnProfileChange = (img) =>
+                {
+                    profilePic.Image = img;
+                };
                 inhaltAnzeige.Controls.Add(profil);
             };
 
@@ -175,6 +188,7 @@ namespace ClientSocialMedia
         }
         private void zeigeInhalte() 
         {
+            UpdateProfilePicture();
             EmpfangeDaten();
             inhaltAnzeige.Enabled = true;
             inhaltAnzeige.Visible = true;
