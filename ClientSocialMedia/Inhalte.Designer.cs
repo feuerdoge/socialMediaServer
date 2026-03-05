@@ -84,10 +84,13 @@
             // 
             // kommentareVorschau
             // 
+            this.kommentareVorschau.AutoScroll = true;
+            this.kommentareVorschau.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.kommentareVorschau.Location = new System.Drawing.Point(3, 310);
             this.kommentareVorschau.Name = "kommentareVorschau";
             this.kommentareVorschau.Size = new System.Drawing.Size(433, 162);
             this.kommentareVorschau.TabIndex = 4;
+            this.kommentareVorschau.WrapContents = false;
             // 
             // Kommentarsektion
             // 

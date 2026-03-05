@@ -50,10 +50,13 @@
             // 
             // kommentarsektion
             // 
+            this.kommentarsektion.AutoScroll = true;
+            this.kommentarsektion.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.kommentarsektion.Location = new System.Drawing.Point(3, 28);
             this.kommentarsektion.Name = "kommentarsektion";
             this.kommentarsektion.Size = new System.Drawing.Size(406, 352);
             this.kommentarsektion.TabIndex = 1;
+            this.kommentarsektion.WrapContents = false;
             // 
             // kommentarVerfassen
             // 
