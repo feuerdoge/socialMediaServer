@@ -20,6 +20,8 @@ namespace ClientSocialMedia
         private int scrollIndex = 0;
         private int beitragId;
         private Beitrag beitrag;
+        public Beitrag Beitrag { get => beitrag; }
+        Kommentaruebersicht ku;
         //public Inhalte(List<string> pictures, string titel, int beitragId)
         //{
         //    InitializeComponent();
@@ -32,12 +34,18 @@ namespace ClientSocialMedia
         public Inhalte(Beitrag beitrag)
         {
             InitializeComponent();
+            
             pictures = new List<string>();
             this.beitrag = beitrag;
             this.pictures = new List<string>();
             this.titel = beitrag.Titel;
             this.beitragId = beitrag.Id;
             setDaten(titel, pictures);
+            this.beitrag.SetKommentare(ladekomm());
+            ku = new Kommentaruebersicht(this.beitrag, this);
+            this.Controls.Add(ku);
+            ku.Visible = false;
+            ladeVorschau();
         }
 
         public void setDaten(string titel, List<string> bilder) 
@@ -68,6 +76,19 @@ namespace ClientSocialMedia
                     anzeigeBilder.Add(new Bitmap(img));
                 }
             }
+        }
+
+        public static Image konvertiereBild(string bild) 
+        {
+            if(bild == null || bild == "" || bild == "null") 
+                return null;
+            byte[] imageBytes = Convert.FromBase64String(bild);
+            Image img;
+            using (MemoryStream ms = new MemoryStream(imageBytes))
+            {
+                img = Image.FromStream(ms);
+            }
+            return img;
         }
 
         private void next_Click(object sender, EventArgs e)
@@ -118,6 +139,34 @@ namespace ClientSocialMedia
             string reply = Form1.client.Abonnieren(beitrag.Autor.BenutzerId);
             string[] parts = reply.Split(';');
             MessageBox.Show(parts[1]);
+        }
+
+        private void anzeigen_Click(object sender, EventArgs e)
+        {
+            ku.Visible = true;
+            ku.BringToFront();
+        }
+
+        public List<Kommentar> ladekomm() 
+        {
+            List<Kommentar> k = new List<Kommentar>();
+            k = Form1.client.LadeKommentare(this.beitrag.Id);
+            foreach(Kommentar kom in k) 
+            {
+                this.beitrag.kommentarHinzufuegen(kom);
+            }
+
+            return k;
+        }
+
+        public void ladeVorschau() 
+        {
+            this.kommentareVorschau.Controls.Clear();
+            for(int i = 0; i < beitrag.gebeKommentare().Count - 1; i++) 
+            {
+                KommentarControl kc = new KommentarControl(beitrag.gebeKommentare()[i].autor, beitrag.gebeKommentare()[i].Nachricht, beitrag.gebeKommentare()[i]);
+                kommentareVorschau.Controls.Add(kc);
+            }
         }
     }
 }
