@@ -8,7 +8,7 @@ namespace socialMediaServer
 {
     public class Text
     {
-        private string text;
+        public string text { get; }
         public Text(string text)
         {
             this.text = text;

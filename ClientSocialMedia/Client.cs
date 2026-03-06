@@ -32,7 +32,7 @@ namespace ClientSocialMedia
         }
         public string anmelden(string benutzername, string passwort) 
         {
-            string eingabe = $"{benutzername};{passwort}";
+            string eingabe = $"{ConvertMessage(benutzername)};{ConvertMessage(passwort)}";
             clientSocket.Write("anmelden;" + eingabe +'\n');
             string msg = clientSocket.ReadLine();
             this.benutzername = benutzername;
@@ -46,7 +46,7 @@ namespace ClientSocialMedia
 
         public void registrieren(string benutzername, string passwort, string email) 
         {
-            string eingabe = $"{benutzername};{passwort};{email}";
+            string eingabe = $"{ConvertMessage(benutzername)};{ConvertMessage(passwort)};{ConvertMessage(email)}";
             clientSocket.Write("registrieren;"+eingabe+'\n');
             string msg = clientSocket.ReadLine();
             MessageBox.Show(msg);
@@ -108,7 +108,7 @@ namespace ClientSocialMedia
         }
         public void beitragSenden(string titel, List<string> bilder) 
         {
-            string eingabe = $"{titel};{bilder.Count}";
+            string eingabe = $"{ConvertMessage(titel)};{bilder.Count}";
             foreach (string bild in bilder) 
             {
                 eingabe += bild;
@@ -146,7 +146,7 @@ namespace ClientSocialMedia
 
         public void ErstelleKommentar(int beitragId, string nachricht, int? oberKommentarId)
         {
-            string msg = $"kommentar;{beitragId};{nachricht}";
+            string msg = $"kommentar;{beitragId};{ConvertMessage(nachricht)}";
             clientSocket.Write(msg + "\n");
             string reply = clientSocket.ReadLine();
             MessageBox.Show(reply);
@@ -167,10 +167,10 @@ namespace ClientSocialMedia
             {
                 string[] commentData = parts[2 + i].Split('|');
                 int id = Convert.ToInt32(commentData[0]);
-                string nachricht = commentData[1];
+                string nachricht = GetMessage(commentData[1]);
                 int autor = Convert.ToInt32(commentData[2]);
                 DateTime timestamp = Convert.ToDateTime(commentData[3]);
-                string autorKommentar = commentData[4];
+                string autorKommentar = GetMessage(commentData[4]);
                 string profilAutor = commentData[5];
                 string oberKommentar = commentData[6];
                 Kommentar k;
@@ -215,7 +215,7 @@ namespace ClientSocialMedia
                 string[] relevantData = s.Split('|');
                 string[] newRelevant = relevantData[0].Split('?');
                 int id = Convert.ToInt32(newRelevant[2]);
-                string titel = relevantData[1];
+                string titel = GetMessage(relevantData[1]);
                 string text = relevantData[2];
                 int autor = Convert.ToInt32(relevantData[3]);
                 List<Bild> bilder = new List<Bild>();
@@ -253,8 +253,8 @@ namespace ClientSocialMedia
             clientSocket.Write("loadProfile\n");
             string msg = clientSocket.ReadLine();
             string[] parts = msg.Split(';');
-            string name = parts[1];
-            string email = parts[2];
+            string name = GetMessage(parts[1]);
+            string email = GetMessage(parts[2]);
             int id = Convert.ToInt32(parts[3]);
             DateTime zuletztAktiv = Convert.ToDateTime(parts[4]);
             int abonnenten = Convert.ToInt32(parts[5]);
@@ -279,7 +279,7 @@ namespace ClientSocialMedia
 
         public string ProfilAktualisieren(string name, string email)
         {
-            string msg = $"updateProfile;{name};{email}\n";
+            string msg = $"updateProfile;{ConvertMessage(name)};{ConvertMessage(email)}\n";
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
         }
@@ -293,7 +293,7 @@ namespace ClientSocialMedia
 
         public string PasswortAktualisieren(string old, string newP)
         {
-            string msg = $"updatePasswort;{old};{newP}\n";
+            string msg = $"updatePasswort;{ConvertMessage(old)};{ConvertMessage(newP)}\n";
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
         }
@@ -355,6 +355,14 @@ namespace ClientSocialMedia
             string msg = "abmelden\n";
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
+        }
+        private string ConvertMessage(string message)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(message));
+        }
+        private string GetMessage(string message)
+        {
+            return Encoding.UTF8.GetString(Convert.FromBase64String(message));
         }
     }
 }
