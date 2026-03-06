@@ -346,15 +346,9 @@ namespace ClientSocialMedia
             this.inhaltAnzeige.Controls.Clear();
             beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
             
-            foreach (Beitrag beitraege in beitraege)
+            for(int i = beitraege.Count - 1; i > -1; i--) 
             {
-                Inhalte inhalt = new Inhalte(beitraege);
-                foreach (Bild b in beitraege.Bilder)
-                {
-
-                    inhalt.pictures.Add(b.bilddata);
-                }
-                inhalt.setDaten(beitraege.Titel, inhalt.pictures);
+                Inhalte inhalt = new Inhalte(beitraege[i]);
                 inhaltAnzeige.Controls.Add(inhalt);
             }
         }
