@@ -124,24 +124,6 @@ namespace ClientSocialMedia
         {
             erstellen.Show();
             menuPanel.BackColor = Color.White;
-            Button buttonProfil = new Button()
-            {
-                Size = new Size(215, 60),
-                Location = new Point(10, 10),
-                BackColor= Color.White,
-                Text = "Profil"
-            };
-            buttonProfil.Click += (s, e) =>
-            {
-                inhaltAnzeige.Controls.Clear();
-                ProfileControl profil = new ProfileControl();
-                profil.OnProfileChange = (img) =>
-                {
-                    profilePic.Image = img;
-                };
-                inhaltAnzeige.Controls.Add(profil);
-            };
-
             Button buttonBeitraege = new Button()
             {
                 Size = new Size(215, 60),
@@ -177,7 +159,6 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Suchen"
             };
-            menuPanel.Controls.Add(buttonProfil);
             menuPanel.Controls.Add(buttonBeitraege);
             menuPanel.Controls.Add(buttonBeliebt);
             menuPanel.Controls.Add(buttonChat);
@@ -188,10 +169,12 @@ namespace ClientSocialMedia
         }
         private void zeigeInhalte() 
         {
+            Cursor = Cursors.WaitCursor;
             UpdateProfilePicture();
             EmpfangeDaten();
             inhaltAnzeige.Enabled = true;
             inhaltAnzeige.Visible = true;
+            Cursor = Cursors.Default;
         }
         private void EmpfangeDaten() 
         {
@@ -248,6 +231,7 @@ namespace ClientSocialMedia
                 if (antwort.Contains("+")) 
                 {
                     panel.Hide();
+                    profilePic.Visible = true;
                     zeigeProgram();
                 }
             }
@@ -332,6 +316,33 @@ namespace ClientSocialMedia
             client.beitragSenden(titelEingabe.Text, bilder);
             beitragsErstellungsPanel.Visible = false;
             EmpfangeDaten();
+        }
+
+        private void profilePic_Click(object sender, EventArgs e)
+        {
+            if (profilePic.Tag == null)
+            {
+                inhaltAnzeige.Controls.Clear();
+                ProfileControl profil = new ProfileControl();
+                profil.OnProfileChange = (img) =>
+                {
+                    profilePic.Image = img;
+                };
+                inhaltAnzeige.Controls.Add(profil);
+                profilePic.Tag = "profile";
+            }
+            else if (profilePic.Tag == "profile")
+            {
+                inhaltAnzeige.Controls.Clear();
+                profilePic.Tag = null;
+                zeigeInhalte();
+            }
+        }
+
+        private void profilePic_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tt = new ToolTip();
+            tt.SetToolTip(profilePic, "Profil anpassen");
         }
     }
 }

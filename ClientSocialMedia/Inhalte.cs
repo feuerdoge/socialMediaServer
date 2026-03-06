@@ -162,7 +162,7 @@ namespace ClientSocialMedia
         public void ladeVorschau() 
         {
             this.kommentareVorschau.Controls.Clear();
-            for(int i = 0; i < beitrag.gebeKommentare().Count - 1; i++) 
+            for(int i = 0; i < beitrag.gebeKommentare().Count; i++) 
             {
                 KommentarControl kc = new KommentarControl(beitrag.gebeKommentare()[i].autor, beitrag.gebeKommentare()[i].Nachricht, beitrag.gebeKommentare()[i]);
                 kommentareVorschau.Controls.Add(kc);

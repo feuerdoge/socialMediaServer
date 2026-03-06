@@ -353,6 +353,12 @@ namespace socialMediaServer
             int verify = Convert.ToInt32(check.ExecuteScalar());
             if (verify != 0)
                 return -1;
+            MySqlCommand check2 = new MySqlCommand("SELECT nutzerId FROM likes WHERE nutzerId = @n AND beitragId = @b", conn);
+            check2.Parameters.AddWithValue("@n", nutzerId);
+            check2.Parameters.AddWithValue("@b", beitragId);
+            verify = Convert.ToInt32(check2.ExecuteScalar());
+            if (verify != 0)
+                return -2;
             MySqlCommand like = new MySqlCommand(@"
                 INSERT INTO likes (beitragId, nutzerId)
                 VALUES (@bId, @nId)", conn);

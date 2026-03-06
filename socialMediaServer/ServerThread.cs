@@ -143,6 +143,10 @@ namespace socialMediaServer
                                 Console.WriteLine("Fehler beim liken");
                                 client.Write("-;Autor kann nicht selbst liken\n");
                             }
+                            else if (response == -2)
+                            {
+                                client.Write("-;Autor hat bereits diesen Beitrag geliked\n");
+                            }
                             else
                             {
                                 client.Write("+;Liken Erfolgreich\n");
@@ -181,7 +185,20 @@ namespace socialMediaServer
                             msg = $"kommentare;{kommentare.Count}";
                             foreach (Kommentar k in kommentare)
                             {
-                                msg += $";{k.Id}|{k.Nachricht}|{k.AutorId}|{k.Timestamp}|{k.autor}|{k.profil}|";
+
+                              
+                                string pictureString = "";
+                                if (k.profil != null)
+                                {
+                                    byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", k.profil));
+                                    pictureString = Convert.ToBase64String(picture);
+                                }
+                                else
+                                {
+                                    byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
+                                    pictureString = Convert.ToBase64String(picture);
+                                }
+                                    msg += $";{k.Id}|{k.Nachricht}|{k.AutorId}|{k.Timestamp}|{k.autor}|{pictureString}|";
                                 if (k.OberKommentarId != null)
                                     msg += k.OberKommentarId;
                                 else
