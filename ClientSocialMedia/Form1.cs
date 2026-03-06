@@ -317,6 +317,14 @@ namespace ClientSocialMedia
             beitragsErstellungsPanel.Visible = false;
             EmpfangeDaten();
         }
+        
+        public void Abmelden()
+        {
+            inhaltAnzeige.Controls.Clear();
+            inhaltAnzeige.Visible = false;
+            profilePic.Visible = false;
+            ErstellePanel();
+        }
 
         private void profilePic_Click(object sender, EventArgs e)
         {
@@ -327,6 +335,10 @@ namespace ClientSocialMedia
                 profil.OnProfileChange = (img) =>
                 {
                     profilePic.Image = img;
+                };
+                profil.OnAbmelden = () =>
+                {
+                    Abmelden();
                 };
                 inhaltAnzeige.Controls.Add(profil);
                 profilePic.Tag = "profile";

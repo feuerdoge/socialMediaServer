@@ -297,5 +297,12 @@ namespace ClientSocialMedia
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
         }
+
+        public string Abmelden()
+        {
+            string msg = "abmelden\n";
+            clientSocket.Write(msg);
+            return clientSocket.ReadLine();
+        }
     }
 }

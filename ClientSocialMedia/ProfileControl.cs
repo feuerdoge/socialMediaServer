@@ -15,6 +15,7 @@ namespace ClientSocialMedia
     public partial class ProfileControl : UserControl
     {
         public Action<Image> OnProfileChange;
+        public Action OnAbmelden;
         public ProfileControl()
         {
             InitializeComponent();
@@ -106,5 +107,13 @@ namespace ClientSocialMedia
                 MessageBox.Show(reply);
             }
         }
+
+        private void abmeldenBtn_Click(object sender, EventArgs e)
+        {
+            string msg = Form1.client.Abmelden();
+            MessageBox.Show(msg);
+            OnAbmelden?.Invoke();
+        }
+
     }
 }
