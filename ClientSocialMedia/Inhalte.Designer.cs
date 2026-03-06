@@ -32,11 +32,12 @@
             this.beitragBild = new System.Windows.Forms.PictureBox();
             this.next = new System.Windows.Forms.Button();
             this.last = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.kommentareVorschau = new System.Windows.Forms.FlowLayoutPanel();
             this.Kommentarsektion = new System.Windows.Forms.Label();
             this.likeBtn = new System.Windows.Forms.Button();
             this.likesLb = new System.Windows.Forms.Label();
             this.abonnierenBtn = new System.Windows.Forms.Button();
+            this.anzeigen = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,7 +45,7 @@
             // 
             this.beitragTitel.AutoSize = true;
             this.beitragTitel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.beitragTitel.Location = new System.Drawing.Point(127, 11);
+            this.beitragTitel.Location = new System.Drawing.Point(200, 12);
             this.beitragTitel.Name = "beitragTitel";
             this.beitragTitel.Size = new System.Drawing.Size(53, 25);
             this.beitragTitel.TabIndex = 0;
@@ -54,7 +55,7 @@
             // 
             this.beitragBild.BackgroundImage = global::ClientSocialMedia.Properties.Resources.empty;
             this.beitragBild.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.beitragBild.Location = new System.Drawing.Point(49, 39);
+            this.beitragBild.Location = new System.Drawing.Point(109, 40);
             this.beitragBild.Name = "beitragBild";
             this.beitragBild.Size = new System.Drawing.Size(224, 199);
             this.beitragBild.TabIndex = 1;
@@ -62,7 +63,7 @@
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(256, 126);
+            this.next.Location = new System.Drawing.Point(316, 127);
             this.next.Name = "next";
             this.next.Size = new System.Drawing.Size(28, 23);
             this.next.TabIndex = 2;
@@ -72,7 +73,7 @@
             // 
             // last
             // 
-            this.last.Location = new System.Drawing.Point(35, 126);
+            this.last.Location = new System.Drawing.Point(95, 127);
             this.last.Name = "last";
             this.last.Size = new System.Drawing.Size(28, 23);
             this.last.TabIndex = 3;
@@ -81,12 +82,15 @@
             this.last.Visible = false;
             this.last.Click += new System.EventHandler(this.last_Click);
             // 
-            // flowLayoutPanel1
+            // kommentareVorschau
             // 
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 310);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(310, 162);
-            this.flowLayoutPanel1.TabIndex = 4;
+            this.kommentareVorschau.AutoScroll = true;
+            this.kommentareVorschau.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.kommentareVorschau.Location = new System.Drawing.Point(3, 310);
+            this.kommentareVorschau.Name = "kommentareVorschau";
+            this.kommentareVorschau.Size = new System.Drawing.Size(433, 162);
+            this.kommentareVorschau.TabIndex = 4;
+            this.kommentareVorschau.WrapContents = false;
             // 
             // Kommentarsektion
             // 
@@ -126,31 +130,42 @@
             this.abonnierenBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.abonnierenBtn.ForeColor = System.Drawing.Color.White;
             this.abonnierenBtn.Location = new System.Drawing.Point(176, 256);
-            this.abonnierenBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.abonnierenBtn.Margin = new System.Windows.Forms.Padding(2);
             this.abonnierenBtn.Name = "abonnierenBtn";
-            this.abonnierenBtn.Size = new System.Drawing.Size(79, 23);
+            this.abonnierenBtn.Size = new System.Drawing.Size(67, 19);
             this.abonnierenBtn.TabIndex = 8;
             this.abonnierenBtn.TabStop = false;
             this.abonnierenBtn.Text = "Abonnieren";
             this.abonnierenBtn.UseVisualStyleBackColor = false;
             this.abonnierenBtn.Click += new System.EventHandler(this.abonnierenBtn_Click);
             // 
+            // anzeigen
+            // 
+            this.anzeigen.Location = new System.Drawing.Point(176, 282);
+            this.anzeigen.Name = "anzeigen";
+            this.anzeigen.Size = new System.Drawing.Size(97, 23);
+            this.anzeigen.TabIndex = 9;
+            this.anzeigen.Text = "Alle Anzeigen";
+            this.anzeigen.UseVisualStyleBackColor = true;
+            this.anzeigen.Click += new System.EventHandler(this.anzeigen_Click);
+            // 
             // Inhalte
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.Controls.Add(this.anzeigen);
             this.Controls.Add(this.abonnierenBtn);
             this.Controls.Add(this.likesLb);
             this.Controls.Add(this.likeBtn);
             this.Controls.Add(this.Kommentarsektion);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.kommentareVorschau);
             this.Controls.Add(this.last);
             this.Controls.Add(this.next);
             this.Controls.Add(this.beitragBild);
             this.Controls.Add(this.beitragTitel);
             this.Name = "Inhalte";
-            this.Size = new System.Drawing.Size(316, 475);
+            this.Size = new System.Drawing.Size(439, 475);
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -163,10 +178,11 @@
         private System.Windows.Forms.PictureBox beitragBild;
         private System.Windows.Forms.Button next;
         private System.Windows.Forms.Button last;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel kommentareVorschau;
         private System.Windows.Forms.Label Kommentarsektion;
         private System.Windows.Forms.Button likeBtn;
         private System.Windows.Forms.Label likesLb;
         private System.Windows.Forms.Button abonnierenBtn;
+        private System.Windows.Forms.Button anzeigen;
     }
 }

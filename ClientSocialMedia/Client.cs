@@ -35,6 +35,7 @@ namespace ClientSocialMedia
             string eingabe = $"{benutzername};{passwort}";
             clientSocket.Write("anmelden;" + eingabe +'\n');
             string msg = clientSocket.ReadLine();
+            this.benutzername = benutzername;
             MessageBox.Show(msg);
             return msg;
             //List<string> bilder = BilderAuswaehlen();
@@ -146,8 +147,6 @@ namespace ClientSocialMedia
         public void ErstelleKommentar(int beitragId, string nachricht, int? oberKommentarId)
         {
             string msg = $"kommentar;{beitragId};{nachricht}";
-            if (oberKommentarId != null)
-                msg += $";{oberKommentarId}";
             clientSocket.Write(msg + "\n");
             string reply = clientSocket.ReadLine();
             MessageBox.Show(reply);
@@ -171,16 +170,20 @@ namespace ClientSocialMedia
                 string nachricht = commentData[1];
                 int autor = Convert.ToInt32(commentData[2]);
                 DateTime timestamp = Convert.ToDateTime(commentData[3]);
-                string oberKommentar = commentData[4];
+                string autorKommentar = commentData[4];
+                string profilAutor = commentData[5];
+                string oberKommentar = commentData[6];
                 Kommentar k;
                 if (oberKommentar == "null") 
                 {
-                    k = new Kommentar(id, nachricht, timestamp, autor, null);
+                    k = new Kommentar(nachricht, timestamp, autor);
                 }
                 else
                 {
-                    k = new Kommentar(id, nachricht, timestamp, autor, Convert.ToInt32(oberKommentar));
+                    k = new Kommentar(nachricht, timestamp, autor);
                 }
+                k.autor = autorKommentar;
+                k.profil = profilAutor;
                 comments.Add(k);
             }
             return comments;

@@ -62,6 +62,18 @@
     <Compile Include="Inhalte.Designer.cs">
       <DependentUpon>Inhalte.cs</DependentUpon>
     </Compile>
+    <Compile Include="KommentarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="KommentarControl.Designer.cs">
+      <DependentUpon>KommentarControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kommentaruebersicht.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Kommentaruebersicht.Designer.cs">
+      <DependentUpon>Kommentaruebersicht.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -75,6 +87,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Inhalte.resx">
       <DependentUpon>Inhalte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KommentarControl.resx">
+      <DependentUpon>KommentarControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kommentaruebersicht.resx">
+      <DependentUpon>Kommentaruebersicht.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProfileControl.resx">
       <DependentUpon>ProfileControl.cs</DependentUpon>

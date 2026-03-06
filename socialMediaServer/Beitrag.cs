@@ -20,6 +20,7 @@ namespace socialMediaServer
         public Text Text { get => text; }
         private List<Bild> bilder;
         public List<Bild> Bilder { get => bilder; }
+        private List<Kommentar> kommentare;
         public Beitrag(Nutzer autor, string titel, List<Bild> bild)
         {
             this.autor = autor;
@@ -27,6 +28,7 @@ namespace socialMediaServer
             anzahlLikes = 0;
             geposted = DateTime.Now;
             bilder = new List<Bild>();
+            kommentare = new List<Kommentar>();
             foreach (Bild bildItem in bild) 
                 Hinzufuegen(bildItem);
         }
@@ -51,6 +53,11 @@ namespace socialMediaServer
             return anzahlLikes;
         }
 
+        public List<Kommentar> gebeKommentare() 
+        {
+            return kommentare;
+        }
+
         public void setAnzahlLikes(int value) 
         {
             anzahlLikes = value;
@@ -59,6 +66,16 @@ namespace socialMediaServer
         public void setGeposted(DateTime gepostet) 
         {
             this.geposted = gepostet;
+        }
+
+        public void kommentarHinzufuegen(Kommentar kommentar) 
+        {
+            this.kommentare.Add(kommentar);
+        }
+
+        public void SetKommentare(List<Kommentar> kommentare) 
+        {
+            this.kommentare = kommentare;
         }
     }
 }

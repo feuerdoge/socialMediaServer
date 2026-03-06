@@ -388,9 +388,9 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand select = new MySqlCommand(@"
-                SELECT kommentarid, nachricht, timestamp, autor, oberKommentarId
-                From kommentar
-                WHERE beitragId = @bId
+                SELECT kommentarid, nachricht, timestamp, autor, oberKommentarId, benutzerName, profilBild
+                From kommentar, nutzer
+                WHERE beitragId = @bId AND nutzerId = autor
                 ORDER BY timestamp ASC", conn);
             select.Parameters.AddWithValue("@bId", beitragId);
             MySqlDataReader reader = select.ExecuteReader();
@@ -401,10 +401,23 @@ namespace socialMediaServer
                 DateTime timestamp = reader.GetDateTime("timestamp");
                 int autor = reader.GetInt32("autor");
                 var ordinal = reader.GetOrdinal("oberKommentarId");
+                string benutzername = reader.GetString("benutzerName");
+                int index = reader.GetOrdinal("profilBild");
+                string profil;
+                if (!reader.IsDBNull(index))
+                {
+                    profil = reader.GetString("profilBild");
+                }
+                else
+                {
+                    profil = null;
+                }
                 int? oKid = null;
                 if (!reader.IsDBNull(ordinal))    
                     oKid = reader.GetInt32(ordinal);
-                Kommentar k = new Kommentar(kId, nachricht, timestamp, autor, oKid);
+                Kommentar k = new Kommentar(nachricht, timestamp, autor);
+                k.autor = benutzername;
+                k.profil = profil;
                 comments.Add(k);
             }
             conn.Close();

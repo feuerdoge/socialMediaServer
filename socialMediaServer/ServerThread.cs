@@ -181,7 +181,7 @@ namespace socialMediaServer
                             msg = $"kommentare;{kommentare.Count}";
                             foreach (Kommentar k in kommentare)
                             {
-                                msg += $";{k.Id}|{k.Nachricht}|{k.AutorId}|{k.Timestamp}|";
+                                msg += $";{k.Id}|{k.Nachricht}|{k.AutorId}|{k.Timestamp}|{k.autor}|{k.profil}|";
                                 if (k.OberKommentarId != null)
                                     msg += k.OberKommentarId;
                                 else
