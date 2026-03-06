@@ -217,6 +217,24 @@ namespace socialMediaServer
                             }
                             client.Write(msg + "\n");
                             break;
+                        case "loadNutzer":
+                            nutzerId = Convert.ToInt32(parameter[1]);
+                            abonnenten = spf.ErmittelAbonnentenAnzahl(nutzerId);
+                            Nutzer n = spf.SucheNutzer(nutzerId);
+                            if (n.ProfilBild == null)
+                            {
+                                byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
+                                string pictureString = Convert.ToBase64String(picture);
+                                msg = $"+;{ConvertMessage(n.BenutzerName)};{n.BenutzerId};{n.ZuletztAktiv};{abonnenten};{pictureString}";
+                            }
+                            else
+                            {
+                                byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", n.ProfilBild));
+                                string pictureString = Convert.ToBase64String(picture);
+                                msg = $"+;{ConvertMessage(n.BenutzerName)};{n.BenutzerId};{n.ZuletztAktiv};{abonnenten};{pictureString}";
+                            }
+                            client.Write(msg + "\n");
+                            break;
                         case "updateProfile":
                             name = GetMessage(parameter[1]);
                             email = GetMessage(parameter[2]);

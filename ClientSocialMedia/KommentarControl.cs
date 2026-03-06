@@ -16,11 +16,13 @@ namespace ClientSocialMedia
         private string benutzer;
         private string text;
         private Kommentar kommentar;
+        private int nutzerId;
 
         public KommentarControl(string nutzer, string text, Kommentar kommentar)
         {
             InitializeComponent();
             setKommentar(nutzer, text, kommentar);
+            nutzerId = kommentar.AutorId;
         }
 
         public void setKommentar(string nutzer, string text, Kommentar kommentar) 
@@ -32,6 +34,15 @@ namespace ClientSocialMedia
 
             this.autor.Text = benutzer;
             this.profil.Image = Inhalte.konvertiereBild(kommentar.profil);
+        }
+
+        private async void profil_Click(object sender, EventArgs e)
+        {
+            UserOverviewControl userOverview = new UserOverviewControl();
+            userOverview.Location = new Point((this.Parent.Parent.Width - userOverview.Width) / 2, (this.Parent.Parent.Height - userOverview.Height) / 2);
+            this.Parent.Parent.Controls.Add(userOverview);
+            userOverview.BringToFront();
+            await userOverview.LadeNutzer(nutzerId);
         }
     }
 }

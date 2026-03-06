@@ -297,8 +297,23 @@ namespace ClientSocialMedia
             n.AbonnentenAnzahl = abonnenten;
             string base64 = parts[6];
             n.ProfilBild = base64;
-            
 
+            return n;
+        }
+        public Nutzer LadeNutzer(int nutzerId)
+        {
+            clientSocket.Write($"loadNutzer;{nutzerId}\n");
+            string msg = clientSocket.ReadLine();
+            string[] parts = msg.Split(';');
+            string name = GetMessage(parts[1]);
+            int id = Convert.ToInt32(parts[2]);
+            DateTime zuletztAktiv = Convert.ToDateTime(parts[3]);
+            int abonnenten = Convert.ToInt32(parts[4]);
+            Nutzer n = new Nutzer(name, "", "", id);
+            n.ZuletztAktiv = zuletztAktiv;
+            n.AbonnentenAnzahl = abonnenten;
+            string base64 = parts[5];
+            n.ProfilBild = base64;
             return n;
         }
 

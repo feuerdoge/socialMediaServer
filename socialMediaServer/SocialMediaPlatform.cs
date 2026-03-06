@@ -251,7 +251,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand get = new MySqlCommand(@"
-                SELECT benutzerName, email, zuletztAktiv
+                SELECT benutzerName, email, zuletztAktiv, profilBild
                 FROM nutzer
                 WHERE nutzerId = @nutzerId", conn);
             get.Parameters.AddWithValue("@nutzerId", nutzerId);
@@ -262,7 +262,10 @@ namespace socialMediaServer
                 string name = reader.GetString("benutzerName");
                 string email = reader.GetString("email");
                 DateTime time = reader.GetDateTime("zuletztAktiv");
+                int ordinale = reader.GetOrdinal("profilBild");
                 n = new Nutzer(name, "", email, nutzerId);
+                if (!reader.IsDBNull(ordinale))
+                    n.ProfilBild = reader.GetString("profilBild");
                 n.ZuletztAktiv = time;
             }
             conn.Close();
