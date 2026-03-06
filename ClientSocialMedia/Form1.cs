@@ -174,6 +174,7 @@ namespace ClientSocialMedia
             EmpfangeDaten();
             inhaltAnzeige.Enabled = true;
             inhaltAnzeige.Visible = true;
+            menuPanel.Visible = true;
             Cursor = Cursors.Default;
         }
         private void EmpfangeDaten() 
@@ -323,6 +324,9 @@ namespace ClientSocialMedia
             inhaltAnzeige.Controls.Clear();
             inhaltAnzeige.Visible = false;
             profilePic.Visible = false;
+            menuPanel.Visible = false;
+            erstellen.Visible = false;
+            profilePic.Tag = null;
             ErstellePanel();
         }
 
