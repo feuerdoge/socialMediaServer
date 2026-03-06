@@ -231,7 +231,6 @@ namespace ClientSocialMedia
                         string imageName = innerData[0];
                         string imageData = innerData[1];
                         byte[] imageBytes = Convert.FromBase64String(imageData);
-                        File.WriteAllBytes(imageName, imageBytes);
                         Bild bild = new Bild(imageName);
                         bild.bilddata = imageData;
                         bilder.Add(bild);
