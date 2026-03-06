@@ -171,6 +171,22 @@ namespace socialMediaServer
             conn.Close();
             return beitraege;
         }
+
+        public List<Beitrag> BeitraegeVonAbosHolen(string benutzerName) 
+        {
+            List<Beitrag> beitraege = new List<Beitrag>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand neusteBeitraege = new MySqlCommand(@"
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                FROM beitrag b
+                JOIN nutzer u ON b.autor = u.nutzerId
+                LEFT JOIN likes l ON b.beitragid = l.beitragId
+                WHERE b.erstelltAm > @zuletztAktiv AND b.autor = (SELECT nutzerId FROM nutzer n WHERE n.)
+                GROUP BY b.beitragid
+                ORDER BY b.erstelltAm DESC
+                LIMIT 10", conn);
+        }
         private Beitrag LeseBeitrag(MySqlDataReader reader)
         {
             int beitragId = reader.GetInt32("beitragid");

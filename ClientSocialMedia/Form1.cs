@@ -138,35 +138,43 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Beliebt"
             };
-            Button buttonChat = new Button()
+            Button buttonNurAbos = new Button()
             {
                 Size = new Size(215, 60),
                 Location = new Point(10, 130),
+                BackColor = Color.White,
+                Text = "Beiträge Abonnierter Nutzer"
+            };
+            Button buttonChat = new Button()
+            {
+                Size = new Size(215, 60),
+                Location = new Point(10, 190),
                 BackColor = Color.White,
                 Text = "Chat"
             };
             Button buttonGruppen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 190),
+                Location = new Point(10, 250),
                 BackColor = Color.White,
                 Text = "Gruppen"
             };
             Button buttonSuchen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 250),
+                Location = new Point(10, 310),
                 BackColor = Color.White,
                 Text = "Suchen"
             };
             menuPanel.Controls.Add(buttonBeitraege);
             menuPanel.Controls.Add(buttonBeliebt);
+            menuPanel.Controls.Add(buttonNurAbos);
             menuPanel.Controls.Add(buttonChat);
             menuPanel.Controls.Add(buttonGruppen);
             menuPanel.Controls.Add(buttonSuchen);
 
             buttonBeliebt.Click += buttonBeliebt_Click;
-
+            buttonNurAbos.Click += 
             zeigeInhalte();
         }
         private void zeigeInhalte() 
@@ -374,6 +382,11 @@ namespace ClientSocialMedia
                 Inhalte inhalt = new Inhalte(beitraege[i]);
                 inhaltAnzeige.Controls.Add(inhalt);
             }
+        }
+
+        private void buttonNurAbos_Click(object sender, EventArgs e) 
+        {
+            
         }
     }
 }

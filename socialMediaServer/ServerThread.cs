@@ -138,7 +138,9 @@ namespace socialMediaServer
                             Console.WriteLine(msg);
                             client.Write(msg + "\n");
                             break;
-
+                        case "nurAbos":
+                            List<Beitrag> beitraege = spf.BeitraegeVonAbosHolen();
+                            break;
                         case "like":   // like;2 (BeitragId)
                             int beitragId = Convert.ToInt32(parameter[1]);
                             int response = spf.Like(beitragId, this.nutzer.BenutzerId);
