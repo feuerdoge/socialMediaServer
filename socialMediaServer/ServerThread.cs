@@ -102,7 +102,7 @@ namespace socialMediaServer
                                 text = GetMessage(parameter[3 + anzahl]);
 
                             spf.ErstelleBeitrag(this.nutzer, titel, text, dateinamen);
-                            //client.Write("+;Hochgeladen\n");
+                            client.Write("+;Hochgeladen\n");
                             break;
                         case "neueBeitraege":
                             List<Beitrag> beitraege = spf.ErmittleNeueBeitraege(this.nutzer);

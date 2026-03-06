@@ -1,5 +1,9 @@
-﻿using System;
+﻿using socialMediaServer;
+using SocketAbi;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,8 +12,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using socialMediaServer;
-using SocketAbi;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace ClientSocialMedia
@@ -98,7 +100,10 @@ namespace ClientSocialMedia
             {
                 foreach(string path in dialog.FileNames)
                 {
-                    byte[] bytes = System.IO.File.ReadAllBytes(path);  // Credits: https://stackoverflow.com/questions/1497997/reliable-way-to-convert-a-file-to-a-byte
+                    //byte[] bytes = System.IO.File.ReadAllBytes(path);  // Credits: https://stackoverflow.com/questions/1497997/reliable-way-to-convert-a-file-to-a-byte
+                    Image resized = ImageResizer(Image.FromFile(path));
+                    byte[] bytes = ImageToByteArray(resized);
+
                     string picture = Convert.ToBase64String(bytes);
                     string msg = $";{System.IO.Path.GetFileName(path)}|{picture}";
                     bilder.Add(msg);
@@ -106,6 +111,33 @@ namespace ClientSocialMedia
             }
             return bilder;
         }
+
+        private static byte[] ImageToByteArray(System.Drawing.Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, ImageFormat.Jpeg); 
+                return ms.ToArray();
+            }
+        }
+        private static Image ImageResizer(System.Drawing.Image img)
+        {
+            int width = img.Width;
+            int height = img.Height;
+            double ratio = (double)1024 / Math.Max(width, height);
+            if (ratio >= 1)
+                return img;
+            int newWidth = (int)(width * ratio);
+            int newHeight = (int)(height * ratio);
+            Bitmap resized = new Bitmap(newWidth, newHeight);
+            using (Graphics g = Graphics.FromImage(resized))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(img, 0, 0, newWidth, newHeight);
+            }
+            return resized;
+        }
+
         public void beitragSenden(string titel, List<string> bilder) 
         {
             string eingabe = $"{ConvertMessage(titel)};{bilder.Count}";
@@ -115,6 +147,8 @@ namespace ClientSocialMedia
             } 
             
             clientSocket.Write("beitrag;" + eingabe + '\n');
+            if (clientSocket.ReadLine().Split(';')[0] == "-")
+                MessageBox.Show("Zu viele Bilder, maximal 7!");
         }
 
         public string Like(int beitragId)
