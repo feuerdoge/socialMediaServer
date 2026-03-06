@@ -39,6 +39,7 @@
             this.beitragBild = new System.Windows.Forms.PictureBox();
             this.profilePicPb = new System.Windows.Forms.PictureBox();
             this.nutzerNameLb = new System.Windows.Forms.Label();
+            this.timeLb = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.profilePicPb)).BeginInit();
             this.SuspendLayout();
@@ -118,7 +119,7 @@
             // 
             // anzeigen
             // 
-            this.anzeigen.Location = new System.Drawing.Point(176, 282);
+            this.anzeigen.Location = new System.Drawing.Point(156, 282);
             this.anzeigen.Name = "anzeigen";
             this.anzeigen.Size = new System.Drawing.Size(97, 23);
             this.anzeigen.TabIndex = 9;
@@ -158,11 +159,22 @@
             this.nutzerNameLb.TabIndex = 11;
             this.nutzerNameLb.Text = "Nutzername";
             // 
+            // timeLb
+            // 
+            this.timeLb.AutoSize = true;
+            this.timeLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeLb.Location = new System.Drawing.Point(296, 292);
+            this.timeLb.Name = "timeLb";
+            this.timeLb.Size = new System.Drawing.Size(140, 12);
+            this.timeLb.TabIndex = 12;
+            this.timeLb.Text = "Erstellt am dd/MM/yyyy HH:mm";
+            // 
             // Inhalte
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.Controls.Add(this.timeLb);
             this.Controls.Add(this.nutzerNameLb);
             this.Controls.Add(this.profilePicPb);
             this.Controls.Add(this.anzeigen);
@@ -196,5 +208,6 @@
         private System.Windows.Forms.Button anzeigen;
         private System.Windows.Forms.PictureBox profilePicPb;
         private System.Windows.Forms.Label nutzerNameLb;
+        private System.Windows.Forms.Label timeLb;
     }
 }

@@ -31,6 +31,7 @@
             this.autor = new System.Windows.Forms.Label();
             this.profil = new System.Windows.Forms.PictureBox();
             this.komm = new System.Windows.Forms.TextBox();
+            this.timeLb = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.profil)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,11 +66,22 @@
             this.komm.Size = new System.Drawing.Size(249, 70);
             this.komm.TabIndex = 2;
             // 
+            // timeLb
+            // 
+            this.timeLb.AutoSize = true;
+            this.timeLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeLb.Location = new System.Drawing.Point(217, 5);
+            this.timeLb.Name = "timeLb";
+            this.timeLb.Size = new System.Drawing.Size(90, 12);
+            this.timeLb.TabIndex = 3;
+            this.timeLb.Text = "dd.MM.yyyy hh:mm";
+            // 
             // KommentarControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.Controls.Add(this.timeLb);
             this.Controls.Add(this.komm);
             this.Controls.Add(this.profil);
             this.Controls.Add(this.autor);
@@ -87,5 +99,6 @@
         private System.Windows.Forms.Label autor;
         private System.Windows.Forms.PictureBox profil;
         private System.Windows.Forms.TextBox komm;
+        private System.Windows.Forms.Label timeLb;
     }
 }

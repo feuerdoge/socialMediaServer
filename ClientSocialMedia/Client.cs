@@ -63,28 +63,6 @@ namespace ClientSocialMedia
             //clientSocket.Write("neueBeitraege\n");
             //Test(clientSocket.ReadLine());
         }
-
-        // Todo: Titel Test; Sämtliche Daten teilen
-        public void BeitraegeAuspacken(string msg)
-        {
-            string titel = "";
-            string[] parts = msg.Split(';');
-            int anzahl = int.Parse(parts[1]);
-            for (int i = 0; i < anzahl; i++)
-            {
-                string beitragString = parts[2 + i];
-                string[] felder = beitragString.Split('|');
-                titel += felder[1];
-            }
-            MessageBox.Show(titel);
-        }
-        public string PictureMessage(List<string> bilder)
-        {
-            string msg = "";
-            foreach (string bild in bilder)
-                msg += bild;
-            return msg;
-        }
         /// <summary>
         /// Opens a dialog lets the user select pictures and encodes them to base64 (bytes just as strings) 
         /// Adds them to a list with their filename.

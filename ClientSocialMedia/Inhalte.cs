@@ -61,6 +61,7 @@ namespace ClientSocialMedia
             this.beitragTitel.Left = (this.Width - beitragTitel.Width) / 2;
             likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes()}";
             nutzerNameLb.Text = Autor.BenutzerName;
+            timeLb.Text = $"Erstellt am: {beitrag.Geposted.ToString("g")}";
             if (bilder.Count != 0)
             {
                 konvertiereBilder(bilder);

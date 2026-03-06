@@ -23,6 +23,7 @@ namespace ClientSocialMedia
             InitializeComponent();
             setKommentar(nutzer, text, kommentar);
             nutzerId = kommentar.AutorId;
+            this.kommentar = kommentar;
         }
 
         public void setKommentar(string nutzer, string text, Kommentar kommentar) 
@@ -34,6 +35,7 @@ namespace ClientSocialMedia
 
             this.autor.Text = benutzer;
             this.profil.Image = Inhalte.konvertiereBild(kommentar.profil);
+            this.timeLb.Text = kommentar.Timestamp.ToString("g");
         }
 
         private async void profil_Click(object sender, EventArgs e)
