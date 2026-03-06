@@ -189,12 +189,8 @@ namespace ClientSocialMedia
             foreach(Beitrag beitraege in beitraege) 
             {
                 Inhalte inhalt = new Inhalte(beitraege);
-                foreach(Bild b in beitraege.Bilder) 
-                {
 
-                    inhalt.pictures.Add(b.bilddata);
-                }
-                inhalt.setDaten(beitraege.Titel, inhalt.pictures);
+                
                 inhaltAnzeige.Controls.Add(inhalt);
             }
             //Server nach einer Liste aller Beiträge fragen

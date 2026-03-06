@@ -40,12 +40,17 @@ namespace ClientSocialMedia
             this.pictures = new List<string>();
             this.titel = beitrag.Titel;
             this.beitragId = beitrag.Id;
-            setDaten(titel, pictures);
             this.beitrag.SetKommentare(ladekomm());
             ku = new Kommentaruebersicht(this.beitrag, this);
             this.Controls.Add(ku);
             ku.Visible = false;
             ladeVorschau();
+            foreach (Bild b in beitrag.Bilder)
+            {
+
+                pictures.Add(b.bilddata);
+            }
+            setDaten(titel, pictures);
         }
 
         public void setDaten(string titel, List<string> bilder) 
