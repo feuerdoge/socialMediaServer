@@ -27,14 +27,12 @@ namespace socialMediaServer
 
         public void HandleConnection()
         {
-            Console.WriteLine("Client hat sich verbunden!");
             try
             {
                 while (true)
                 {
                     
                     string befehl = client.ReadLine();
-                    Console.WriteLine($"Empfangen: {befehl}");
 
                     string[] parameter = befehl.Split(';');
                     if (parameter.Length == 0)
@@ -43,8 +41,8 @@ namespace socialMediaServer
                     switch (command)
                     {
                         case "anmelden":
-                            string name = parameter[1];
-                            string password = parameter[2];
+                            string name = GetMessage(parameter[1]);
+                            string password = GetMessage(parameter[2]);
                             Nutzer nutzer = spf.Anmelden(name, password);
                             if (nutzer != null)
                             {
@@ -57,9 +55,9 @@ namespace socialMediaServer
                             }
                             break;
                         case "registrieren":
-                            name = parameter[1];
-                            password = parameter[2];
-                            string email = parameter[3];
+                            name = GetMessage(parameter[1]);
+                            password = GetMessage(parameter[2]);
+                            string email = GetMessage(parameter[3]);
                             int code = spf.Registrieren(name, password, email);
                             if (code == -1)
                                 client.Write("-;NameOrEmailVorhanden\n");
@@ -67,11 +65,11 @@ namespace socialMediaServer
                                 client.Write("+;registrierungerfolg\n");
                             break;
                         case "abmelden":
-                            client.Write($"+;Bis zum nächsten Mal {this.nutzer.BenutzerName}!\n");
+                            client.Write($"+;Bis zum nächsten Mal {ConvertMessage(this.nutzer.BenutzerName)}!\n");
                             this.nutzer = null;
                             break;
                         case "beitrag":
-                            string titel = parameter[1];
+                            string titel = GetMessage(parameter[1]);
                             int anzahl = Convert.ToInt32(parameter[2]);
                             if (anzahl > 10)
                             {
@@ -85,7 +83,6 @@ namespace socialMediaServer
 
                                 if (pieces.Length != 2)
                                 {
-                                    Console.WriteLine("Bild fehlerhaft übertragen");
                                     client.Write("-;error while transmitting\n");
                                     continue;
                                 }
@@ -102,10 +99,10 @@ namespace socialMediaServer
                             }
                             string text = null;
                             if (parameter.Length > 3 + anzahl)
-                                text = parameter[3 + anzahl];
+                                text = GetMessage(parameter[3 + anzahl]);
 
                             spf.ErstelleBeitrag(this.nutzer, titel, text, dateinamen);
-                            //client.Write("+;Hochgeladen\n");
+                            client.Write("+;Hochgeladen\n");
                             break;
                         case "neueBeitraege":
                             List<Beitrag> beitraege = spf.ErmittleNeueBeitraege(this.nutzer);
@@ -131,11 +128,9 @@ namespace socialMediaServer
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
-                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{b.Titel}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
+                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
                                 msg += ";";
                             }
-                            
-                            Console.WriteLine(msg);
                             client.Write(msg + "\n");
                             break;
                         case "nurAbos":
@@ -146,7 +141,6 @@ namespace socialMediaServer
                             int response = spf.Like(beitragId, this.nutzer.BenutzerId);
                             if (response == -1)
                             {
-                                Console.WriteLine("Fehler beim liken");
                                 client.Write("-;Autor kann nicht selbst liken\n");
                             }
                             else if (response == -2)
@@ -173,12 +167,11 @@ namespace socialMediaServer
                         case "abonnentenAnzahl":
                             int nutzerId = Convert.ToInt32(parameter[1]);
                             anzahl = spf.ErmittelAbonnentenAnzahl(nutzerId);
-                            Console.WriteLine($"Nutzer {nutzerId} hat {anzahl} Abonnenten");
                             client.Write($"+;{anzahl}\n");
                             break;
                         case "kommentar":
                             beitragId = Convert.ToInt32(parameter[1]);
-                            text = parameter[2];
+                            text = GetMessage(parameter[2]);
                             int? oberKommentarId = null;
                             if (parameter.Length > 3)
                                 oberKommentarId = Convert.ToInt32(parameter[3]);
@@ -191,8 +184,6 @@ namespace socialMediaServer
                             msg = $"kommentare;{kommentare.Count}";
                             foreach (Kommentar k in kommentare)
                             {
-
-                              
                                 string pictureString = "";
                                 if (k.profil != null)
                                 {
@@ -204,7 +195,7 @@ namespace socialMediaServer
                                     byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
                                     pictureString = Convert.ToBase64String(picture);
                                 }
-                                    msg += $";{k.Id}|{k.Nachricht}|{k.AutorId}|{k.Timestamp}|{k.autor}|{pictureString}|";
+                                    msg += $";{k.Id}|{ConvertMessage(k.Nachricht)}|{k.AutorId}|{k.Timestamp}|{ConvertMessage(k.autor)}|{pictureString}|";
                                 if (k.OberKommentarId != null)
                                     msg += k.OberKommentarId;
                                 else
@@ -218,20 +209,19 @@ namespace socialMediaServer
                             {
                                 byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
                                 string pictureString = Convert.ToBase64String(picture);
-                                msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten};{pictureString}";
+                                msg = $"+;{ConvertMessage(this.nutzer.BenutzerName)};{ConvertMessage(this.nutzer.Email)};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten};{pictureString}";
                             }
                             else
                             {
                                 byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", this.nutzer.ProfilBild));
                                 string pictureString = Convert.ToBase64String(picture);
-                                msg = $"+;{this.nutzer.BenutzerName};{this.nutzer.Email};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten};{pictureString}";
+                                msg = $"+;{ConvertMessage(this.nutzer.BenutzerName)};{ConvertMessage(this.nutzer.Email)};{this.nutzer.BenutzerId};{this.nutzer.ZuletztAktiv};{abonnenten};{pictureString}";
                             }
-                            Console.WriteLine(msg);
                             client.Write(msg + "\n");
                             break;
                         case "updateProfile":
-                            name = parameter[1];
-                            email = parameter[2];
+                            name = GetMessage(parameter[1]);
+                            email = GetMessage(parameter[2]);
                             if (parameter.Length > 3)
                             {
                                 string file = parameter[3];
@@ -242,7 +232,7 @@ namespace socialMediaServer
                                 this.nutzer.ProfilBild = fileName;
                             }
                             else 
-                                spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
+                            spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
                             this.nutzer.Email = email;
                             this.nutzer.BenutzerName = name;
                             client.Write("+;Profil aktualisiert\n");
@@ -257,16 +247,14 @@ namespace socialMediaServer
                             File.WriteAllBytes(Path.Combine(imgOrdner, "profile", unique), pictureByte);
                             this.nutzer.ProfilBild = unique;
                             spf.AktualisiereProfilBild(this.nutzer.BenutzerId, unique);
-                            Console.WriteLine("");
                             client.Write("+;Profilbild hinzugefügt\n");
                             break;
                         case "updatePasswort":
-                            string old = parameter[1];
-                            string newP = parameter[2];
+                            string old = GetMessage(parameter[1]);
+                            string newP = GetMessage(parameter[2]);
                             response = spf.ChangePassword(old, newP, this.nutzer.BenutzerId);
                             if (response == 0)
                             {
-                                Console.WriteLine("Passwort erfolgreich geupdated");
                                 client.Write("+;Passwort erfolgreich aktualisiert\n");
                             }
                             else
@@ -286,6 +274,15 @@ namespace socialMediaServer
                 client.Close();
                 Console.WriteLine("Client getrennt.");
             }
+        }
+        private string ConvertMessage(string message)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(message));
+        }
+
+        private string GetMessage(string message)
+        {
+            return Encoding.UTF8.GetString(Convert.FromBase64String(message));
         }
     }
 }
