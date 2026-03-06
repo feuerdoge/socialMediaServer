@@ -39,7 +39,7 @@ namespace ClientSocialMedia
         {
             string reply = Form1.client.Abonnieren(nutzerId);
             await LadeNutzer(nutzerId);
-            MessageBox.Show(reply);
+            MessageBox.Show(reply.Split(';')[1]);
         }
 
         private void closeBtn_Click(object sender, EventArgs e)

@@ -21,6 +21,7 @@ namespace ClientSocialMedia
         private int beitragId;
         private Beitrag beitrag;
         public Beitrag Beitrag { get => beitrag; }
+        private Nutzer Autor;
         Kommentaruebersicht ku;
         //public Inhalte(List<string> pictures, string titel, int beitragId)
         //{
@@ -44,6 +45,7 @@ namespace ClientSocialMedia
             ku = new Kommentaruebersicht(this.beitrag, this);
             this.Controls.Add(ku);
             ku.Visible = false;
+            this.Autor = GetUserData();
             ladeVorschau();
             foreach (Bild b in beitrag.Bilder)
             {
@@ -56,7 +58,9 @@ namespace ClientSocialMedia
         public void setDaten(string titel, List<string> bilder) 
         {
             this.beitragTitel.Text = titel;
+            this.beitragTitel.Left = (this.Width - beitragTitel.Width) / 2;
             likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes()}";
+            nutzerNameLb.Text = Autor.BenutzerName;
             if (bilder.Count != 0)
             {
                 konvertiereBilder(bilder);
@@ -66,8 +70,20 @@ namespace ClientSocialMedia
             {
                 next.Visible = false;
             }
+            byte[] imageBytes = Convert.FromBase64String(Autor.ProfilBild);
+
+            using (MemoryStream ms = new MemoryStream(imageBytes))
+            {
+                Image img = Image.FromStream(ms);
+                profilePicPb.Image = img;
+            }
         }
 
+        private Nutzer GetUserData()
+        {
+            return Form1.client.LadeNutzer(beitrag.Autor.BenutzerId);
+            
+        }
         public void konvertiereBilder(List<string> bilder)
         {
 
@@ -139,13 +155,6 @@ namespace ClientSocialMedia
                 likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes() + 1}";
         }
 
-        private void abonnierenBtn_Click(object sender, EventArgs e)
-        {
-            string reply = Form1.client.Abonnieren(beitrag.Autor.BenutzerId);
-            string[] parts = reply.Split(';');
-            MessageBox.Show(parts[1]);
-        }
-
         private void anzeigen_Click(object sender, EventArgs e)
         {
             ku.Visible = true;
@@ -172,6 +181,22 @@ namespace ClientSocialMedia
                 KommentarControl kc = new KommentarControl(beitrag.gebeKommentare()[i].autor, beitrag.gebeKommentare()[i].Nachricht, beitrag.gebeKommentare()[i]);
                 kommentareVorschau.Controls.Add(kc);
             }
+        }
+
+        private async void profilePicPb_Click(object sender, EventArgs e)
+        {
+            UserOverviewControl userOverview = new UserOverviewControl();
+            userOverview.Location = new Point((this.Parent.Parent.Width - userOverview.Width) / 2, (this.Parent.Parent.Height - userOverview.Height) / 2);
+            this.Parent.Parent.Controls.Add(userOverview);
+            userOverview.BringToFront();
+            await userOverview.LadeNutzer(beitrag.Autor.BenutzerId);
+        }
+
+        private void profilePicPb_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tt = new ToolTip();
+            tt.InitialDelay = 250;
+            tt.SetToolTip(profilePicPb, "Click to view");
         }
     }
 }

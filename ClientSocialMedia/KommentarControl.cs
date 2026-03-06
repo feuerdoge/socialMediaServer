@@ -44,5 +44,12 @@ namespace ClientSocialMedia
             userOverview.BringToFront();
             await userOverview.LadeNutzer(nutzerId);
         }
+
+        private void profil_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tt = new ToolTip();
+            tt.InitialDelay = 250;
+            tt.SetToolTip(profil, "Click to view");
+        }
     }
 }

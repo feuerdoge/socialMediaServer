@@ -53,6 +53,7 @@
             this.profil.TabIndex = 1;
             this.profil.TabStop = false;
             this.profil.Click += new System.EventHandler(this.profil_Click);
+            this.profil.MouseHover += new System.EventHandler(this.profil_MouseHover);
             // 
             // komm
             // 
