@@ -375,5 +375,28 @@ namespace ClientSocialMedia
                 inhaltAnzeige.Controls.Add(inhalt);
             }
         }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+
+            //inhaltAnzeige.Left = (this.ClientSize.Width - inhaltAnzeige.Width) / 2;
+            //inhaltAnzeige.Height = this.ClientSize.Height - inhaltAnzeige.Height - 20;
+            //int newWidth = inhaltAnzeige.Width;
+            //if ((inhaltAnzeige.Width * 2) > this.ClientSize.Width - menuPanel.Width)
+            //{
+            //    newWidth *= 2;
+            //    inhaltAnzeige.WrapContents = true;
+            //}
+            //else
+            //{
+            //    newWidth = 500;
+            //    inhaltAnzeige.WrapContents = false;
+            //}
+            //    inhaltAnzeige.Size = new Size(newWidth, this.ClientSize.Height - 10);
+            //foreach (Control c in inhaltAnzeige.Controls)
+            //{
+            //    c.Margin = new Padding((inhaltAnzeige.ClientSize.Width - c.Width) / 2, 10, 0, 10);
+            //}
+        }
     }
 }
