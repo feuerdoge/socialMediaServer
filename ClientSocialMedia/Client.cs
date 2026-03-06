@@ -348,7 +348,13 @@ namespace ClientSocialMedia
                 beitraege = sortiereBeitraegeNachBeliebtheit(beitraege, left, right - 1);
             }
             return beitraege;
-            
+        }
+        
+        public string Abmelden()
+        {
+            string msg = "abmelden\n";
+            clientSocket.Write(msg);
+            return clientSocket.ReadLine();
         }
     }
 }

@@ -66,6 +66,10 @@ namespace socialMediaServer
                             else
                                 client.Write("+;registrierungerfolg\n");
                             break;
+                        case "abmelden":
+                            client.Write($"+;Bis zum nächsten Mal {this.nutzer.BenutzerName}!\n");
+                            this.nutzer = null;
+                            break;
                         case "beitrag":
                             string titel = parameter[1];
                             int anzahl = Convert.ToInt32(parameter[2]);
