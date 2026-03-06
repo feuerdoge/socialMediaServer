@@ -134,7 +134,35 @@ namespace socialMediaServer
                             client.Write(msg + "\n");
                             break;
                         case "nurAbos":
-                            List<Beitrag> beitraege = spf.BeitraegeVonAbosHolen();
+                            List<Beitrag> nurAboBeitraege = spf.BeitraegeVonAbosHolen(this.nutzer);
+                            foreach (Beitrag b in nurAboBeitraege)
+                            {
+                                foreach (Bild bild in spf.HoleBilder(b.Id))
+                                {
+                                    b.Hinzufuegen(bild);
+                                }
+                            }
+                            // Protokoll: neueBeitraege.anzahlBeitraege.id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
+                            msg = "";
+                            if (nurAboBeitraege.Count == 0)
+                            {
+                                msg = $"aboBeitraege?{nurAboBeitraege.Count}?";
+                            }
+                            foreach (Beitrag b in nurAboBeitraege)
+                            {
+                                List<string> bilderStringList = new List<string>();
+                                foreach (Bild img in b.Bilder)
+                                {
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", img.Dateiname)));
+                                    bilderStringList.Add($"{img.Dateiname}:{s}");
+                                }
+                                string bilderString = string.Join(",", bilderStringList);
+                                msg += $"aboBeitraege?{nurAboBeitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
+                                msg += ";";
+                            }
+
+                            Console.WriteLine(msg);
+                            client.Write(msg + "\n");
                             break;
                         case "like":   // like;2 (BeitragId)
                             int beitragId = Convert.ToInt32(parameter[1]);

@@ -222,14 +222,28 @@ namespace ClientSocialMedia
             }
             return comments;
         }
-        public List<Beitrag> beitraegeAnfragen()
+        public List<Beitrag> beitraegeAnfragen(bool nurAbos)
         {
-            clientSocket.Write("neueBeitraege\n");
             string str;
-            str = clientSocket.ReadLine();
-            if(str == "neueBeitaege?0?") 
+            if (!nurAbos) 
             {
-                return null;
+                clientSocket.Write("neueBeitraege\n");
+                
+                str = clientSocket.ReadLine();
+                if (str == "neueBeitaege?0?")
+                {
+                    return null;
+                }
+            }
+            else 
+            {
+                clientSocket.Write("nurAbos\n");
+
+                str = clientSocket.ReadLine();
+                if (str == "aboBeitraege?0?")
+                {
+                    return null;
+                }
             }
             // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
             List<Beitrag> beitraege = new List<Beitrag>();
@@ -341,15 +355,15 @@ namespace ClientSocialMedia
             
             while(i < x) 
             {
-                if (beitraege[i].gebeAnzahlLikes() < pivot.gebeAnzahlLikes()) 
+                if (beitraege[i].gebeAnzahlLikes() <= pivot.gebeAnzahlLikes()) 
                 {
                     i++;
                 }
-                if (beitraege[x].gebeAnzahlLikes() > pivot.gebeAnzahlLikes()) 
+                if (beitraege[x].gebeAnzahlLikes() >= pivot.gebeAnzahlLikes()) 
                 {
                     x--;
                 }
-                if (beitraege[i].gebeAnzahlLikes() > pivot.gebeAnzahlLikes() && beitraege[x].gebeAnzahlLikes() < pivot.gebeAnzahlLikes()) 
+                if (beitraege[i].gebeAnzahlLikes() >= pivot.gebeAnzahlLikes() && beitraege[x].gebeAnzahlLikes() <= pivot.gebeAnzahlLikes()) 
                 {
                     var temp = beitraege[i];
                     beitraege[i] = beitraege[x];

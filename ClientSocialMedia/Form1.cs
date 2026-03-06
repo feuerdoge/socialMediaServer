@@ -173,10 +173,17 @@ namespace ClientSocialMedia
             menuPanel.Controls.Add(buttonGruppen);
             menuPanel.Controls.Add(buttonSuchen);
 
+            buttonBeitraege.Click += buttonBeitraege_Click;
             buttonBeliebt.Click += buttonBeliebt_Click;
-            buttonNurAbos.Click += 
+            buttonNurAbos.Click += buttonNurAbos_Click;
             zeigeInhalte();
         }
+
+        private void buttonBeitraege_Click(object sender, EventArgs e)
+        {
+            zeigeInhalte();
+        }
+
         private void zeigeInhalte() 
         {
             Cursor = Cursors.WaitCursor;
@@ -190,7 +197,7 @@ namespace ClientSocialMedia
         private void EmpfangeDaten() 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = client.beitraegeAnfragen();
+            beitraege = client.beitraegeAnfragen(false);
             if(beitraege == null) 
             {
                 return;
@@ -386,7 +393,19 @@ namespace ClientSocialMedia
 
         private void buttonNurAbos_Click(object sender, EventArgs e) 
         {
-            
+            inhaltAnzeige.Controls.Clear();
+            beitraege = client.beitraegeAnfragen(true);
+            if (beitraege == null)
+            {
+                return;
+            }
+            foreach (Beitrag beitraege in beitraege)
+            {
+                Inhalte inhalt = new Inhalte(beitraege);
+
+
+                inhaltAnzeige.Controls.Add(inhalt);
+            }
         }
     }
 }

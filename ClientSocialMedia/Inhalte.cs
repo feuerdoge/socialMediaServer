@@ -35,7 +35,6 @@ namespace ClientSocialMedia
         {
             InitializeComponent();
             
-            pictures = new List<string>();
             this.beitrag = beitrag;
             this.pictures = new List<string>();
             this.titel = beitrag.Titel;
@@ -48,7 +47,7 @@ namespace ClientSocialMedia
             foreach (Bild b in beitrag.Bilder)
             {
 
-                pictures.Add(b.bilddata);
+                this.pictures.Add(b.bilddata);
             }
             setDaten(titel, pictures);
         }
