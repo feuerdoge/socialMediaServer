@@ -184,6 +184,8 @@ namespace ClientSocialMedia
             menuPanel.Controls.Add(buttonGruppen);
             menuPanel.Controls.Add(buttonSuchen);
 
+            buttonBeliebt.Click += buttonBeliebt_Click;
+
             zeigeInhalte();
         }
         private void zeigeInhalte() 
@@ -332,6 +334,29 @@ namespace ClientSocialMedia
             client.beitragSenden(titelEingabe.Text, bilder);
             beitragsErstellungsPanel.Visible = false;
             EmpfangeDaten();
+        }
+
+        private void buttonBeliebt_Click(object sender, EventArgs e) 
+        {
+            if (beitraege == null)
+            {
+                return;
+            }
+
+            this.inhaltAnzeige.Controls.Clear();
+            beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
+            
+            foreach (Beitrag beitraege in beitraege)
+            {
+                Inhalte inhalt = new Inhalte(beitraege);
+                foreach (Bild b in beitraege.Bilder)
+                {
+
+                    inhalt.pictures.Add(b.bilddata);
+                }
+                inhalt.setDaten(beitraege.Titel, inhalt.pictures);
+                inhaltAnzeige.Controls.Add(inhalt);
+            }
         }
     }
 }
