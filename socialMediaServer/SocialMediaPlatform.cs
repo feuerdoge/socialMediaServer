@@ -171,6 +171,55 @@ namespace socialMediaServer
             conn.Close();
             return beitraege;
         }
+
+        public List<Beitrag> BeitraegeVonAbosHolen(Nutzer n) 
+        {
+            List<Beitrag> beitraege = new List<Beitrag>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand neusteBeitraege = new MySqlCommand(@"
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                FROM beitrag b
+                JOIN nutzer u ON b.autor = u.nutzerId
+                LEFT JOIN likes l ON b.beitragid = l.beitragId
+                WHERE b.erstelltAm > @zuletztAktiv AND b.autor = (SELECT abonnentId FROM abonnement WHERE abonnierteNutzerId = (SELECT nutzerId FROM nutzer WHERE benutzername = @benutzername))
+                GROUP BY b.beitragid
+                ORDER BY b.erstelltAm DESC
+                LIMIT 10", conn);
+            neusteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
+            neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+            MySqlDataReader reader = neusteBeitraege.ExecuteReader();
+            while (reader.Read())
+            {
+                beitraege.Add(LeseBeitrag(reader));
+            }
+            reader.Close();
+            if (beitraege.Count < 10)
+            {
+                int remaining = 10 - beitraege.Count;
+                MySqlCommand alteBeitraege = new MySqlCommand(@"
+                    SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                    FROM beitrag b
+                    JOIN nutzer u ON b.autor = u.nutzerId
+                    LEFT JOIN likes l ON b.beitragid = l.beitragId
+                    WHERE b.erstelltAm <= @zuletztAktiv AND b.autor = (SELECT abonnentId FROM abonnement WHERE abonnierteNutzerId = (SELECT nutzerId FROM nutzer WHERE benutzername = @benutzername))
+                    GROUP BY b.beitragid
+                    ORDER BY b.erstelltAm DESC
+                    LIMIT 10", conn);
+                alteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
+                alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+                alteBeitraege.Parameters.AddWithValue("@max", remaining);
+                reader = alteBeitraege.ExecuteReader();
+                while (reader.Read())
+                {
+                    beitraege.Add(LeseBeitrag(reader));
+                }
+                reader.Close();
+            }
+
+            conn.Close();
+            return beitraege;
+        }
         private Beitrag LeseBeitrag(MySqlDataReader reader)
         {
             int beitragId = reader.GetInt32("beitragid");
