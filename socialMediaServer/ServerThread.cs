@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Runtime;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Permissions;
@@ -327,6 +328,48 @@ namespace socialMediaServer
                                     byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", nu.ProfilBild));
                                     string pictureString = Convert.ToBase64String(picture);
                                     msg += $";{ConvertMessage(nu.BenutzerName)}|{nu.BenutzerId}|{abonnenten}|{pictureString}";
+                                }
+                            }
+                            client.Write(msg + "\n");
+                            break;
+                        case "chatErstellen":
+                            int user2 = Convert.ToInt32(parameter[1]);
+                            int chatId = spf.ChatErstellen(this.nutzer.BenutzerId, user2);
+                            client.Write($"+;{chatId}\n");
+                            break;
+                        case "chatListe":
+                            List<Chat> chats = spf.LadeChats(this.nutzer.BenutzerId);
+                            msg = $"+;{chats.Count}";
+                            foreach (Chat c in chats)
+                            {
+                                msg += $";{c.ChatId}";
+                            }
+                            client.Write(msg + "\n");
+                            break;
+                        case "nachrichtSenden":
+                            int chat = Convert.ToInt32(parameter[1]);
+                            text = GetMessage(parameter[2]);
+                            spf.SendeNachricht(chat, this.nutzer.BenutzerId, text);
+                            client.Write("+;Nachricht gesendet");
+                            break;
+                        case "loadNachrichten":
+                            chatId = Convert.ToInt32(parameter[1]);
+                            List<Nachricht> nachrichten = spf.LadeNachricht(chatId);
+                            msg = $"+;{nachrichten.Count}";
+                            foreach (Nachricht na in nachrichten)
+                            {
+                                msg += $";{na.Sender.BenutzerId}|{ConvertMessage(na.Text)}|{na.GesendetAm}";
+                                if (na.Sender.ProfilBild != null)
+                                {
+                                    byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", na.Sender.ProfilBild));
+                                    string pictureString = Convert.ToBase64String(picture);
+                                    msg += $"|{pictureString}";
+                                }
+                                else
+                                {
+                                    byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
+                                    string pictureString = Convert.ToBase64String(picture);
+                                    msg += $"|{pictureString}";
                                 }
                             }
                             client.Write(msg + "\n");

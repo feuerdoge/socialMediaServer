@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -511,6 +512,90 @@ namespace socialMediaServer
             return comments;
         }
 
+        public int ChatErstellen(int nutzer1, int nutzer2)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand chat = new MySqlCommand("INSERT INTO chat(erstelltAm) VALUES (NOW())", conn);
+            chat.ExecuteNonQuery();
+            int chatId = Convert.ToInt32(chat.LastInsertedId);
+
+            chat = new MySqlCommand("INSERT INTO chatTeilnehmer(chatId, nutzerId) VALUES (@c, @n)", conn);
+            chat.Parameters.AddWithValue("@c", chatId);
+            chat.Parameters.AddWithValue("@n", nutzer1);
+            chat.ExecuteNonQuery();
+            chat.Parameters.AddWithValue("@c", chatId);
+            chat.Parameters.AddWithValue("@n", nutzer2);
+            chat.ExecuteNonQuery();
+            conn.Close();
+            return chatId;
+        }
+
+        public void SendeNachricht(int chatId, int sender, string text)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand insert = new MySqlCommand(@"
+                INSERT INTO nachricht(chatId, senderId, text, gesendetAm)
+                VALUES (@c, @s, @t, NOW())", conn);
+            insert.Parameters.AddWithValue("@c", chatId);
+            insert.Parameters.AddWithValue("@s", sender);
+            insert.Parameters.AddWithValue("@t", text);
+            insert.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public List<Chat> LadeChats(int nutzerId)
+        {
+            List<Chat> chats = new List<Chat>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand get = new MySqlCommand(@"
+                SELECT c.chatId
+                FROM chat c
+                JOIN chatTeilnehmer t ON c.chatId = t.chatId
+                WHERE t.nutzerId = @n", conn);
+            get.Parameters.AddWithValue("@n", nutzerId);
+            MySqlDataReader reader = get.ExecuteReader();
+            while (reader.Read())
+            {
+                chats.Add(new Chat(reader.GetInt32("chatId")));
+            }
+            reader.Close();
+            conn.Close();
+            return chats;
+        }
+
+        public List<Nachricht> LadeNachricht(int chatId)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            List<Nachricht> nachrichten = new List<Nachricht>();
+            MySqlCommand get = new MySqlCommand(@"
+                SELECT n.text, n.senderId, n.gesendetAm, u.benutzerName, u.profilBild
+                FROM nachricht n
+                JOIN nutzer u ON n.senderId = u.benutzerId
+                WHERE n.chatId = @c
+                ORDER BY n.gesendetAm ASC
+                LIMIT 20", conn);
+            get.Parameters.AddWithValue("@c", chatId);
+            MySqlDataReader reader = get.ExecuteReader();
+            while (reader.Read())
+            {
+                string text = reader.GetString("text");
+                int id = reader.GetInt32("senderId");
+                DateTime gesendetAm = reader.GetDateTime("gesendetAm");
+                string name = reader.GetString("benutzerName");
+                Nutzer n = new Nutzer(name, "", "", id);
+                int ordinal = reader.GetOrdinal("profilBild");
+                if (!reader.IsDBNull(ordinal))
+                    n.ProfilBild = reader.GetString("profilBild");
+                nachrichten.Add(new Nachricht(chatId, n, text, gesendetAm));
+            }
+            reader.Close();
+            conn.Close();
+            return nachrichten;
+        }
         private bool VeriryPasswort(string enteredPass, string savedPass)
         {
             byte[] hashBytes = Convert.FromBase64String(savedPass);
