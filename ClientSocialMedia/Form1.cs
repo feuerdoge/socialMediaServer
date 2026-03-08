@@ -159,6 +159,7 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Suchen"
             };
+            buttonSuchen.Click += Suche_Click;
             menuPanel.Controls.Add(buttonBeitraege);
             menuPanel.Controls.Add(buttonBeliebt);
             menuPanel.Controls.Add(buttonChat);
@@ -375,6 +376,13 @@ namespace ClientSocialMedia
                 Inhalte inhalt = new Inhalte(beitraege[i]);
                 inhaltAnzeige.Controls.Add(inhalt);
             }
+        }
+
+        private void Suche_Click(object sender, EventArgs e)
+        {
+            inhaltAnzeige.Controls.Clear();
+            SearchControl searchControl = new SearchControl();
+            inhaltAnzeige.Controls.Add(searchControl);
         }
 
         private void Form1_Resize(object sender, EventArgs e)

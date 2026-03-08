@@ -2,6 +2,7 @@
 using SocketAbi;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -293,6 +294,27 @@ namespace ClientSocialMedia
             string base64 = parts[5];
             n.ProfilBild = base64;
             return n;
+        }
+
+        public List<Nutzer> SucheNutzer(string name)
+        {
+            clientSocket.Write($"sucheNutzer;{ConvertMessage(name)}\n");
+            string[] parts = clientSocket.ReadLine().Split(';');
+            int anzahl = Convert.ToInt32(parts[1]);
+            List<Nutzer> nutzerListe = new List<Nutzer>(); 
+            for(int i = 0; i < anzahl; i++)
+            {
+                string[] data = parts[i + 2].Split('|');
+                string nutzerName = GetMessage(data[0]);
+                int id = Convert.ToInt32(data[1]);
+                int abonnenten = Convert.ToInt32(data[2]);
+                string profil = data[3];
+                Nutzer n = new Nutzer(nutzerName, "", "", id);
+                n.AbonnentenAnzahl = abonnenten;
+                n.ProfilBild = profil;
+                nutzerListe.Add(n);
+            }
+            return nutzerListe;
         }
 
         public byte[] LadeProfilePicture()

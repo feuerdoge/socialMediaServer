@@ -278,6 +278,28 @@ namespace socialMediaServer
                                 client.Write("-;Falsches aktuelles Passwort eingegeben\n");
                             }
                             break;
+                        case "sucheNutzer":
+                            name = GetMessage(parameter[1]);
+                            List<Nutzer> nutzerList = spf.SucheNutzer(name);
+                            msg = $"+;{nutzerList.Count}";
+                            foreach (Nutzer nu in nutzerList)
+                            {
+                                abonnenten = spf.ErmittelAbonnentenAnzahl(nu.BenutzerId);
+                                if (nu.ProfilBild == null)
+                                {
+                                    byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
+                                    string pictureString = Convert.ToBase64String(picture);
+                                    msg += $";{ConvertMessage(nu.BenutzerName)}|{nu.BenutzerId}|{abonnenten}|{pictureString}";
+                                }
+                                else
+                                {
+                                    byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", nu.ProfilBild));
+                                    string pictureString = Convert.ToBase64String(picture);
+                                    msg += $";{ConvertMessage(nu.BenutzerName)}|{nu.BenutzerId}|{abonnenten}|{pictureString}";
+                                }
+                            }
+                            client.Write(msg + "\n");
+                            break;
                     }
                 }
             }

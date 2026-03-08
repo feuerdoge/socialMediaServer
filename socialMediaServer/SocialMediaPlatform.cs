@@ -273,6 +273,32 @@ namespace socialMediaServer
             return n;
         }
 
+        public List<Nutzer> SucheNutzer(string suchBegriff)
+        {
+            List<Nutzer> nutzer = new List<Nutzer>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand get = new MySqlCommand(@"
+                SELECT nutzerId, benutzerName, profilBild
+                FROM nutzer
+                WHERE benutzerName LIKE @name LIMIT 20", conn);
+            get.Parameters.AddWithValue("@name", "%" +  suchBegriff + "%");
+
+            MySqlDataReader reader = get.ExecuteReader();
+            while(reader.Read())
+            {
+                int id = reader.GetInt32("nutzerId");
+                string name = reader.GetString("benutzerName");
+                int ordinale = reader.GetOrdinal("profilBild");
+                Nutzer n = new Nutzer(name, "", "", id);
+                if (!reader.IsDBNull(ordinale))
+                    n.ProfilBild = reader.GetString("profilBild");
+                nutzer.Add(n);
+            }
+            conn.Close();
+            return nutzer;
+        }
+
         public void AktualisiereProfil(int nutzerId, string name, string email)
         {
             MySqlConnection conn = new MySqlConnection(connectionString);

@@ -97,8 +97,9 @@
             this.Controls.Add(this.abonnentenLb);
             this.Controls.Add(this.nameLb);
             this.Controls.Add(this.nutzerPb);
+            this.MaximumSize = new System.Drawing.Size(330, 300);
             this.Name = "UserOverviewControl";
-            this.Size = new System.Drawing.Size(332, 297);
+            this.Size = new System.Drawing.Size(330, 300);
             ((System.ComponentModel.ISupportInitialize)(this.nutzerPb)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
