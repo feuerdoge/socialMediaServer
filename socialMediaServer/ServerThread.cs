@@ -71,6 +71,7 @@ namespace socialMediaServer
                         case "beitrag":
                             string titel = GetMessage(parameter[1]);
                             int anzahl = Convert.ToInt32(parameter[2]);
+                            string tag = GetMessage(parameter[3 + anzahl]);
                             if (anzahl > 10)
                             {
                                 client.Write("-;fehler;max10\n");
@@ -98,10 +99,10 @@ namespace socialMediaServer
                                 dateinamen.Add(uniqueName);
                             }
                             string text = null;
-                            if (parameter.Length > 3 + anzahl)
-                                text = GetMessage(parameter[3 + anzahl]);
+                            if (parameter.Length > 4 + anzahl)
+                                text = GetMessage(parameter[4 + anzahl]);
 
-                            spf.ErstelleBeitrag(this.nutzer, titel, text, dateinamen);
+                            spf.ErstelleBeitrag(this.nutzer, titel, text, dateinamen, tag);
                             client.Write("+;Hochgeladen\n");
                             break;
                         case "neueBeitraege":
@@ -128,7 +129,7 @@ namespace socialMediaServer
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
-                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
+                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
                                 msg += ";";
                             }
                             client.Write(msg + "\n");

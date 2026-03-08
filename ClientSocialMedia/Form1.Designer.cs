@@ -33,27 +33,28 @@
             this.momentaneAnsicht = new System.Windows.Forms.Panel();
             this.inhaltAnzeige = new System.Windows.Forms.FlowLayoutPanel();
             this.beitragsErstellungsPanel = new System.Windows.Forms.Panel();
+            this.tagPick = new System.Windows.Forms.ComboBox();
             this.erstellen = new System.Windows.Forms.Button();
+            this.tagLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).BeginInit();
+            this.beitragsErstellungsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuPanel
             // 
             this.menuPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuPanel.Location = new System.Drawing.Point(0, 0);
-            this.menuPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.menuPanel.Name = "menuPanel";
-            this.menuPanel.Size = new System.Drawing.Size(313, 554);
+            this.menuPanel.Size = new System.Drawing.Size(235, 450);
             this.menuPanel.TabIndex = 0;
             // 
             // profilePic
             // 
             this.profilePic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.profilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.profilePic.Location = new System.Drawing.Point(984, 15);
-            this.profilePic.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.profilePic.Location = new System.Drawing.Point(738, 12);
             this.profilePic.Name = "profilePic";
-            this.profilePic.Size = new System.Drawing.Size(67, 62);
+            this.profilePic.Size = new System.Drawing.Size(51, 51);
             this.profilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.profilePic.TabIndex = 1;
             this.profilePic.TabStop = false;
@@ -63,20 +64,18 @@
             // 
             // momentaneAnsicht
             // 
-            this.momentaneAnsicht.Location = new System.Drawing.Point(309, -1);
-            this.momentaneAnsicht.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.momentaneAnsicht.Location = new System.Drawing.Point(232, -1);
             this.momentaneAnsicht.Name = "momentaneAnsicht";
-            this.momentaneAnsicht.Size = new System.Drawing.Size(607, 62);
+            this.momentaneAnsicht.Size = new System.Drawing.Size(455, 50);
             this.momentaneAnsicht.TabIndex = 2;
             // 
             // inhaltAnzeige
             // 
             this.inhaltAnzeige.AutoScroll = true;
             this.inhaltAnzeige.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.inhaltAnzeige.Location = new System.Drawing.Point(313, 0);
-            this.inhaltAnzeige.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.inhaltAnzeige.Location = new System.Drawing.Point(235, 0);
             this.inhaltAnzeige.Name = "inhaltAnzeige";
-            this.inhaltAnzeige.Size = new System.Drawing.Size(663, 554);
+            this.inhaltAnzeige.Size = new System.Drawing.Size(497, 450);
             this.inhaltAnzeige.TabIndex = 3;
             this.inhaltAnzeige.Visible = false;
             this.inhaltAnzeige.WrapContents = false;
@@ -84,41 +83,62 @@
             // beitragsErstellungsPanel
             // 
             this.beitragsErstellungsPanel.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.beitragsErstellungsPanel.Location = new System.Drawing.Point(320, 68);
-            this.beitragsErstellungsPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.beitragsErstellungsPanel.Controls.Add(this.tagLabel);
+            this.beitragsErstellungsPanel.Controls.Add(this.tagPick);
+            this.beitragsErstellungsPanel.Location = new System.Drawing.Point(240, 55);
             this.beitragsErstellungsPanel.Name = "beitragsErstellungsPanel";
-            this.beitragsErstellungsPanel.Size = new System.Drawing.Size(567, 441);
+            this.beitragsErstellungsPanel.Size = new System.Drawing.Size(425, 358);
             this.beitragsErstellungsPanel.TabIndex = 0;
             this.beitragsErstellungsPanel.Visible = false;
             // 
+            // tagPick
+            // 
+            this.tagPick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tagPick.FormattingEnabled = true;
+            this.tagPick.Location = new System.Drawing.Point(260, 24);
+            this.tagPick.Name = "tagPick";
+            this.tagPick.Size = new System.Drawing.Size(121, 21);
+            this.tagPick.TabIndex = 0;
+            this.tagPick.Tag = "";
+            this.tagPick.Visible = false;
+            // 
             // erstellen
             // 
-            this.erstellen.Location = new System.Drawing.Point(913, 145);
-            this.erstellen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.erstellen.Location = new System.Drawing.Point(685, 118);
             this.erstellen.Name = "erstellen";
-            this.erstellen.Size = new System.Drawing.Size(137, 28);
+            this.erstellen.Size = new System.Drawing.Size(103, 23);
             this.erstellen.TabIndex = 4;
             this.erstellen.Text = "Beitrag Erstellen";
             this.erstellen.UseVisualStyleBackColor = true;
             this.erstellen.Visible = false;
             this.erstellen.Click += new System.EventHandler(this.erstellen_Click);
             // 
+            // tagLabel
+            // 
+            this.tagLabel.AutoSize = true;
+            this.tagLabel.Location = new System.Drawing.Point(228, 27);
+            this.tagLabel.Name = "tagLabel";
+            this.tagLabel.Size = new System.Drawing.Size(26, 13);
+            this.tagLabel.TabIndex = 1;
+            this.tagLabel.Text = "Tag";
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.beitragsErstellungsPanel);
             this.Controls.Add(this.erstellen);
             this.Controls.Add(this.inhaltAnzeige);
             this.Controls.Add(this.momentaneAnsicht);
             this.Controls.Add(this.profilePic);
             this.Controls.Add(this.menuPanel);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "s";
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).EndInit();
+            this.beitragsErstellungsPanel.ResumeLayout(false);
+            this.beitragsErstellungsPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -131,6 +151,8 @@
         private System.Windows.Forms.FlowLayoutPanel inhaltAnzeige;
         private System.Windows.Forms.Button erstellen;
         private System.Windows.Forms.Panel beitragsErstellungsPanel;
+        private System.Windows.Forms.ComboBox tagPick;
+        private System.Windows.Forms.Label tagLabel;
     }
 }
 

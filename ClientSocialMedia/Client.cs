@@ -138,7 +138,7 @@ namespace ClientSocialMedia
             return resized;
         }
 
-        public void beitragSenden(string titel, List<string> bilder) 
+        public void beitragSenden(string titel, List<string> bilder, string tag) 
         {
             string eingabe = $"{ConvertMessage(titel)};{bilder.Count}";
             foreach (string bild in bilder) 
@@ -146,7 +146,7 @@ namespace ClientSocialMedia
                 eingabe += bild;
             } 
             
-            clientSocket.Write("beitrag;" + eingabe + '\n');
+            clientSocket.Write("beitrag;" + eingabe + ";" + ConvertMessage(tag) + '\n');
             if (clientSocket.ReadLine().Split(';')[0] == "-")
                 MessageBox.Show("Zu viele Bilder, maximal 7!");
         }
@@ -270,7 +270,7 @@ namespace ClientSocialMedia
                 int likes = Convert.ToInt32(relevantData[4]);
                 DateTime timestamp = Convert.ToDateTime(relevantData[5]);
                 string[] images = relevantData[6].Split(',');
-
+                string tag = relevantData[7];
                 foreach (string image in images)
                 {
                     string[] innerData = image.Split(':');
@@ -284,7 +284,7 @@ namespace ClientSocialMedia
                         bilder.Add(bild);
                     }
                 }
-                Beitrag b = new Beitrag(new Nutzer("Nutzer", "", "", autor), titel, bilder);
+                Beitrag b = new Beitrag(new Nutzer("Nutzer", "", "", autor), titel, bilder, tag);
                 b.Id = id;
                 b.setAnzahlLikes(likes);
                 b.setGeposted(timestamp);

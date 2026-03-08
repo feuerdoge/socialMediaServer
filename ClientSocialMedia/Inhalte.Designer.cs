@@ -38,6 +38,7 @@
             this.likesLb = new System.Windows.Forms.Label();
             this.abonnierenBtn = new System.Windows.Forms.Button();
             this.anzeigen = new System.Windows.Forms.Button();
+            this.tag = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).BeginInit();
             this.SuspendLayout();
             // 
@@ -149,11 +150,21 @@
             this.anzeigen.UseVisualStyleBackColor = true;
             this.anzeigen.Click += new System.EventHandler(this.anzeigen_Click);
             // 
+            // tag
+            // 
+            this.tag.AutoSize = true;
+            this.tag.Location = new System.Drawing.Point(302, 291);
+            this.tag.Name = "tag";
+            this.tag.Size = new System.Drawing.Size(22, 13);
+            this.tag.TabIndex = 10;
+            this.tag.Text = "tag";
+            // 
             // Inhalte
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.Controls.Add(this.tag);
             this.Controls.Add(this.anzeigen);
             this.Controls.Add(this.abonnierenBtn);
             this.Controls.Add(this.likesLb);
@@ -184,5 +195,6 @@
         private System.Windows.Forms.Label likesLb;
         private System.Windows.Forms.Button abonnierenBtn;
         private System.Windows.Forms.Button anzeigen;
+        private System.Windows.Forms.Label tag;
     }
 }

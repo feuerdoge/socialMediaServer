@@ -176,6 +176,14 @@ namespace ClientSocialMedia
             buttonBeitraege.Click += buttonBeitraege_Click;
             buttonBeliebt.Click += buttonBeliebt_Click;
             buttonNurAbos.Click += buttonNurAbos_Click;
+            
+            tagPick.Items.AddRange(new string[] {
+                "Tiere",
+                "Memes",
+                "Sonstiges",
+                "News"
+            });
+
             zeigeInhalte();
         }
 
@@ -293,6 +301,7 @@ namespace ClientSocialMedia
 
         private void erstellen_Click(object sender, EventArgs e)
         {
+            tagPick.Visible = true;
             inhaltAnzeige.Show();
             beitragsErstellungsPanel.Visible = true;
             //this.Controls.Add(beitragsErstellungsPanel);
@@ -322,12 +331,17 @@ namespace ClientSocialMedia
 
             
             beitragErstellen.Click += beitragErstellen_Click;
-
         }
 
         private void beitragErstellen_Click(object sender, EventArgs e) 
         {
-            client.beitragSenden(titelEingabe.Text, bilder);
+            if(tagPick.Text == "") 
+            {
+                MessageBox.Show("Wähle ein Tag aus!");
+                return;
+            }
+            tagPick.Visible = false;
+            client.beitragSenden(titelEingabe.Text, bilder, tagPick.Text);
             beitragsErstellungsPanel.Visible = false;
             EmpfangeDaten();
         }
@@ -360,7 +374,7 @@ namespace ClientSocialMedia
                 inhaltAnzeige.Controls.Add(profil);
                 profilePic.Tag = "profile";
             }
-            else if (profilePic.Tag == "profile")
+            else if (profilePic.Tag.ToString() == "profile")
             {
                 inhaltAnzeige.Controls.Clear();
                 profilePic.Tag = null;

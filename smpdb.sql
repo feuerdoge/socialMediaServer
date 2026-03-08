@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2026 at 08:27 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Erstellungszeit: 08. Mrz 2026 um 09:49
+-- Server-Version: 10.4.32-MariaDB
+-- PHP-Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `smpdb`
+-- Datenbank: `smpdb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `abonnement`
+-- Tabellenstruktur für Tabelle `abonnement`
 --
 
 CREATE TABLE `abonnement` (
@@ -35,7 +35,7 @@ CREATE TABLE `abonnement` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `beitrag`
+-- Tabellenstruktur für Tabelle `beitrag`
 --
 
 CREATE TABLE `beitrag` (
@@ -43,20 +43,14 @@ CREATE TABLE `beitrag` (
   `text` text DEFAULT NULL,
   `titel` text NOT NULL,
   `erstelltAm` datetime NOT NULL,
-  `autor` int(11) NOT NULL
+  `autor` int(11) NOT NULL,
+  `tag` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `beitrag`
---
-
-INSERT INTO `beitrag` (`beitragid`, `text`, `titel`, `erstelltAm`, `autor`) VALUES
-(4, NULL, 'Hallo Welt', '2026-03-02 20:19:36', 3);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bild`
+-- Tabellenstruktur für Tabelle `bild`
 --
 
 CREATE TABLE `bild` (
@@ -65,21 +59,10 @@ CREATE TABLE `bild` (
   `beitragid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `bild`
---
-
-INSERT INTO `bild` (`bildid`, `dateiname`, `beitragid`) VALUES
-(5, '715de59c-5d68-4635-b222-0cdbb1302f10.jpg', 4),
-(6, 'e71de9fe-2a09-4374-bdf9-5f573c5e94dd.jpg', 4),
-(7, 'cb090e08-1b53-493a-8226-b57903100c62.jpg', 4),
-(8, '4526fc58-d19e-4ff9-9a12-8f240ba13606.jpeg', 4),
-(9, '656762d5-a664-4468-b901-a1d4725e299f.jpeg', 4);
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kommentar`
+-- Tabellenstruktur für Tabelle `kommentar`
 --
 
 CREATE TABLE `kommentar` (
@@ -94,7 +77,7 @@ CREATE TABLE `kommentar` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `likes`
+-- Tabellenstruktur für Tabelle `likes`
 --
 
 CREATE TABLE `likes` (
@@ -102,17 +85,10 @@ CREATE TABLE `likes` (
   `beitragId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `likes`
---
-
-INSERT INTO `likes` (`nutzerId`, `beitragId`) VALUES
-(4, 4);
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nutzer`
+-- Tabellenstruktur für Tabelle `nutzer`
 --
 
 CREATE TABLE `nutzer` (
@@ -125,42 +101,32 @@ CREATE TABLE `nutzer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `nutzer`
---
-
-INSERT INTO `nutzer` (`nutzerId`, `benutzerName`, `passwort`, `email`, `zuletztAktiv`, `profilBild`) VALUES
-(1, 'Nutzername...', 'Passwort festlegen...', 'Email Eingeben', '2026-02-13 12:14:59', NULL),
-(2, 'hilfe', '234', 'hilfe@gmail.com', '2026-02-13 12:16:50', NULL),
-(3, 'mario', '6s75CRWQqAYMe/ubQeHA5QvRFkmSvt8ItvKWRQ5Zc7Sj76P2+Bud/nsnOF21/GTb', 'ashdu@ask.de', '2026-03-02 20:19:06', NULL),
-(4, 'bitte', 'yLXuLEZXESjvzD3Lem9oD0HR7lauLQxnXRw82UUgV03zPkJP1VTnxL9jio3ndZ/k', 'hilfe@sdas', '2026-03-03 18:46:51', '074049e2-5b98-4ba9-83e9-b1f76a90b965.jpg');
-
---
--- Indexes for dumped tables
+-- Indizes der exportierten Tabellen
 --
 
 --
--- Indexes for table `abonnement`
+-- Indizes für die Tabelle `abonnement`
 --
 ALTER TABLE `abonnement`
   ADD PRIMARY KEY (`abonnentId`,`abonnierteNutzerId`),
   ADD KEY `abonnierteNutzerFK` (`abonnierteNutzerId`);
 
 --
--- Indexes for table `beitrag`
+-- Indizes für die Tabelle `beitrag`
 --
 ALTER TABLE `beitrag`
   ADD PRIMARY KEY (`beitragid`),
   ADD KEY `autorFK` (`autor`);
 
 --
--- Indexes for table `bild`
+-- Indizes für die Tabelle `bild`
 --
 ALTER TABLE `bild`
   ADD PRIMARY KEY (`bildid`),
   ADD KEY `help` (`beitragid`);
 
 --
--- Indexes for table `kommentar`
+-- Indizes für die Tabelle `kommentar`
 --
 ALTER TABLE `kommentar`
   ADD PRIMARY KEY (`kommentarid`),
@@ -169,71 +135,71 @@ ALTER TABLE `kommentar`
   ADD KEY `asd` (`autor`);
 
 --
--- Indexes for table `likes`
+-- Indizes für die Tabelle `likes`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`nutzerId`,`beitragId`),
   ADD KEY `beitragIDFK` (`beitragId`);
 
 --
--- Indexes for table `nutzer`
+-- Indizes für die Tabelle `nutzer`
 --
 ALTER TABLE `nutzer`
   ADD PRIMARY KEY (`nutzerId`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
--- AUTO_INCREMENT for table `beitrag`
+-- AUTO_INCREMENT für Tabelle `beitrag`
 --
 ALTER TABLE `beitrag`
   MODIFY `beitragid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `bild`
+-- AUTO_INCREMENT für Tabelle `bild`
 --
 ALTER TABLE `bild`
   MODIFY `bildid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `kommentar`
+-- AUTO_INCREMENT für Tabelle `kommentar`
 --
 ALTER TABLE `kommentar`
   MODIFY `kommentarid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `nutzer`
+-- AUTO_INCREMENT für Tabelle `nutzer`
 --
 ALTER TABLE `nutzer`
   MODIFY `nutzerId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Constraints for dumped tables
+-- Constraints der exportierten Tabellen
 --
 
 --
--- Constraints for table `abonnement`
+-- Constraints der Tabelle `abonnement`
 --
 ALTER TABLE `abonnement`
   ADD CONSTRAINT `abonnentFk` FOREIGN KEY (`abonnentId`) REFERENCES `nutzer` (`nutzerId`),
   ADD CONSTRAINT `abonnierteNutzerFK` FOREIGN KEY (`abonnierteNutzerId`) REFERENCES `nutzer` (`nutzerId`);
 
 --
--- Constraints for table `beitrag`
+-- Constraints der Tabelle `beitrag`
 --
 ALTER TABLE `beitrag`
   ADD CONSTRAINT `autorFK` FOREIGN KEY (`autor`) REFERENCES `nutzer` (`nutzerId`);
 
 --
--- Constraints for table `bild`
+-- Constraints der Tabelle `bild`
 --
 ALTER TABLE `bild`
   ADD CONSTRAINT `help` FOREIGN KEY (`beitragid`) REFERENCES `beitrag` (`beitragid`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `kommentar`
+-- Constraints der Tabelle `kommentar`
 --
 ALTER TABLE `kommentar`
   ADD CONSTRAINT `asd` FOREIGN KEY (`autor`) REFERENCES `nutzer` (`nutzerId`),
@@ -241,7 +207,7 @@ ALTER TABLE `kommentar`
   ADD CONSTRAINT `oberKommentarId` FOREIGN KEY (`oberKommentarId`) REFERENCES `kommentar` (`kommentarid`);
 
 --
--- Constraints for table `likes`
+-- Constraints der Tabelle `likes`
 --
 ALTER TABLE `likes`
   ADD CONSTRAINT `beitragIDFK` FOREIGN KEY (`beitragId`) REFERENCES `beitrag` (`beitragid`),

@@ -16,6 +16,7 @@ namespace ClientSocialMedia
     {
         public List<string> pictures;
         public string titel;
+        public string tagBeitrag;
         public List<Image> anzeigeBilder = new List<Image>();
         private int scrollIndex = 0;
         private int beitragId;
@@ -39,6 +40,7 @@ namespace ClientSocialMedia
             this.pictures = new List<string>();
             this.titel = beitrag.Titel;
             this.beitragId = beitrag.Id;
+            this.tagBeitrag = beitrag.Tag;
             this.beitrag.SetKommentare(ladekomm());
             ku = new Kommentaruebersicht(this.beitrag, this);
             this.Controls.Add(ku);
@@ -49,12 +51,13 @@ namespace ClientSocialMedia
 
                 this.pictures.Add(b.bilddata);
             }
-            setDaten(titel, pictures);
+            setDaten(titel, pictures, tagBeitrag);
         }
 
-        public void setDaten(string titel, List<string> bilder) 
+        public void setDaten(string titel, List<string> bilder, string tag) 
         {
             this.beitragTitel.Text = titel;
+            this.tag.Text = tag;
             likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes()}";
             if (bilder.Count != 0)
             {
