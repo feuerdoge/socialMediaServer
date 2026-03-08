@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.menuPanel = new System.Windows.Forms.Panel();
-            this.profilePic = new System.Windows.Forms.PictureBox();
             this.momentaneAnsicht = new System.Windows.Forms.Panel();
             this.inhaltAnzeige = new System.Windows.Forms.FlowLayoutPanel();
             this.beitragsErstellungsPanel = new System.Windows.Forms.Panel();
             this.tagPick = new System.Windows.Forms.ComboBox();
             this.erstellen = new System.Windows.Forms.Button();
             this.tagLabel = new System.Windows.Forms.Label();
+            this.profilePic = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).BeginInit();
             this.beitragsErstellungsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -71,11 +71,12 @@
             // 
             // inhaltAnzeige
             // 
+            this.inhaltAnzeige.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.inhaltAnzeige.AutoScroll = true;
             this.inhaltAnzeige.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.inhaltAnzeige.Location = new System.Drawing.Point(235, 0);
             this.inhaltAnzeige.Name = "inhaltAnzeige";
-            this.inhaltAnzeige.Size = new System.Drawing.Size(497, 450);
+            this.inhaltAnzeige.Size = new System.Drawing.Size(500, 450);
             this.inhaltAnzeige.TabIndex = 3;
             this.inhaltAnzeige.Visible = false;
             this.inhaltAnzeige.WrapContents = false;
@@ -121,6 +122,20 @@
             this.tagLabel.Size = new System.Drawing.Size(26, 13);
             this.tagLabel.TabIndex = 1;
             this.tagLabel.Text = "Tag";
+            //
+            // profilePic
+            // 
+            this.profilePic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.profilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.profilePic.Location = new System.Drawing.Point(737, 12);
+            this.profilePic.Name = "profilePic";
+            this.profilePic.Size = new System.Drawing.Size(51, 51);
+            this.profilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.profilePic.TabIndex = 1;
+            this.profilePic.TabStop = false;
+            this.profilePic.Visible = false;
+            this.profilePic.Click += new System.EventHandler(this.profilePic_Click);
+            this.profilePic.MouseHover += new System.EventHandler(this.profilePic_MouseHover);
             // 
             // Form1
             // 
@@ -134,8 +149,10 @@
             this.Controls.Add(this.momentaneAnsicht);
             this.Controls.Add(this.profilePic);
             this.Controls.Add(this.menuPanel);
+            this.MinimumSize = new System.Drawing.Size(815, 490);
             this.Name = "Form1";
             this.Text = "s";
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).EndInit();
             this.beitragsErstellungsPanel.ResumeLayout(false);
             this.beitragsErstellungsPanel.PerformLayout();

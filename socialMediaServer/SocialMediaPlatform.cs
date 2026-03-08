@@ -239,6 +239,7 @@ namespace socialMediaServer
             Nutzer autor = new Nutzer(autorName, "", "", autorId);
             Beitrag b = new Beitrag(autor, titel, new List<Bild>(), tag);
             b.Id = beitragId;
+            b.setGeposted(erstelltAm);
             b.setAnzahlLikes(reader.GetInt32("likes"));
             if (text != null)
                 b.ErstelleText(text);
@@ -302,7 +303,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand get = new MySqlCommand(@"
-                SELECT benutzerName, email, zuletztAktiv
+                SELECT benutzerName, email, zuletztAktiv, profilBild
                 FROM nutzer
                 WHERE nutzerId = @nutzerId", conn);
             get.Parameters.AddWithValue("@nutzerId", nutzerId);
@@ -313,11 +314,40 @@ namespace socialMediaServer
                 string name = reader.GetString("benutzerName");
                 string email = reader.GetString("email");
                 DateTime time = reader.GetDateTime("zuletztAktiv");
+                int ordinale = reader.GetOrdinal("profilBild");
                 n = new Nutzer(name, "", email, nutzerId);
+                if (!reader.IsDBNull(ordinale))
+                    n.ProfilBild = reader.GetString("profilBild");
                 n.ZuletztAktiv = time;
             }
             conn.Close();
             return n;
+        }
+
+        public List<Nutzer> SucheNutzer(string suchBegriff)
+        {
+            List<Nutzer> nutzer = new List<Nutzer>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand get = new MySqlCommand(@"
+                SELECT nutzerId, benutzerName, profilBild
+                FROM nutzer
+                WHERE benutzerName LIKE @name LIMIT 20", conn);
+            get.Parameters.AddWithValue("@name", "%" +  suchBegriff + "%");
+
+            MySqlDataReader reader = get.ExecuteReader();
+            while(reader.Read())
+            {
+                int id = reader.GetInt32("nutzerId");
+                string name = reader.GetString("benutzerName");
+                int ordinale = reader.GetOrdinal("profilBild");
+                Nutzer n = new Nutzer(name, "", "", id);
+                if (!reader.IsDBNull(ordinale))
+                    n.ProfilBild = reader.GetString("profilBild");
+                nutzer.Add(n);
+            }
+            conn.Close();
+            return nutzer;
         }
 
         public void AktualisiereProfil(int nutzerId, string name, string email)

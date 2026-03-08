@@ -2,6 +2,7 @@
 using SocketAbi;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -62,28 +63,6 @@ namespace ClientSocialMedia
             //MessageBox.Show(clientSocket.ReadLine());
             //clientSocket.Write("neueBeitraege\n");
             //Test(clientSocket.ReadLine());
-        }
-
-        // Todo: Titel Test; Sämtliche Daten teilen
-        public void BeitraegeAuspacken(string msg)
-        {
-            string titel = "";
-            string[] parts = msg.Split(';');
-            int anzahl = int.Parse(parts[1]);
-            for (int i = 0; i < anzahl; i++)
-            {
-                string beitragString = parts[2 + i];
-                string[] felder = beitragString.Split('|');
-                titel += felder[1];
-            }
-            MessageBox.Show(titel);
-        }
-        public string PictureMessage(List<string> bilder)
-        {
-            string msg = "";
-            foreach (string bild in bilder)
-                msg += bild;
-            return msg;
         }
         /// <summary>
         /// Opens a dialog lets the user select pictures and encodes them to base64 (bytes just as strings) 
@@ -311,9 +290,45 @@ namespace ClientSocialMedia
             n.AbonnentenAnzahl = abonnenten;
             string base64 = parts[6];
             n.ProfilBild = base64;
-            
 
             return n;
+        }
+        public Nutzer LadeNutzer(int nutzerId)
+        {
+            clientSocket.Write($"loadNutzer;{nutzerId}\n");
+            string msg = clientSocket.ReadLine();
+            string[] parts = msg.Split(';');
+            string name = GetMessage(parts[1]);
+            int id = Convert.ToInt32(parts[2]);
+            DateTime zuletztAktiv = Convert.ToDateTime(parts[3]);
+            int abonnenten = Convert.ToInt32(parts[4]);
+            Nutzer n = new Nutzer(name, "", "", id);
+            n.ZuletztAktiv = zuletztAktiv;
+            n.AbonnentenAnzahl = abonnenten;
+            string base64 = parts[5];
+            n.ProfilBild = base64;
+            return n;
+        }
+
+        public List<Nutzer> SucheNutzer(string name)
+        {
+            clientSocket.Write($"sucheNutzer;{ConvertMessage(name)}\n");
+            string[] parts = clientSocket.ReadLine().Split(';');
+            int anzahl = Convert.ToInt32(parts[1]);
+            List<Nutzer> nutzerListe = new List<Nutzer>(); 
+            for(int i = 0; i < anzahl; i++)
+            {
+                string[] data = parts[i + 2].Split('|');
+                string nutzerName = GetMessage(data[0]);
+                int id = Convert.ToInt32(data[1]);
+                int abonnenten = Convert.ToInt32(data[2]);
+                string profil = data[3];
+                Nutzer n = new Nutzer(nutzerName, "", "", id);
+                n.AbonnentenAnzahl = abonnenten;
+                n.ProfilBild = profil;
+                nutzerListe.Add(n);
+            }
+            return nutzerListe;
         }
 
         public byte[] LadeProfilePicture()
