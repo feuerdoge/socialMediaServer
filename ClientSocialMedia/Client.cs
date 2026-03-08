@@ -361,6 +361,59 @@ namespace ClientSocialMedia
             return clientSocket.ReadLine();
         }
 
+        public int ChatErstellen(int nutzerId)
+        {
+            string msg = $"chatErstellen;{nutzerId}\n";
+            clientSocket.Write(msg);
+            string reply = clientSocket.ReadLine();
+            return Convert.ToInt32(reply.Split(';')[1]);
+        }
+
+        public List<int> LadeChats()
+        {
+            clientSocket.Write("chatListe\n");
+            string reply = clientSocket.ReadLine();
+            List<int> chats = new List<int>();
+            string[] parts = reply.Split(';');
+            for (int i = 1; i < parts.Length; i++)
+            {
+                chats.Add(Convert.ToInt32(parts[i]));
+            }
+            return chats;
+        }
+
+        public string SendeNachricht(int chat, string text)
+        {
+            string msg = $"nachrichtSenden;{chat};{ConvertMessage(text)}\n";
+            clientSocket.Write(msg);
+            string reply = clientSocket.ReadLine();
+            return reply;
+        }
+
+        public List<Nachricht> LadeNachrichten(int chat)
+        {
+            clientSocket.Write($"loadNachrichten;{chat}\n");
+            string reply = clientSocket.ReadLine();
+            string[] parts = reply.Split(';');
+            List<Nachricht> nachrichten = new List<Nachricht>();
+            if (parts[0] != "+")
+                return nachrichten;
+            int anzahl = Convert.ToInt32(parts[1]);
+            for (int i = 0; i < anzahl; i++)
+            {
+                string[] data = parts[2 + i].Split('|');
+                int benutzerId = Convert.ToInt32(data[0]);
+                string name = GetMessage(data[1]);
+                string text = GetMessage(data[2]);
+                DateTime gesendetAm = Convert.ToDateTime(data[3]);
+                string profil = data[4];
+                Nutzer n = new Nutzer(name, "", "", benutzerId);
+                n.ProfilBild = profil;
+                nachrichten.Add(new Nachricht(chat, n, text, gesendetAm));
+            }
+            return nachrichten;
+        }
+
         public List<Beitrag> sortiereBeitraegeNachBeliebtheit(List<Beitrag> beitraege, int left, int right) 
         {
 

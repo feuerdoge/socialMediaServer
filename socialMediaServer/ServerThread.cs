@@ -358,7 +358,7 @@ namespace socialMediaServer
                             msg = $"+;{nachrichten.Count}";
                             foreach (Nachricht na in nachrichten)
                             {
-                                msg += $";{na.Sender.BenutzerId}|{ConvertMessage(na.Text)}|{na.GesendetAm}";
+                                msg += $";{na.Sender.BenutzerId}|{ConvertMessage(na.Sender.BenutzerName)}|{ConvertMessage(na.Text)}|{na.GesendetAm}";
                                 if (na.Sender.ProfilBild != null)
                                 {
                                     byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", na.Sender.ProfilBild));
