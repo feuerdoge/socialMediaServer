@@ -22,16 +22,17 @@ namespace socialMediaServer
             nutzer = new List<Nutzer>();
         }
 
-        public void ErstelleBeitrag(Nutzer nutzer, string titel, string text, List<string> bilder)
+        public void ErstelleBeitrag(Nutzer nutzer, string titel, string text, List<string> bilder, string tag)
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
 
-            MySqlCommand beitrag = new MySqlCommand("INSERT INTO beitrag (text, titel, erstelltAm, autor) VALUES (@text, @titel, @erstelltAm, @autor); SELECT LAST_INSERT_ID()", conn);
+            MySqlCommand beitrag = new MySqlCommand("INSERT INTO beitrag (text, titel, erstelltAm, autor, tag) VALUES (@text, @titel, @erstelltAm, @autor, @tag); SELECT LAST_INSERT_ID()", conn);
             beitrag.Parameters.AddWithValue("@text", text);
             beitrag.Parameters.AddWithValue("@titel", titel);
             beitrag.Parameters.AddWithValue("@erstelltAm", DateTime.Now);
             beitrag.Parameters.AddWithValue("@autor", nutzer.BenutzerId);
+            beitrag.Parameters.AddWithValue("@tag", tag);
 
             int beitragId = Convert.ToInt32(beitrag.ExecuteScalar());
 
@@ -131,7 +132,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand neusteBeitraege = new MySqlCommand(@"
-                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
                 LEFT JOIN likes l ON b.beitragid = l.beitragId
@@ -151,7 +152,7 @@ namespace socialMediaServer
             {
                 int remaining = 10 - beitraege.Count;
                 MySqlCommand alteBeitraege = new MySqlCommand(@"
-                    SELECT b.beitragid, b.titel, b.text, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                    SELECT b.beitragid, b.titel, b.text, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
                     LEFT JOIN likes l ON b.beitragid = l.beitragId
@@ -225,6 +226,7 @@ namespace socialMediaServer
             int beitragId = reader.GetInt32("beitragid");
             string titel = reader.GetString("titel");
             string text;
+            string tag = reader.GetString("tag");
             if (reader.IsDBNull(reader.GetOrdinal("text")))
                 text = null;
             else
@@ -235,7 +237,7 @@ namespace socialMediaServer
             string autorName = reader.GetString("benutzerName");
 
             Nutzer autor = new Nutzer(autorName, "", "", autorId);
-            Beitrag b = new Beitrag(autor, titel, new List<Bild>());
+            Beitrag b = new Beitrag(autor, titel, new List<Bild>(), tag);
             b.Id = beitragId;
             b.setAnzahlLikes(reader.GetInt32("likes"));
             if (text != null)
