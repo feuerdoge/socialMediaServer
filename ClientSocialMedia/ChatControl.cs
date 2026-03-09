@@ -1,4 +1,5 @@
-﻿using System;
+﻿using socialMediaServer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,19 +22,19 @@ namespace ClientSocialMedia
         private void LoadChat()
         {
             chatPanel.Controls.Clear();
-            List<int> chats = Form1.client.LadeChats();
-            for (int i = 1; i <= chats.Count; i++)
+            List<Chat> chats = Form1.client.LadeChats();
+            foreach (Chat chat in chats)
             {
-                Button b = new Button();
-                b.Text = $"Chat {i}";
-                b.Width = 50;
-                b.Tag = chats[i];
-                b.Click += (s, e) =>
-                {
-                    ChatSelected?.Invoke(Convert.ToInt32(b.Tag));
-                };
-                chatPanel.Controls.Add(b);
+                ChatItemControl cic = new ChatItemControl(chat);
+                cic.Width = chatPanel.Width - 10;
+                cic.ChatClicked += ChatClicked;
+                chatPanel.Controls.Add(cic);
             }
+        }
+
+        private void ChatClicked(int chatId)
+        {
+            ChatSelected?.Invoke(chatId);
         }
     }
 }

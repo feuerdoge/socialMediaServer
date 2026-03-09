@@ -378,16 +378,24 @@ namespace ClientSocialMedia
             }
         }
 
-        public List<int> LadeChats()
+        public List<Chat> LadeChats()
         {
             clientSocket.Write("chatListe\n");
             string reply = clientSocket.ReadLine();
-            List<int> chats = new List<int>();
+            List<Chat> chats = new List<Chat>();
             string[] parts = reply.Split(';');
             int anzahl = Convert.ToInt32(parts[1]);
             for (int i = 0; i < anzahl; i++)
             {
-                chats.Add(Convert.ToInt32(parts[i + 2]));
+                string[] data = parts[i + 2].Split('|');
+                int id = Convert.ToInt32(data[0]);
+                string name = GetMessage(data[1]);
+                string nachricht = GetMessage(data[2]);
+                DateTime time = Convert.ToDateTime(data[3]);
+                string profil = data[4];
+                Chat c = new Chat(id);
+                c.SetData(name, profil, nachricht, time);
+                chats.Add(c);
             }
             return chats;
         }

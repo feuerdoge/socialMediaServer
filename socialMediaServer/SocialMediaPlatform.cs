@@ -578,15 +578,47 @@ namespace socialMediaServer
             List<Chat> chats = new List<Chat>();
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
+            //MySqlCommand get = new MySqlCommand(@"
+            //    SELECT DISTINCT chatId
+            //    FROM chatTeilnehmer
+            //    WHERE nutzerId = @n
+            //    LIMIT 10", conn);
+            //get.Parameters.AddWithValue("@n", nutzerId);
             MySqlCommand get = new MySqlCommand(@"
-                SELECT DISTINCT chatId
-                FROM chatTeilnehmer
-                WHERE nutzerId = @n", conn);
+                SELECT c.chatId, n.benutzerName, n.profilBild, na.text, na.gesendetAm
+                FROM chatTeilnehmer t
+                JOIN chat c ON t.chatId = c.chatId
+                JOIN chatTeilnehmer t2 ON c.chatId = t2.chatId AND t2.nutzerId != @n
+                JOIN nutzer n ON t2.nutzerId = n.nutzerId
+                LEFT JOIN chatnachricht na ON na.chatId = c.chatId AND na.gesendetAm = (
+                    SELECT MAX(gesendetAm)
+                    FROM chatnachricht
+                    WHERE chatId = c.chatId
+                )
+                WHERE t.nutzerId = @n
+                ORDER BY na.gesendetAm DESC
+                LIMIT 10", conn);
             get.Parameters.AddWithValue("@n", nutzerId);
             MySqlDataReader reader = get.ExecuteReader();
             while (reader.Read())
             {
-                chats.Add(new Chat(reader.GetInt32("chatId")));
+                int id = reader.GetInt32("chatId");
+                string name = reader.GetString("benutzerName");
+                Chat c = new Chat(id);
+                int ordinal = reader.GetOrdinal("profilBild");
+                string text = reader.GetString("text");
+                DateTime gesendetAm = reader.GetDateTime("gesendetAm");
+                if (!reader.IsDBNull(ordinal))
+                { 
+                    string profil = reader.GetString("profilBild");
+                    c.SetData(name, profil, text, gesendetAm);
+                }
+                else
+                {
+                    c.SetData(name, null, text, gesendetAm);
+                }
+
+                chats.Add(c);
             }
             reader.Close();
             conn.Close();

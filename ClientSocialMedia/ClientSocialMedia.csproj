@@ -75,6 +75,12 @@
     <Compile Include="ChatControl.Designer.cs">
       <DependentUpon>ChatControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChatItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ChatItemControl.Designer.cs">
+      <DependentUpon>ChatItemControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ChatOverviewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -140,6 +146,9 @@
     </Compile>
     <EmbeddedResource Include="ChatControl.resx">
       <DependentUpon>ChatControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChatItemControl.resx">
+      <DependentUpon>ChatItemControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChatOverviewControl.resx">
       <DependentUpon>ChatOverviewControl.cs</DependentUpon>
