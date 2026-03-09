@@ -512,10 +512,37 @@ namespace socialMediaServer
             return comments;
         }
 
-        public int ChatErstellen(int nutzer1, int nutzer2)
+        public int ChatDoesNotExist(int nutzer1, int nutzer2)
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
+            MySqlCommand check = new MySqlCommand(@"
+                SELECT chatId
+                FROM chatTeilnehmer
+                WHERE nutzerId IN (@n1, @n2)
+                GROUP BY chatId
+                HAVING COUNT(DISTINCT nutzerId) = 2
+                AND COUNT(*) = 2
+                LIMIT 1", conn);
+            check.Parameters.AddWithValue("@n1", nutzer1);
+            check.Parameters.AddWithValue("@n2", nutzer2);
+            var result = check.ExecuteScalar();
+            if (result != null)
+                return Convert.ToInt32(result);
+            return 0;
+        }
+
+        public int ChatErstellen(int nutzer1, int nutzer2)
+        {
+            int value = ChatDoesNotExist(nutzer1, nutzer2);
+            if (value != 0)
+            {
+                return value;
+            }
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            //MySqlCommand check = new MySqlCommand("")
+
             MySqlCommand chat = new MySqlCommand("INSERT INTO chat(erstelltAm) VALUES (NOW())", conn);
             chat.ExecuteNonQuery();
             int chatId = Convert.ToInt32(chat.LastInsertedId);
@@ -524,6 +551,7 @@ namespace socialMediaServer
             chat.Parameters.AddWithValue("@c", chatId);
             chat.Parameters.AddWithValue("@n", nutzer1);
             chat.ExecuteNonQuery();
+            chat = new MySqlCommand("INSERT INTO chatTeilnehmer(chatId, nutzerId) VALUES (@c, @n)", conn);
             chat.Parameters.AddWithValue("@c", chatId);
             chat.Parameters.AddWithValue("@n", nutzer2);
             chat.ExecuteNonQuery();
@@ -536,7 +564,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand insert = new MySqlCommand(@"
-                INSERT INTO nachricht(chatId, senderId, text, gesendetAm)
+                INSERT INTO chatnachricht(chatId, senderId, text, gesendetAm)
                 VALUES (@c, @s, @t, NOW())", conn);
             insert.Parameters.AddWithValue("@c", chatId);
             insert.Parameters.AddWithValue("@s", sender);
@@ -551,10 +579,9 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand get = new MySqlCommand(@"
-                SELECT c.chatId
-                FROM chat c
-                JOIN chatTeilnehmer t ON c.chatId = t.chatId
-                WHERE t.nutzerId = @n", conn);
+                SELECT DISTINCT chatId
+                FROM chatTeilnehmer
+                WHERE nutzerId = @n", conn);
             get.Parameters.AddWithValue("@n", nutzerId);
             MySqlDataReader reader = get.ExecuteReader();
             while (reader.Read())
@@ -573,8 +600,8 @@ namespace socialMediaServer
             List<Nachricht> nachrichten = new List<Nachricht>();
             MySqlCommand get = new MySqlCommand(@"
                 SELECT n.text, n.senderId, n.gesendetAm, u.benutzerName, u.profilBild
-                FROM nachricht n
-                JOIN nutzer u ON n.senderId = u.benutzerId
+                FROM chatnachricht n
+                JOIN nutzer u ON n.senderId = u.nutzerId
                 WHERE n.chatId = @c
                 ORDER BY n.gesendetAm ASC
                 LIMIT 20", conn);

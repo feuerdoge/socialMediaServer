@@ -192,9 +192,15 @@ namespace ClientSocialMedia
             userOverview.Location = new Point((this.Parent.Parent.Width - userOverview.Width) / 2, (this.Parent.Parent.Height - userOverview.Height) / 2);
             this.Parent.Parent.Controls.Add(userOverview);
             userOverview.BringToFront();
+            userOverview.OnChatCreated += ShowChat;
             await userOverview.LadeNutzer(beitrag.Autor.BenutzerId);
         }
 
+        private void ShowChat(ChatOverviewControl coc)
+        {
+            this.Controls.Clear();
+            this.Controls.Add(coc);
+        }
         private void profilePicPb_MouseHover(object sender, EventArgs e)
         {
             ToolTip tt = new ToolTip();

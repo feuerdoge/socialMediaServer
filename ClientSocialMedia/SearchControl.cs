@@ -62,9 +62,14 @@ namespace ClientSocialMedia
             overviewPanel.Visible = true;
             UserOverviewControl u = new UserOverviewControl();
             u.OnClose += OnUserOvererviewClose;
-            
+            u.OnChatCreated += ShowChat;   
             u.LadeNutzer(n);
             overviewPanel.Controls.Add(u);
+        }
+        private void ShowChat(ChatOverviewControl coc)
+        {
+            this.Controls.Clear();
+            this.Controls.Add(coc);
         }
     }
 }

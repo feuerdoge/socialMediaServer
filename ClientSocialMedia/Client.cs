@@ -3,6 +3,7 @@ using SocketAbi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -366,7 +367,15 @@ namespace ClientSocialMedia
             string msg = $"chatErstellen;{nutzerId}\n";
             clientSocket.Write(msg);
             string reply = clientSocket.ReadLine();
-            return Convert.ToInt32(reply.Split(';')[1]);
+            string[] parts = reply.Split(';');
+            if (parts[0] == "+")
+            {
+                return Convert.ToInt32(reply.Split(';')[1]);
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public List<int> LadeChats()
@@ -375,9 +384,10 @@ namespace ClientSocialMedia
             string reply = clientSocket.ReadLine();
             List<int> chats = new List<int>();
             string[] parts = reply.Split(';');
-            for (int i = 1; i < parts.Length; i++)
+            int anzahl = Convert.ToInt32(parts[1]);
+            for (int i = 0; i < anzahl; i++)
             {
-                chats.Add(Convert.ToInt32(parts[i]));
+                chats.Add(Convert.ToInt32(parts[i + 2]));
             }
             return chats;
         }

@@ -33,6 +33,7 @@
             this.abonnierenBtn = new System.Windows.Forms.Button();
             this.nutzerPb = new System.Windows.Forms.PictureBox();
             this.closeBtn = new System.Windows.Forms.Button();
+            this.chatBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nutzerPb)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,7 +61,7 @@
             // 
             this.abonnierenBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.abonnierenBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.abonnierenBtn.Location = new System.Drawing.Point(77, 219);
+            this.abonnierenBtn.Location = new System.Drawing.Point(44, 219);
             this.abonnierenBtn.Name = "abonnierenBtn";
             this.abonnierenBtn.Size = new System.Drawing.Size(160, 40);
             this.abonnierenBtn.TabIndex = 4;
@@ -87,11 +88,22 @@
             this.closeBtn.UseVisualStyleBackColor = true;
             this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
             // 
+            // chatBtn
+            // 
+            this.chatBtn.Location = new System.Drawing.Point(246, 229);
+            this.chatBtn.Name = "chatBtn";
+            this.chatBtn.Size = new System.Drawing.Size(75, 23);
+            this.chatBtn.TabIndex = 6;
+            this.chatBtn.Text = "Chatten!";
+            this.chatBtn.UseVisualStyleBackColor = true;
+            this.chatBtn.Click += new System.EventHandler(this.chatBtn_Click);
+            // 
             // UserOverviewControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.chatBtn);
             this.Controls.Add(this.closeBtn);
             this.Controls.Add(this.abonnierenBtn);
             this.Controls.Add(this.abonnentenLb);
@@ -113,5 +125,6 @@
         private System.Windows.Forms.Label abonnentenLb;
         private System.Windows.Forms.Button abonnierenBtn;
         private System.Windows.Forms.Button closeBtn;
+        private System.Windows.Forms.Button chatBtn;
     }
 }

@@ -69,6 +69,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ChatControl.Designer.cs">
+      <DependentUpon>ChatControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChatOverviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ChatOverviewControl.Designer.cs">
+      <DependentUpon>ChatOverviewControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Client.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -93,6 +105,12 @@
     </Compile>
     <Compile Include="Kommentaruebersicht.Designer.cs">
       <DependentUpon>Kommentaruebersicht.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MessageControl.Designer.cs">
+      <DependentUpon>MessageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ProfileControl.cs">
       <SubType>UserControl</SubType>
@@ -120,6 +138,12 @@
     <Compile Include="UserSearchResultControl.Designer.cs">
       <DependentUpon>UserSearchResultControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChatControl.resx">
+      <DependentUpon>ChatControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChatOverviewControl.resx">
+      <DependentUpon>ChatOverviewControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -131,6 +155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Kommentaruebersicht.resx">
       <DependentUpon>Kommentaruebersicht.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageControl.resx">
+      <DependentUpon>MessageControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProfileControl.resx">
       <DependentUpon>ProfileControl.cs</DependentUpon>

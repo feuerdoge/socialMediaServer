@@ -16,6 +16,7 @@ namespace ClientSocialMedia
     {
         public Action<Image> OnProfileChange;
         public Action OnAbmelden;
+        public Action OnClose;
         public ProfileControl()
         {
             InitializeComponent();
@@ -115,5 +116,9 @@ namespace ClientSocialMedia
             OnAbmelden?.Invoke();
         }
 
+        private void closeBtn_Click(object sender, EventArgs e)
+        {
+            OnClose?.Invoke();
+        }
     }
 }

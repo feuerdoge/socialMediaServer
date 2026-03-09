@@ -334,6 +334,11 @@ namespace socialMediaServer
                             break;
                         case "chatErstellen":
                             int user2 = Convert.ToInt32(parameter[1]);
+                            if (user2 == this.nutzer.BenutzerId)
+                            {
+                                client.Write("-;Nutzer kann nicht mit sich selbst ein Chat erstellen\n");
+                                break;
+                            }
                             int chatId = spf.ChatErstellen(this.nutzer.BenutzerId, user2);
                             client.Write($"+;{chatId}\n");
                             break;
@@ -350,7 +355,7 @@ namespace socialMediaServer
                             int chat = Convert.ToInt32(parameter[1]);
                             text = GetMessage(parameter[2]);
                             spf.SendeNachricht(chat, this.nutzer.BenutzerId, text);
-                            client.Write("+;Nachricht gesendet");
+                            client.Write("+;Nachricht gesendet\n");
                             break;
                         case "loadNachrichten":
                             chatId = Convert.ToInt32(parameter[1]);

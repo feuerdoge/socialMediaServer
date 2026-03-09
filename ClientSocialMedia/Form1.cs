@@ -166,6 +166,7 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Suchen"
             };
+            buttonChat.Click += Chat_Click;
             buttonSuchen.Click += Suche_Click;
             menuPanel.Controls.Add(buttonBeitraege);
             menuPanel.Controls.Add(buttonBeliebt);
@@ -360,27 +361,22 @@ namespace ClientSocialMedia
 
         private void profilePic_Click(object sender, EventArgs e)
         {
-            if (profilePic.Tag == null)
+            inhaltAnzeige.Controls.Clear();
+            ProfileControl profil = new ProfileControl();
+            profil.OnProfileChange = (img) =>
+            {
+                profilePic.Image = img;
+            };
+            profil.OnAbmelden = () =>
+            {
+                Abmelden();
+            };
+            profil.OnClose = () =>
             {
                 inhaltAnzeige.Controls.Clear();
-                ProfileControl profil = new ProfileControl();
-                profil.OnProfileChange = (img) =>
-                {
-                    profilePic.Image = img;
-                };
-                profil.OnAbmelden = () =>
-                {
-                    Abmelden();
-                };
-                inhaltAnzeige.Controls.Add(profil);
-                profilePic.Tag = "profile";
-            }
-            else if (profilePic.Tag.ToString() == "profile")
-            {
-                inhaltAnzeige.Controls.Clear();
-                profilePic.Tag = null;
                 zeigeInhalte();
-            }
+            };
+            inhaltAnzeige.Controls.Add(profil);            
         }
 
         private void profilePic_MouseHover(object sender, EventArgs e)
@@ -388,8 +384,17 @@ namespace ClientSocialMedia
             ToolTip tt = new ToolTip();
             tt.InitialDelay = 250;
             tt.SetToolTip(profilePic, "Profil anpassen");
+            Cursor = Cursors.Hand;
+            profilePic.BackColor = Color.FromArgb(230, 230, 230);
+            profilePic.Size = new Size(54, 54);
         }
-        
+
+        private void profilePic_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+            profilePic.Size = new Size(50, 50);
+        }
+
         private void buttonBeliebt_Click(object sender, EventArgs e) 
         {
             if (beitraege == null)
@@ -429,6 +434,22 @@ namespace ClientSocialMedia
             inhaltAnzeige.Controls.Clear();
             SearchControl searchControl = new SearchControl();
             inhaltAnzeige.Controls.Add(searchControl);
+        }
+
+        private void Chat_Click(object sender, EventArgs e)
+        {
+            ChatControl cc = new ChatControl();
+            cc.ChatSelected += ChatControl_ChatSelected;
+            inhaltAnzeige.Controls.Clear();
+            inhaltAnzeige.Controls.Add(cc);
+        }
+
+        private async void ChatControl_ChatSelected(int chatId)
+        {
+            ChatOverviewControl coc = new ChatOverviewControl(chatId);
+            inhaltAnzeige.Controls.Clear();
+            inhaltAnzeige.Controls.Add(coc);
+            coc.LoadNachrichten();
         }
 
         private void Form1_Resize(object sender, EventArgs e)

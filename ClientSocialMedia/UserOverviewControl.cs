@@ -16,6 +16,7 @@ namespace ClientSocialMedia
     {
         private int nutzerId;
         public Action OnClose;
+        public Action<ChatOverviewControl> OnChatCreated;
         public UserOverviewControl()
         {
             InitializeComponent();
@@ -65,6 +66,21 @@ namespace ClientSocialMedia
         {
             this.Dispose();
             OnClose?.Invoke();
+        }
+
+        private void chatBtn_Click(object sender, EventArgs e)
+        {
+            int chatId = Form1.client.ChatErstellen(nutzerId);
+            if (chatId == -1)
+            {
+                MessageBox.Show("Nutzer kann nicht mit sich selbst ein Chat erstellen");
+                return;
+            }
+            ChatOverviewControl coc = new ChatOverviewControl(chatId);
+            coc.BringToFront();
+            coc.LoadNachrichten();
+            OnChatCreated?.Invoke(coc);
+            this.Dispose();
         }
     }
 }
