@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Mrz 2026 um 09:49
--- Server-Version: 10.4.32-MariaDB
--- PHP-Version: 8.2.12
+-- Generation Time: Mar 09, 2026 at 10:03 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `smpdb`
+-- Database: `smpdb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `abonnement`
+-- Table structure for table `abonnement`
 --
 
 CREATE TABLE `abonnement` (
@@ -35,7 +35,7 @@ CREATE TABLE `abonnement` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `beitrag`
+-- Table structure for table `beitrag`
 --
 
 CREATE TABLE `beitrag` (
@@ -50,7 +50,7 @@ CREATE TABLE `beitrag` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `bild`
+-- Table structure for table `bild`
 --
 
 CREATE TABLE `bild` (
@@ -62,7 +62,43 @@ CREATE TABLE `bild` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `kommentar`
+-- Table structure for table `chat`
+--
+
+CREATE TABLE `chat` (
+  `chatId` int(11) NOT NULL,
+  `erstelltAm` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chatnachricht`
+--
+
+CREATE TABLE `chatnachricht` (
+  `nachrichtId` int(11) NOT NULL,
+  `chatId` int(11) DEFAULT NULL,
+  `senderId` int(11) DEFAULT NULL,
+  `text` text DEFAULT NULL,
+  `gesendetAm` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chatteilnehmer`
+--
+
+CREATE TABLE `chatteilnehmer` (
+  `chatId` int(11) NOT NULL,
+  `nutzerId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kommentar`
 --
 
 CREATE TABLE `kommentar` (
@@ -77,7 +113,7 @@ CREATE TABLE `kommentar` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `likes`
+-- Table structure for table `likes`
 --
 
 CREATE TABLE `likes` (
@@ -88,7 +124,7 @@ CREATE TABLE `likes` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `nutzer`
+-- Table structure for table `nutzer`
 --
 
 CREATE TABLE `nutzer` (
@@ -101,32 +137,53 @@ CREATE TABLE `nutzer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indizes der exportierten Tabellen
+-- Indexes for dumped tables
 --
 
 --
--- Indizes für die Tabelle `abonnement`
+-- Indexes for table `abonnement`
 --
 ALTER TABLE `abonnement`
   ADD PRIMARY KEY (`abonnentId`,`abonnierteNutzerId`),
   ADD KEY `abonnierteNutzerFK` (`abonnierteNutzerId`);
 
 --
--- Indizes für die Tabelle `beitrag`
+-- Indexes for table `beitrag`
 --
 ALTER TABLE `beitrag`
   ADD PRIMARY KEY (`beitragid`),
   ADD KEY `autorFK` (`autor`);
 
 --
--- Indizes für die Tabelle `bild`
+-- Indexes for table `bild`
 --
 ALTER TABLE `bild`
   ADD PRIMARY KEY (`bildid`),
   ADD KEY `help` (`beitragid`);
 
 --
--- Indizes für die Tabelle `kommentar`
+-- Indexes for table `chat`
+--
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`chatId`);
+
+--
+-- Indexes for table `chatnachricht`
+--
+ALTER TABLE `chatnachricht`
+  ADD PRIMARY KEY (`nachrichtId`),
+  ADD KEY `senderFK` (`senderId`),
+  ADD KEY `chat2FK` (`chatId`);
+
+--
+-- Indexes for table `chatteilnehmer`
+--
+ALTER TABLE `chatteilnehmer`
+  ADD PRIMARY KEY (`chatId`,`nutzerId`),
+  ADD KEY `nutzerFK` (`nutzerId`);
+
+--
+-- Indexes for table `kommentar`
 --
 ALTER TABLE `kommentar`
   ADD PRIMARY KEY (`kommentarid`),
@@ -135,71 +192,97 @@ ALTER TABLE `kommentar`
   ADD KEY `asd` (`autor`);
 
 --
--- Indizes für die Tabelle `likes`
+-- Indexes for table `likes`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`nutzerId`,`beitragId`),
   ADD KEY `beitragIDFK` (`beitragId`);
 
 --
--- Indizes für die Tabelle `nutzer`
+-- Indexes for table `nutzer`
 --
 ALTER TABLE `nutzer`
   ADD PRIMARY KEY (`nutzerId`);
 
 --
--- AUTO_INCREMENT für exportierte Tabellen
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT für Tabelle `beitrag`
+-- AUTO_INCREMENT for table `beitrag`
 --
 ALTER TABLE `beitrag`
-  MODIFY `beitragid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `beitragid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `bild`
+-- AUTO_INCREMENT for table `bild`
 --
 ALTER TABLE `bild`
-  MODIFY `bildid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `bildid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `kommentar`
+-- AUTO_INCREMENT for table `chat`
+--
+ALTER TABLE `chat`
+  MODIFY `chatId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `chatnachricht`
+--
+ALTER TABLE `chatnachricht`
+  MODIFY `nachrichtId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `kommentar`
 --
 ALTER TABLE `kommentar`
   MODIFY `kommentarid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `nutzer`
+-- AUTO_INCREMENT for table `nutzer`
 --
 ALTER TABLE `nutzer`
-  MODIFY `nutzerId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `nutzerId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints der exportierten Tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Constraints der Tabelle `abonnement`
+-- Constraints for table `abonnement`
 --
 ALTER TABLE `abonnement`
   ADD CONSTRAINT `abonnentFk` FOREIGN KEY (`abonnentId`) REFERENCES `nutzer` (`nutzerId`),
   ADD CONSTRAINT `abonnierteNutzerFK` FOREIGN KEY (`abonnierteNutzerId`) REFERENCES `nutzer` (`nutzerId`);
 
 --
--- Constraints der Tabelle `beitrag`
+-- Constraints for table `beitrag`
 --
 ALTER TABLE `beitrag`
   ADD CONSTRAINT `autorFK` FOREIGN KEY (`autor`) REFERENCES `nutzer` (`nutzerId`);
 
 --
--- Constraints der Tabelle `bild`
+-- Constraints for table `bild`
 --
 ALTER TABLE `bild`
   ADD CONSTRAINT `help` FOREIGN KEY (`beitragid`) REFERENCES `beitrag` (`beitragid`) ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `kommentar`
+-- Constraints for table `chatnachricht`
+--
+ALTER TABLE `chatnachricht`
+  ADD CONSTRAINT `chat2FK` FOREIGN KEY (`chatId`) REFERENCES `chat` (`chatId`),
+  ADD CONSTRAINT `senderFK` FOREIGN KEY (`senderId`) REFERENCES `nutzer` (`nutzerId`);
+
+--
+-- Constraints for table `chatteilnehmer`
+--
+ALTER TABLE `chatteilnehmer`
+  ADD CONSTRAINT `chatFK` FOREIGN KEY (`chatId`) REFERENCES `chat` (`chatId`),
+  ADD CONSTRAINT `nutzerFK` FOREIGN KEY (`nutzerId`) REFERENCES `nutzer` (`nutzerId`);
+
+--
+-- Constraints for table `kommentar`
 --
 ALTER TABLE `kommentar`
   ADD CONSTRAINT `asd` FOREIGN KEY (`autor`) REFERENCES `nutzer` (`nutzerId`),
@@ -207,7 +290,7 @@ ALTER TABLE `kommentar`
   ADD CONSTRAINT `oberKommentarId` FOREIGN KEY (`oberKommentarId`) REFERENCES `kommentar` (`kommentarid`);
 
 --
--- Constraints der Tabelle `likes`
+-- Constraints for table `likes`
 --
 ALTER TABLE `likes`
   ADD CONSTRAINT `beitragIDFK` FOREIGN KEY (`beitragId`) REFERENCES `beitrag` (`beitragid`),
