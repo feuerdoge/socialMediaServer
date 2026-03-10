@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace ClientSocialMedia
 {
@@ -390,8 +391,13 @@ namespace ClientSocialMedia
                 string[] data = parts[i + 2].Split('|');
                 int id = Convert.ToInt32(data[0]);
                 string name = GetMessage(data[1]);
-                string nachricht = GetMessage(data[2]);
-                DateTime time = Convert.ToDateTime(data[3]);
+                string nachricht = null;
+                DateTime? time = null;
+                if (data[2] != "")
+                {
+                    nachricht = GetMessage(data[2]);
+                    time = Convert.ToDateTime(data[3]);
+                }
                 string profil = data[4];
                 Chat c = new Chat(id);
                 c.SetData(name, profil, nachricht, time);

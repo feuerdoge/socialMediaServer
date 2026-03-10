@@ -12,13 +12,13 @@ namespace socialMediaServer
         public string BenutzerName { get; set; }
         public string ProfilBild { get; set; }
         public string LetzteNachricht { get; set; }
-        public DateTime LetzteZeit { get; set; }
+        public DateTime? LetzteZeit { get; set; }
         public Chat(int chatId)
         {
             this.ChatId = chatId;
         }
 
-        public void SetData(string nutzerName, string profilBild, string letzteNachricht, DateTime letzteZeit)
+        public void SetData(string nutzerName, string profilBild, string letzteNachricht, DateTime? letzteZeit)
         {
             BenutzerName = nutzerName;
             ProfilBild = profilBild;

@@ -15,11 +15,16 @@ namespace ClientSocialMedia
     {
         private int chatId;
         private List<Nachricht> nachrichten;
+        private Timer timer;
         public ChatOverviewControl(int chat)
         {
             InitializeComponent();
             this.chatId = chat;
             this.nachrichten = new List<Nachricht>();
+            timer = new Timer();
+            timer.Interval = 10000;
+            timer.Tick += (s, e) => LoadNachrichten();
+            timer.Start();
         }
 
         public async void LoadNachrichten()

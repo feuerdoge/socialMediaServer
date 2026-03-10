@@ -22,10 +22,17 @@ namespace ClientSocialMedia
             InitializeComponent();
             chatId = chat.ChatId;
             nameLb.Text = chat.BenutzerName;
-            lastLb.Text = $"Last:'{chat.LetzteNachricht}'";
-            dateLb.Text = $"Von: {chat.LetzteZeit.ToString("g")}";
-
-            byte[] bytes = Convert.FromBase64String(chat.ProfilBild);
+            if (chat.LetzteNachricht != null)
+            {
+                lastLb.Text = $"{chat.LetzteNachricht}";
+                dateLb.Text = $"Von: {chat.LetzteZeit.ToString()}";
+            }
+            else
+            {
+                lastLb.Text = "Noch keine Nachrichten hinterlassen!";
+                dateLb.Visible = false;
+            }
+                byte[] bytes = Convert.FromBase64String(chat.ProfilBild);
             using (MemoryStream ms = new MemoryStream(bytes))
             {
                 Image img = Image.FromStream(ms);

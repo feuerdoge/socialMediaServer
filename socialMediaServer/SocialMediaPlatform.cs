@@ -578,12 +578,6 @@ namespace socialMediaServer
             List<Chat> chats = new List<Chat>();
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
-            //MySqlCommand get = new MySqlCommand(@"
-            //    SELECT DISTINCT chatId
-            //    FROM chatTeilnehmer
-            //    WHERE nutzerId = @n
-            //    LIMIT 10", conn);
-            //get.Parameters.AddWithValue("@n", nutzerId);
             MySqlCommand get = new MySqlCommand(@"
                 SELECT c.chatId, n.benutzerName, n.profilBild, na.text, na.gesendetAm
                 FROM chatTeilnehmer t
@@ -605,9 +599,15 @@ namespace socialMediaServer
                 int id = reader.GetInt32("chatId");
                 string name = reader.GetString("benutzerName");
                 Chat c = new Chat(id);
-                int ordinal = reader.GetOrdinal("profilBild");
-                string text = reader.GetString("text");
-                DateTime gesendetAm = reader.GetDateTime("gesendetAm");
+                int ordinal = reader.GetOrdinal("text");
+                string text = null;
+                if (!reader.IsDBNull(ordinal))
+                    text = reader.GetString("text");
+                ordinal = reader.GetOrdinal("gesendetAm");
+                DateTime? gesendetAm = null;
+                if (!reader.IsDBNull(ordinal))
+                    gesendetAm = reader.GetDateTime("gesendetAm");
+                ordinal = reader.GetOrdinal("profilBild");
                 if (!reader.IsDBNull(ordinal))
                 { 
                     string profil = reader.GetString("profilBild");

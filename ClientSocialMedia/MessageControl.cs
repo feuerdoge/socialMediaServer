@@ -25,7 +25,10 @@ namespace ClientSocialMedia
         private void LoadMessage()
         {
             nameLb.Text = nachricht.Sender.BenutzerName;
-            text.Text = nachricht.Text;
+            if (nachricht.Text == null)
+                text.Text = "Noch keine Nachricht!";
+            else
+                text.Text = nachricht.Text;
             Size textSize = TextRenderer.MeasureText(nachricht.Text, text.Font, new Size(text.Size.Width, text.Size.Height), TextFormatFlags.WordBreak);
             text.Size = new Size(textSize.Width + 10, textSize.Height + 5);
             int lineCount = text.GetLineFromCharIndex(text.TextLength) + 1;
@@ -41,7 +44,9 @@ namespace ClientSocialMedia
                 text.ScrollBars = RichTextBoxScrollBars.Vertical;
             }
 
-
+            if (nachricht.GesendetAm == null)
+                dateLb.Hide();
+            else
                 dateLb.Text = $"Gesendet: {nachricht.GesendetAm.ToString("g")}";
             byte[] bytes = Convert.FromBase64String(nachricht.Sender.ProfilBild);
             using (MemoryStream ms = new MemoryStream(bytes))

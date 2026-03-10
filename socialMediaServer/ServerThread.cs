@@ -347,7 +347,10 @@ namespace socialMediaServer
                             msg = $"+;{chats.Count}";
                             foreach (Chat c in chats)
                             {
-                                msg += $";{c.ChatId}|{ConvertMessage(c.BenutzerName)}|{ConvertMessage(c.LetzteNachricht)}|{c.LetzteZeit}";
+                                if (c.LetzteNachricht != null)
+                                    msg += $";{c.ChatId}|{ConvertMessage(c.BenutzerName)}|{ConvertMessage(c.LetzteNachricht)}|{c.LetzteZeit}";
+                                else
+                                    msg += $";{c.ChatId}|{ConvertMessage(c.BenutzerName)}||";
                                 if (c.ProfilBild != null)
                                 {
                                     byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", c.ProfilBild));
