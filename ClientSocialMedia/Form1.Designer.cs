@@ -34,7 +34,6 @@
             this.beitragsErstellungsPanel = new System.Windows.Forms.Panel();
             this.tagLabel = new System.Windows.Forms.Label();
             this.tagPick = new System.Windows.Forms.ComboBox();
-            this.erstellen = new System.Windows.Forms.Button();
             this.profilePic = new System.Windows.Forms.PictureBox();
             this.beitragsErstellungsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).BeginInit();
@@ -98,17 +97,6 @@
             this.tagPick.Tag = "";
             this.tagPick.Visible = false;
             // 
-            // erstellen
-            // 
-            this.erstellen.Location = new System.Drawing.Point(685, 118);
-            this.erstellen.Name = "erstellen";
-            this.erstellen.Size = new System.Drawing.Size(103, 23);
-            this.erstellen.TabIndex = 4;
-            this.erstellen.Text = "Beitrag Erstellen";
-            this.erstellen.UseVisualStyleBackColor = true;
-            this.erstellen.Visible = false;
-            this.erstellen.Click += new System.EventHandler(this.erstellen_Click);
-            // 
             // profilePic
             // 
             this.profilePic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -130,7 +118,6 @@
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 451);
             this.Controls.Add(this.beitragsErstellungsPanel);
-            this.Controls.Add(this.erstellen);
             this.Controls.Add(this.inhaltAnzeige);
             this.Controls.Add(this.momentaneAnsicht);
             this.Controls.Add(this.profilePic);
@@ -152,7 +139,6 @@
         private System.Windows.Forms.PictureBox profilePic;
         private System.Windows.Forms.Panel momentaneAnsicht;
         private System.Windows.Forms.FlowLayoutPanel inhaltAnzeige;
-        private System.Windows.Forms.Button erstellen;
         private System.Windows.Forms.Panel beitragsErstellungsPanel;
         private System.Windows.Forms.ComboBox tagPick;
         private System.Windows.Forms.Label tagLabel;

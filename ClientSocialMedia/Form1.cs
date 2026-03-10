@@ -122,7 +122,6 @@ namespace ClientSocialMedia
 
         private void zeigeProgram() 
         {
-            erstellen.Show();
             menuPanel.BackColor = Color.White;
             Button buttonBeitraege = new Button()
             {
@@ -145,6 +144,13 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Beiträge Abonnierter Nutzer"
             };
+            Button buttonErstellen = new Button()
+            {
+                Size = new Size(215, 60),
+                Location = new Point(10, 190),
+                BackColor= Color.White,
+                Text = "Beitrag Erstellen"
+            };
             Button buttonChat = new Button()
             {
                 Size = new Size(215, 60),
@@ -166,11 +172,13 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Suchen"
             };
+            buttonErstellen.Click += erstellen_Click;
             buttonChat.Click += Chat_Click;
             buttonSuchen.Click += Suche_Click;
             menuPanel.Controls.Add(buttonBeitraege);
             menuPanel.Controls.Add(buttonBeliebt);
             menuPanel.Controls.Add(buttonNurAbos);
+            menuPanel.Controls.Add(buttonErstellen);
             menuPanel.Controls.Add(buttonChat);
             menuPanel.Controls.Add(buttonGruppen);
             menuPanel.Controls.Add(buttonSuchen);
@@ -298,6 +306,11 @@ namespace ClientSocialMedia
 
         private void erstellen_Click(object sender, EventArgs e)
         {
+            if (beitragsErstellungsPanel.Visible)
+            {
+                beitragsErstellungsPanel.Visible = false;
+                return;
+            }
             tagPick.Controls.Clear();
             tagPick.Visible = true;
             tagPick.Items.AddRange(new string[] {
@@ -313,24 +326,37 @@ namespace ClientSocialMedia
 
             titelEingabe = new TextBox();
             beitragsErstellungsPanel.Controls.Add(titelEingabe);
-            titelEingabe.Location = new Point(titelEingabe.Location.X, titelEingabe.Location.Y);
+            titelEingabe.Location = new Point(titelEingabe.Location.X + 10, titelEingabe.Location.Y + 10);
 
             bilder = new List<string>();
 
             Button bildauswaehlen = new Button();
-            bildauswaehlen.Location = new Point(bildauswaehlen.Location.X, bildauswaehlen.Location.Y + 30);
-            bildauswaehlen.Width = erstellen.Width;
-            bildauswaehlen.Height = erstellen.Height;
+            bildauswaehlen.Location = new Point(bildauswaehlen.Location.X + 10, bildauswaehlen.Location.Y + 40);
+            bildauswaehlen.Width = 100;
+            bildauswaehlen.Height = 25;
             bildauswaehlen.Text = "Bild auswählen";
             beitragsErstellungsPanel.Controls.Add(bildauswaehlen);
             bildauswaehlen.Click += bildauswaehlen_OnClick;
 
             Button beitragErstellen = new Button();
-            beitragErstellen.Location = new Point(bildauswaehlen.Location.X, bildauswaehlen.Location.Y + 60);
-            beitragErstellen.Width = erstellen.Width;
-            beitragErstellen.Height = erstellen.Height;
+            beitragErstellen.Location = new Point(bildauswaehlen.Location.X, bildauswaehlen.Location.Y + 70);
+            beitragErstellen.Width = 100;
+            beitragErstellen.Height = 25;
             beitragErstellen.Text = "Beitrag erstellen";
             beitragsErstellungsPanel.Controls.Add(beitragErstellen);
+
+            Button closeBtn = new Button()
+            {
+                Width = 50,
+                Height = 20,
+                Text = "Close",
+                Location = new Point(beitragsErstellungsPanel.Width - 70, titelEingabe.Location.Y)
+            };
+            closeBtn.Click += (s, e2) =>
+            {
+                beitragsErstellungsPanel.Visible = false;
+            };
+            beitragsErstellungsPanel.Controls.Add(closeBtn);
 
             beitragsErstellungsPanel.BringToFront();
 
@@ -357,7 +383,6 @@ namespace ClientSocialMedia
             inhaltAnzeige.Visible = false;
             profilePic.Visible = false;
             menuPanel.Visible = false;
-            erstellen.Visible = false;
             profilePic.Tag = null;
             ErstellePanel();
         }
