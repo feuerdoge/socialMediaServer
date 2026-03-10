@@ -391,6 +391,9 @@ namespace socialMediaServer
                             }
                             client.Write(msg + "\n");
                             break;
+                        case "empfehlung":
+                            List<Beitrag> beitreage = spf.HoleLikedBeitraege(this.nutzer);
+                            break;
                     }
                 }
             }
@@ -412,6 +415,11 @@ namespace socialMediaServer
         private string GetMessage(string message)
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(message));
+        }
+
+        private int GewichtungErmitteln(List<Beitrag> beitraege)
+        {
+
         }
     }
 }

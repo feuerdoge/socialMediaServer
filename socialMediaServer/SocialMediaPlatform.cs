@@ -222,6 +222,29 @@ namespace socialMediaServer
             conn.Close();
             return beitraege;
         }
+
+        public List<Beitrag> HoleLikedBeitraege(Nutzer n)
+        {
+            List<Beitrag> beitraege = new List<Beitrag>();
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            MySqlCommand likedBeitraege = new MySqlCommand(@"
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                FROM beitrag b
+                JOIN nutzer u ON b.autor = u.nutzerId
+                LEFT JOIN likes l ON b.beitragid = l.beitragId
+                WHERE b.beitragid = (SELECT li.beitragId FROM likes li WHERE li.nutzerId = @nutz)
+                GROUP BY b.beitragid
+                ORDER BY b.erstelltAm DESC", conn);
+            likedBeitraege.Parameters.AddWithValue("@nutz", n.BenutzerId);
+            MySqlDataReader reader = likedBeitraege.ExecuteReader();
+            while (reader.Read())
+            {
+                beitraege.Add(LeseBeitrag(reader));
+            }
+            reader.Close();
+            return beitraege;
+        }
         private Beitrag LeseBeitrag(MySqlDataReader reader)
         {
             int beitragId = reader.GetInt32("beitragid");
