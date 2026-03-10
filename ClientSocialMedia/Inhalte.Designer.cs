@@ -49,17 +49,19 @@
             // 
             this.beitragTitel.AutoSize = true;
             this.beitragTitel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.beitragTitel.Location = new System.Drawing.Point(200, 12);
+            this.beitragTitel.Location = new System.Drawing.Point(267, 15);
+            this.beitragTitel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.beitragTitel.Name = "beitragTitel";
-            this.beitragTitel.Size = new System.Drawing.Size(53, 25);
+            this.beitragTitel.Size = new System.Drawing.Size(66, 31);
             this.beitragTitel.TabIndex = 0;
             this.beitragTitel.Text = "Titel";
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(316, 127);
+            this.next.Location = new System.Drawing.Point(421, 156);
+            this.next.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.next.Name = "next";
-            this.next.Size = new System.Drawing.Size(28, 23);
+            this.next.Size = new System.Drawing.Size(37, 28);
             this.next.TabIndex = 2;
             this.next.Text = "Nxt";
             this.next.UseVisualStyleBackColor = true;
@@ -67,9 +69,10 @@
             // 
             // last
             // 
-            this.last.Location = new System.Drawing.Point(95, 127);
+            this.last.Location = new System.Drawing.Point(127, 156);
+            this.last.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.last.Name = "last";
-            this.last.Size = new System.Drawing.Size(28, 23);
+            this.last.Size = new System.Drawing.Size(37, 28);
             this.last.TabIndex = 3;
             this.last.Text = "Lst";
             this.last.UseVisualStyleBackColor = true;
@@ -80,9 +83,10 @@
             // 
             this.kommentareVorschau.AutoScroll = true;
             this.kommentareVorschau.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.kommentareVorschau.Location = new System.Drawing.Point(3, 310);
+            this.kommentareVorschau.Location = new System.Drawing.Point(4, 382);
+            this.kommentareVorschau.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.kommentareVorschau.Name = "kommentareVorschau";
-            this.kommentareVorschau.Size = new System.Drawing.Size(433, 162);
+            this.kommentareVorschau.Size = new System.Drawing.Size(577, 199);
             this.kommentareVorschau.TabIndex = 4;
             this.kommentareVorschau.WrapContents = false;
             // 
@@ -90,9 +94,10 @@
             // 
             this.Kommentarsektion.AutoSize = true;
             this.Kommentarsektion.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Kommentarsektion.Location = new System.Drawing.Point(3, 282);
+            this.Kommentarsektion.Location = new System.Drawing.Point(4, 347);
+            this.Kommentarsektion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Kommentarsektion.Name = "Kommentarsektion";
-            this.Kommentarsektion.Size = new System.Drawing.Size(133, 25);
+            this.Kommentarsektion.Size = new System.Drawing.Size(168, 31);
             this.Kommentarsektion.TabIndex = 5;
             this.Kommentarsektion.Text = "Kommentare";
             // 
@@ -101,9 +106,10 @@
             this.likeBtn.BackColor = System.Drawing.Color.White;
             this.likeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.likeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.likeBtn.Location = new System.Drawing.Point(299, 245);
+            this.likeBtn.Location = new System.Drawing.Point(452, 75);
+            this.likeBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.likeBtn.Name = "likeBtn";
-            this.likeBtn.Size = new System.Drawing.Size(34, 35);
+            this.likeBtn.Size = new System.Drawing.Size(45, 43);
             this.likeBtn.TabIndex = 6;
             this.likeBtn.Text = "👍";
             this.likeBtn.UseVisualStyleBackColor = false;
@@ -112,17 +118,19 @@
             // likesLb
             // 
             this.likesLb.AutoSize = true;
-            this.likesLb.Location = new System.Drawing.Point(339, 259);
+            this.likesLb.Location = new System.Drawing.Point(452, 122);
+            this.likesLb.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.likesLb.Name = "likesLb";
-            this.likesLb.Size = new System.Drawing.Size(70, 13);
+            this.likesLb.Size = new System.Drawing.Size(85, 16);
             this.likesLb.TabIndex = 7;
             this.likesLb.Text = "Anzahl Likes:";
             // 
             // anzeigen
             // 
-            this.anzeigen.Location = new System.Drawing.Point(156, 282);
+            this.anzeigen.Location = new System.Drawing.Point(208, 347);
+            this.anzeigen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.anzeigen.Name = "anzeigen";
-            this.anzeigen.Size = new System.Drawing.Size(97, 23);
+            this.anzeigen.Size = new System.Drawing.Size(129, 28);
             this.anzeigen.TabIndex = 9;
             this.anzeigen.Text = "Alle Anzeigen";
             this.anzeigen.UseVisualStyleBackColor = true;
@@ -131,28 +139,31 @@
             // tag
             // 
             this.tag.AutoSize = true;
-            this.tag.Location = new System.Drawing.Point(302, 291);
+            this.tag.Location = new System.Drawing.Point(449, 319);
+            this.tag.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.tag.Name = "tag";
-            this.tag.Size = new System.Drawing.Size(22, 13);
+            this.tag.Size = new System.Drawing.Size(26, 16);
             this.tag.TabIndex = 10;
             this.tag.Text = "tag";
-            //
+            // 
             // beitragBild
             // 
             this.beitragBild.BackgroundImage = global::ClientSocialMedia.Properties.Resources.empty;
             this.beitragBild.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.beitragBild.Location = new System.Drawing.Point(109, 40);
+            this.beitragBild.Location = new System.Drawing.Point(145, 49);
+            this.beitragBild.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.beitragBild.Name = "beitragBild";
-            this.beitragBild.Size = new System.Drawing.Size(224, 199);
+            this.beitragBild.Size = new System.Drawing.Size(299, 245);
             this.beitragBild.TabIndex = 1;
             this.beitragBild.TabStop = false;
             // 
             // profilePicPb
             // 
             this.profilePicPb.Image = global::ClientSocialMedia.Properties.Resources.profile;
-            this.profilePicPb.Location = new System.Drawing.Point(17, 222);
+            this.profilePicPb.Location = new System.Drawing.Point(23, 273);
+            this.profilePicPb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.profilePicPb.Name = "profilePicPb";
-            this.profilePicPb.Size = new System.Drawing.Size(50, 50);
+            this.profilePicPb.Size = new System.Drawing.Size(67, 62);
             this.profilePicPb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.profilePicPb.TabIndex = 10;
             this.profilePicPb.TabStop = false;
@@ -163,9 +174,10 @@
             // 
             this.nutzerNameLb.AutoSize = true;
             this.nutzerNameLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nutzerNameLb.Location = new System.Drawing.Point(73, 254);
+            this.nutzerNameLb.Location = new System.Drawing.Point(97, 313);
+            this.nutzerNameLb.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.nutzerNameLb.Name = "nutzerNameLb";
-            this.nutzerNameLb.Size = new System.Drawing.Size(99, 18);
+            this.nutzerNameLb.Size = new System.Drawing.Size(123, 24);
             this.nutzerNameLb.TabIndex = 11;
             this.nutzerNameLb.Text = "Nutzername";
             // 
@@ -173,15 +185,16 @@
             // 
             this.timeLb.AutoSize = true;
             this.timeLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeLb.Location = new System.Drawing.Point(296, 292);
+            this.timeLb.Location = new System.Drawing.Point(396, 363);
+            this.timeLb.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.timeLb.Name = "timeLb";
-            this.timeLb.Size = new System.Drawing.Size(140, 12);
+            this.timeLb.Size = new System.Drawing.Size(176, 15);
             this.timeLb.TabIndex = 12;
             this.timeLb.Text = "Erstellt am dd/MM/yyyy HH:mm";
             // 
             // Inhalte
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.Controls.Add(this.tag);
@@ -197,8 +210,9 @@
             this.Controls.Add(this.next);
             this.Controls.Add(this.beitragBild);
             this.Controls.Add(this.beitragTitel);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Inhalte";
-            this.Size = new System.Drawing.Size(439, 475);
+            this.Size = new System.Drawing.Size(585, 585);
             ((System.ComponentModel.ISupportInitialize)(this.beitragBild)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.profilePicPb)).EndInit();
             this.ResumeLayout(false);

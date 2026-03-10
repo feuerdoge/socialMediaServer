@@ -180,7 +180,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand neusteBeitraege = new MySqlCommand(@"
-                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
                 LEFT JOIN likes l ON b.beitragid = l.beitragId
@@ -200,7 +200,7 @@ namespace socialMediaServer
             {
                 int remaining = 10 - beitraege.Count;
                 MySqlCommand alteBeitraege = new MySqlCommand(@"
-                    SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                    SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
                     LEFT JOIN likes l ON b.beitragid = l.beitragId

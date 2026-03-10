@@ -159,7 +159,7 @@ namespace socialMediaServer
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
-                                msg += $"aboBeitraege?{nurAboBeitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}";
+                                msg += $"aboBeitraege?{nurAboBeitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
                                 msg += ";";
                             }
 
