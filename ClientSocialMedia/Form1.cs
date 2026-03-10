@@ -179,12 +179,7 @@ namespace ClientSocialMedia
             buttonBeliebt.Click += buttonBeliebt_Click;
             buttonNurAbos.Click += buttonNurAbos_Click;
             
-            tagPick.Items.AddRange(new string[] {
-                "Tiere",
-                "Memes",
-                "Sonstiges",
-                "News"
-            });
+            
 
             zeigeInhalte();
         }
@@ -303,8 +298,16 @@ namespace ClientSocialMedia
 
         private void erstellen_Click(object sender, EventArgs e)
         {
+            tagPick.Controls.Clear();
             tagPick.Visible = true;
+            tagPick.Items.AddRange(new string[] {
+                "Tiere",
+                "Memes",
+                "Sonstiges",
+                "News"
+            });
             inhaltAnzeige.Show();
+            beitragsErstellungsPanel.Controls.Clear();
             beitragsErstellungsPanel.Visible = true;
             //this.Controls.Add(beitragsErstellungsPanel);
 
