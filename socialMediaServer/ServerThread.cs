@@ -176,8 +176,20 @@ namespace socialMediaServer
                             Console.WriteLine(msg);
                             client.Write(msg + "\n");
                             break;
-                        case "like":   // like;2 (BeitragId)
+                        case "original":
                             int beitragId = Convert.ToInt32(parameter[1]);
+                            List<string> bilder = spf.HoleOriginalBilder(beitragId);
+                            msg = $"+;{bilder.Count}";
+                            foreach (string s in bilder)
+                            {
+                                byte[] pictureBytes = File.ReadAllBytes(Path.Combine(imgOrdner, "original", s));
+                                string base64 = Convert.ToBase64String(pictureBytes);
+                                msg += $";{base64}";
+                            }
+                            client.Write(msg + "\n");
+                            break;
+                        case "like":   // like;2 (BeitragId)
+                            beitragId = Convert.ToInt32(parameter[1]);
                             int response = spf.Like(beitragId, this.nutzer.BenutzerId);
                             if (response == -1)
                             {

@@ -380,6 +380,23 @@ namespace socialMediaServer
             conn.Close();
         }
 
+        public List<string> HoleOriginalBilder(int beitragId)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            conn.Open();
+            List<string> bilder = new List<string>();
+            MySqlCommand cmd = new MySqlCommand("SELECT dateiname FROM bild WHERE beitragid = @b", conn);
+            cmd.Parameters.AddWithValue("@b", beitragId);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string name = reader.GetString("dateiname");
+                bilder.Add(name);
+            }
+            reader.Close();
+            conn.Close();
+            return bilder;
+        }
         public int Abonnieren(int nutzerId, int abonnentId)
         {
             if (nutzerId == abonnentId)

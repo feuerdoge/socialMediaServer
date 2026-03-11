@@ -103,6 +103,25 @@ namespace ClientSocialMedia
                 MessageBox.Show("Zu viele Bilder, maximal 7!");
         }
 
+        public List<Image> HoleOriginalBilder(int beitragId)
+        {
+            string msg = $"original;{beitragId}\n";
+            clientSocket.Write(msg);
+            string reply = clientSocket.ReadLine();
+            string[] parts = reply.Split(';');
+            List<Image> bilder = new List<Image>();
+            int anzahl = Convert.ToInt32(parts[1]);
+            for (int i = 0; i < anzahl; i++)
+            {
+                byte[] bytes = Convert.FromBase64String(parts[2 + i]);
+                using (MemoryStream ms =  new MemoryStream(bytes))
+                {
+                    Image img = Image.FromStream(ms);
+                    bilder.Add(img);
+                }
+            }
+            return bilder;
+        }
         public string Like(int beitragId)
         {
             string msg = $"like;{beitragId}\n";

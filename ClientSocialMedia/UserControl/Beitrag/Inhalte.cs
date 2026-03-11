@@ -207,5 +207,15 @@ namespace ClientSocialMedia
             tt.InitialDelay = 250;
             tt.SetToolTip(profilePicPb, "Click to view");
         }
+
+        private void beitragBild_Click(object sender, EventArgs e)
+        {
+            List<Image> images = Form1.client.HoleOriginalBilder(beitragId);
+            ImageViewerControl viewer = new ImageViewerControl(images, scrollIndex);
+            Form form = this.FindForm();
+            viewer.Dock = DockStyle.Fill;
+            form.Controls.Add(viewer);
+            viewer.BringToFront();
+        }
     }
 }
