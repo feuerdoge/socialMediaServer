@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
@@ -91,11 +92,20 @@ namespace socialMediaServer
                                 string dateiname = pieces[0];
 
                                 byte[] bytes = Convert.FromBase64String(pieces[1]);
+                                Image img;
+                                using (MemoryStream ms = new MemoryStream(bytes))
+                                {
+                                    img = Image.FromStream(ms);
+                                }
+                                img = SocialMediaPlatform.CropToSquare(img);
+                                img = SocialMediaPlatform.ResizeImage(img);
 
                                 string uniqueName = Guid.NewGuid().ToString() + Path.GetExtension(dateiname);
-                                string pfad = Path.Combine(imgOrdner, uniqueName);
+                                string pfad = Path.Combine(imgOrdner, "original",uniqueName);
+                                string pfad2 = Path.Combine(imgOrdner, "preview", uniqueName);
 
                                 File.WriteAllBytes(pfad, bytes);
+                                img.Save(pfad2);
 
                                 dateinamen.Add(uniqueName);
                             }
@@ -126,7 +136,7 @@ namespace socialMediaServer
                                 List<string> bilderStringList = new List<string>();
                                 foreach (Bild img in b.Bilder)
                                 {
-                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", img.Dateiname)));
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview",img.Dateiname)));
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
@@ -155,7 +165,7 @@ namespace socialMediaServer
                                 List<string> bilderStringList = new List<string>();
                                 foreach (Bild img in b.Bilder)
                                 {
-                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", img.Dateiname)));
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview", img.Dateiname)));
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);

@@ -360,7 +360,9 @@ namespace ClientSocialMedia
 
             beitragsErstellungsPanel.BringToFront();
 
-            
+            tagPick.Visible = true;
+            tagPick.BringToFront();
+            beitragsErstellungsPanel.Controls.Add(tagPick);
             beitragErstellen.Click += beitragErstellen_Click;
         }
 

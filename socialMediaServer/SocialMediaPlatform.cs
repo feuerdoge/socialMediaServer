@@ -10,7 +10,7 @@ using Google.Protobuf.WellKnownTypes;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using Mysqlx;
-
+using System.Drawing;
 namespace socialMediaServer
 {
     public class SocialMediaPlatform
@@ -654,6 +654,33 @@ namespace socialMediaServer
             reader.Close();
             conn.Close();
             return nachrichten;
+        }
+
+        public static Image CropToSquare(Image img)
+        {
+            int size = Math.Min(img.Width, img.Height);
+            int x = (img.Width - size) / 2;
+            int y = (img.Height - size) / 2;
+
+            Rectangle cropArea = new Rectangle(x, y, size, size);
+
+            Bitmap bmp = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.DrawImage(img, new Rectangle(0, 0, size, size), cropArea, GraphicsUnit.Pixel);
+            }
+            return bmp;
+        }
+
+        public static Image ResizeImage(Image img, int size = 512)
+        {
+            Bitmap resized = new Bitmap(size, size);
+            using (Graphics g = Graphics.FromImage(resized))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(img, 0, 0, size, size);
+            }
+            return resized;
         }
         private bool VeriryPasswort(string enteredPass, string savedPass)
         {

@@ -95,7 +95,6 @@
             this.tagPick.Size = new System.Drawing.Size(121, 21);
             this.tagPick.TabIndex = 0;
             this.tagPick.Tag = "";
-            this.tagPick.Visible = false;
             // 
             // profilePic
             // 

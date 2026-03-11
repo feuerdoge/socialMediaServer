@@ -81,9 +81,7 @@ namespace ClientSocialMedia
             {
                 foreach(string path in dialog.FileNames)
                 {
-                    //byte[] bytes = System.IO.File.ReadAllBytes(path);  // Credits: https://stackoverflow.com/questions/1497997/reliable-way-to-convert-a-file-to-a-byte
-                    Image resized = ImageResizer(Image.FromFile(path));
-                    byte[] bytes = ImageToByteArray(resized);
+                    byte[] bytes = System.IO.File.ReadAllBytes(path);  // Credits: https://stackoverflow.com/questions/1497997/reliable-way-to-convert-a-file-to-a-byte
 
                     string picture = Convert.ToBase64String(bytes);
                     string msg = $";{System.IO.Path.GetFileName(path)}|{picture}";
@@ -92,33 +90,6 @@ namespace ClientSocialMedia
             }
             return bilder;
         }
-
-        private static byte[] ImageToByteArray(System.Drawing.Image image)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                image.Save(ms, ImageFormat.Jpeg); 
-                return ms.ToArray();
-            }
-        }
-        private static Image ImageResizer(System.Drawing.Image img)
-        {
-            int width = img.Width;
-            int height = img.Height;
-            double ratio = (double)1024 / Math.Max(width, height);
-            if (ratio >= 1)
-                return img;
-            int newWidth = (int)(width * ratio);
-            int newHeight = (int)(height * ratio);
-            Bitmap resized = new Bitmap(newWidth, newHeight);
-            using (Graphics g = Graphics.FromImage(resized))
-            {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.DrawImage(img, 0, 0, newWidth, newHeight);
-            }
-            return resized;
-        }
-
         public void beitragSenden(string titel, List<string> bilder, string tag) 
         {
             string eingabe = $"{ConvertMessage(titel)};{bilder.Count}";
