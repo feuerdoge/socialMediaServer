@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Diagnostics.PerformanceData;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
@@ -416,6 +417,44 @@ namespace socialMediaServer
                             }
                             client.Write(msg + "\n");
                             break;
+                        case "empfehlung":
+                            List<Beitrag> beitreageLiked = spf.HoleLikedBeitraege(this.nutzer);
+
+                            string[] beliebt = TagRankingErmittlen(beitreageLiked);
+
+                            List<Beitrag> relevanteBeitraege = spf.HoleRelevanteBeitraege(beliebt);
+
+                            GewichtungZuweisen(relevanteBeitraege, beliebt, spf.ErmittleAbonnierteNutzer(this.nutzer));
+
+                            List<Beitrag> beitraegeSortiertNachGewichtung = sortiereBeitraegeNachGewichtung(relevanteBeitraege, 0, relevanteBeitraege.Count - 1);
+
+                            foreach (Beitrag b in beitraegeSortiertNachGewichtung)
+                            {
+                                foreach (Bild bild in spf.HoleBilder(b.Id))
+                                {
+                                    b.Hinzufuegen(bild);
+                                }
+                            }
+                            // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
+                            msg = "";
+                            if (beitraegeSortiertNachGewichtung.Count == 0)
+                            {
+                                msg = $"empfehlungen?{beitraegeSortiertNachGewichtung.Count}?";
+                            }
+                            foreach (Beitrag b in beitraegeSortiertNachGewichtung)
+                            {
+                                List<string> bilderStringList = new List<string>();
+                                foreach (Bild img in b.Bilder)
+                                {
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", img.Dateiname)));
+                                    bilderStringList.Add($"{img.Dateiname}:{s}");
+                                }
+                                string bilderString = string.Join(",", bilderStringList);
+                                msg += $"empfehlungen?{beitraegeSortiertNachGewichtung.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
+                                msg += ";";
+                            }
+                            client.Write(msg + "\n");
+                            break;
                     }
                 }
             }
@@ -437,6 +476,140 @@ namespace socialMediaServer
         private string GetMessage(string message)
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(message));
+        }
+
+        private string[] TagRankingErmittlen(List<Beitrag> beitraege)
+        {
+            string[] beliebteste = new string[3];
+
+            int countTiere = 0;
+            int countNews = 0;
+            int countSonstiges = 0;
+            int countMemes = 0;
+
+            //Die Anzahl der Relevanten Tags aller geliketen Beiträgen werden gezählt.
+            
+            foreach(Beitrag b in beitraege) 
+            {
+                switch (b.Tag) 
+                {
+                    case "Tiere":
+                        countTiere++;
+                        break;
+                    case "News":
+                        countNews++;
+                        break;
+                    case "Sonstiges":
+                        countSonstiges++;
+                        break;
+                    case "Memes":
+                        countMemes++;
+                        break;
+                }
+            }
+            int[] counts = { countTiere, countNews, countSonstiges, countMemes };
+            //Sortierung aller Count Werte
+
+            for (int i = 0; i < counts.Length - 1; i++) 
+            {
+                for(int j = 0; j < counts.Length - 1; j++) 
+                {
+                    if (counts[j] < counts[j + 1]) 
+                    {
+                        int temp = counts[j];
+                        counts[j] = counts[j + 1];
+                        counts[j + 1] = temp;
+                    }
+                }
+            }
+
+            //Zuweisung der Tags nach ermittelter Reihenfolge (Ranking nach Array-Index)
+            for(int i = 0; i < beliebteste.Length; i++) 
+            {
+                if (counts[i] == countTiere && counts[i] != 0)
+                    beliebteste[i] = "Tiere";
+                else if(counts[i] == countNews && counts[i] != 0)
+                    beliebteste[i] = "News";
+                else if (counts[i] == countSonstiges && counts[i] != 0)
+                    beliebteste[i] = "Sonstiges";
+                else if (counts[i] == countMemes && counts[i] != 0)
+                    beliebteste[i] = "Memes";
+            }
+
+            return beliebteste;
+        }
+        public void GewichtungZuweisen(List<Beitrag> beitraege, string[] beliebt, List<Nutzer> nutzer)
+        {
+            foreach(Beitrag b in beitraege) 
+            {
+                int gewichtung = 0;
+                gewichtung += b.gebeAnzahlLikes();
+
+                if(b.Tag == beliebt[0])
+                    { gewichtung += 50; }
+                else if(b.Tag == beliebt[1])
+                    { gewichtung += 25; }
+                else { gewichtung += 10; }
+
+                if(nutzer.Contains(b.Autor)) 
+                {
+                    gewichtung += 100;
+                }
+
+                b.setGewichtung(gewichtung);
+            }
+        }
+
+        public List<Beitrag> sortiereBeitraegeNachGewichtung(List<Beitrag> beitraege, int left, int right)
+        {
+
+            int i = left;
+            int x = right - 1;
+            var pivot = beitraege[right];
+
+            while (i < x)
+            {
+                if (beitraege[i].Gewichtung <= pivot.Gewichtung)
+                {
+                    i++;
+                }
+                if (beitraege[x].Gewichtung >= pivot.Gewichtung)
+                {
+                    x--;
+                }
+                if (beitraege[i].Gewichtung >= pivot.Gewichtung && beitraege[x].Gewichtung <= pivot.Gewichtung)
+                {
+                    var temp = beitraege[i];
+                    beitraege[i] = beitraege[x];
+                    beitraege[x] = temp;
+
+                    i++;
+                    x--;
+                }
+            }
+
+            if (beitraege[i].Gewichtung > pivot.Gewichtung)
+            {
+                beitraege[right] = beitraege[i];
+                beitraege[i] = pivot;
+            }
+
+            left += i + 1;
+
+            if (left < right)
+            {
+                beitraege = sortiereBeitraegeNachGewichtung(beitraege, left, right);
+            }
+            else
+            {
+                left = 0;
+                if (right == 0)
+                {
+                    return beitraege;
+                }
+                beitraege = sortiereBeitraegeNachGewichtung(beitraege, left, right - 1);
+            }
+            return beitraege;
         }
     }
 }

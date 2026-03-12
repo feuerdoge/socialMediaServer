@@ -193,7 +193,7 @@ namespace ClientSocialMedia
             }
             return comments;
         }
-        public List<Beitrag> beitraegeAnfragen(bool nurAbos)
+        public List<Beitrag> beitraegeAnfragen(bool nurAbos, bool empfehlungen)
         {
             string str;
             if (!nurAbos) 
@@ -212,6 +212,16 @@ namespace ClientSocialMedia
 
                 str = clientSocket.ReadLine();
                 if (str == "aboBeitraege?0?")
+                {
+                    return null;
+                }
+            }
+            if(empfehlungen) 
+            {
+                clientSocket.Write("empfehlung\n");
+
+                str = clientSocket.ReadLine();
+                if (str == "empfehlungen?0?")
                 {
                     return null;
                 }
