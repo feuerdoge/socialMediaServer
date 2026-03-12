@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Asn1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,9 @@ namespace socialMediaServer
         private List<Bild> bilder;
         public List<Bild> Bilder { get => bilder; }
         private List<Kommentar> kommentare;
+
+        private int gewichtung;
+        public int Gewichtung { get => gewichtung; }
         public Beitrag(Nutzer autor, string titel, List<Bild> bild, string tag)
         {
             this.autor = autor;
@@ -79,6 +83,11 @@ namespace socialMediaServer
         public void SetKommentare(List<Kommentar> kommentare) 
         {
             this.kommentare = kommentare;
+        }
+
+        public void setGewichtung(int gewichtung) 
+        {
+            this.gewichtung = gewichtung;
         }
     }
 }
