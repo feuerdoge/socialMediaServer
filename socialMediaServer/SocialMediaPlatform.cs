@@ -25,84 +25,90 @@ namespace socialMediaServer
 
         public void ErstelleBeitrag(Nutzer nutzer, string titel, string text, List<string> bilder, string tag)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-
-            MySqlCommand beitrag = new MySqlCommand("INSERT INTO beitrag (text, titel, erstelltAm, autor, tag) VALUES (@text, @titel, @erstelltAm, @autor, @tag); SELECT LAST_INSERT_ID()", conn);
-            beitrag.Parameters.AddWithValue("@text", text);
-            beitrag.Parameters.AddWithValue("@titel", titel);
-            beitrag.Parameters.AddWithValue("@erstelltAm", DateTime.Now);
-            beitrag.Parameters.AddWithValue("@autor", nutzer.BenutzerId);
-            beitrag.Parameters.AddWithValue("@tag", tag);
-
-            int beitragId = Convert.ToInt32(beitrag.ExecuteScalar());
-
-            foreach (string dateiNamen in bilder)
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                MySqlCommand bild = new MySqlCommand("INSERT INTO bild (dateiname, beitragid) VALUES (@dateiname, @beitragid)", conn);
-                bild.Parameters.AddWithValue("@dateiname", dateiNamen);
-                bild.Parameters.AddWithValue("@beitragid", beitragId);
-                bild.ExecuteNonQuery();
+                conn.Open();
+                MySqlCommand beitrag = new MySqlCommand("INSERT INTO beitrag (text, titel, erstelltAm, autor, tag) VALUES (@text, @titel, @erstelltAm, @autor, @tag); SELECT LAST_INSERT_ID()", conn);
+                beitrag.Parameters.AddWithValue("@text", text);
+                beitrag.Parameters.AddWithValue("@titel", titel);
+                beitrag.Parameters.AddWithValue("@erstelltAm", DateTime.Now);
+                beitrag.Parameters.AddWithValue("@autor", nutzer.BenutzerId);
+                beitrag.Parameters.AddWithValue("@tag", tag);
+
+                int beitragId = Convert.ToInt32(beitrag.ExecuteScalar());
+
+                foreach (string dateiNamen in bilder)
+                {
+                    MySqlCommand bild = new MySqlCommand("INSERT INTO bild (dateiname, beitragid) VALUES (@dateiname, @beitragid)", conn);
+                    bild.Parameters.AddWithValue("@dateiname", dateiNamen);
+                    bild.Parameters.AddWithValue("@beitragid", beitragId);
+                    bild.ExecuteNonQuery();
+                }
             }
-            
-            conn.Close();
         }
         public int Registrieren(string name, string passwort, string email)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-
-            MySqlCommand checkSelect = new MySqlCommand("SELECT COUNT(*) FROM nutzer WHERE benutzerName=@benutzerName OR email=@email", conn);
-            checkSelect.Parameters.AddWithValue("@benutzerName", name);
-            checkSelect.Parameters.AddWithValue("@email", email);
-            if (Convert.ToInt32(checkSelect.ExecuteScalar()) > 0)
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
+                conn.Open();
+
+                MySqlCommand checkSelect = new MySqlCommand("SELECT COUNT(*) FROM nutzer WHERE benutzerName=@benutzerName OR email=@email", conn);
+                checkSelect.Parameters.AddWithValue("@benutzerName", name);
+                checkSelect.Parameters.AddWithValue("@email", email);
+                if (Convert.ToInt32(checkSelect.ExecuteScalar()) > 0)
+                {
+                    conn.Close();
+                    return -1;
+                }
+
+                string hashedPasswort = HashPasswort(passwort);
+
+                MySqlCommand insert = new MySqlCommand("INSERT INTO nutzer (benutzerName, passwort, email, zuletztAktiv) VALUES (@benutzerName, @pass, @email, @aktiv)", conn);
+                insert.Parameters.AddWithValue("@benutzerName", name);
+                insert.Parameters.AddWithValue("@pass", hashedPasswort);
+                insert.Parameters.AddWithValue("@email", email);
+                insert.Parameters.AddWithValue("@aktiv", DateTime.Now);
+                insert.ExecuteNonQuery();
+
+                MySqlCommand getId = new MySqlCommand("SELECT LAST_INSERT_ID()", conn);
+                int id = Convert.ToInt32(getId.ExecuteScalar());
+                Nutzer neuerNutzer = new Nutzer(name, passwort, email, id);
                 conn.Close();
-                return -1;
+                return 0;
             }
-
-            string hashedPasswort = HashPasswort(passwort);
-
-            MySqlCommand insert = new MySqlCommand("INSERT INTO nutzer (benutzerName, passwort, email, zuletztAktiv) VALUES (@benutzerName, @pass, @email, @aktiv)", conn);
-            insert.Parameters.AddWithValue("@benutzerName", name);
-            insert.Parameters.AddWithValue("@pass", hashedPasswort);
-            insert.Parameters.AddWithValue("@email", email);
-            insert.Parameters.AddWithValue("@aktiv", DateTime.Now);
-            insert.ExecuteNonQuery();
-
-            MySqlCommand getId = new MySqlCommand("SELECT LAST_INSERT_ID()", conn);
-            int id = Convert.ToInt32(getId.ExecuteScalar());
-            Nutzer neuerNutzer = new Nutzer(name, passwort, email, id);
-            conn.Close();
-            return 0;
         }
         public Nutzer Anmelden(string name, string passwort)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand search = new MySqlCommand("SELECT nutzerId, passwort, email, profilBild FROM nutzer WHERE benutzerName=@benutzerName", conn);
-            search.Parameters.AddWithValue("@benutzerName", name);
-            MySqlDataReader reader = search.ExecuteReader();
-            if (!reader.Read())
-                return null;
-            string savedPass = reader.GetString("passwort");
-            if (!VeriryPasswort(passwort, savedPass))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                return null;
+                conn.Open();
+                MySqlCommand search = new MySqlCommand("SELECT nutzerId, passwort, email, profilBild FROM nutzer WHERE benutzerName=@benutzerName", conn);
+                search.Parameters.AddWithValue("@benutzerName", name);
+                Nutzer n = null;
+                using (MySqlDataReader reader = search.ExecuteReader())
+                {
+                    if (!reader.Read())
+                        return null;
+                    string savedPass = reader.GetString("passwort");
+                    if (!VeriryPasswort(passwort, savedPass))
+                    {
+                        return null;
+                    }
+                    n = new Nutzer(name, "", reader.GetString("email"), reader.GetInt32("nutzerId"));
+                    int ordinale = reader.GetOrdinal("profilBild");
+                    if (!reader.IsDBNull(ordinale))
+                        n.ProfilBild = reader.GetString(ordinale);
+                    else
+                        n.ProfilBild = null;
+                    lock (nutzer)
+                    {
+                        nutzer.Add(n);
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+                return n;
             }
-            Nutzer n = new Nutzer(name, "", reader.GetString("email"), reader.GetInt32("nutzerId"));
-            int ordinale = reader.GetOrdinal("profilBild");
-            if (!reader.IsDBNull(ordinale))
-                n.ProfilBild = reader.GetString(ordinale);
-            else
-                n.ProfilBild = null;
-            lock (nutzer)
-            {
-                nutzer.Add(n);
-            }
-            reader.Close();
-            conn.Close();
-            return n;
         }
         public char[] GenerierePasswort()
         {
@@ -130,9 +136,10 @@ namespace socialMediaServer
         public List<Beitrag> ErmittleNeueBeitraege(Nutzer n, int offset = 0)
         {
             List<Beitrag> beitraege = new List<Beitrag>();
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand neusteBeitraege = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand neusteBeitraege = new MySqlCommand(@"
                 SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
@@ -141,19 +148,21 @@ namespace socialMediaServer
                 GROUP BY b.beitragid
                 ORDER BY b.erstelltAm DESC
                 LIMIT 10 OFFSET @offset", conn);
-            //neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
-            neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
-            neusteBeitraege.Parameters.AddWithValue("@offset", offset);
-            MySqlDataReader reader = neusteBeitraege.ExecuteReader();
-            while (reader.Read())
-            {
-                beitraege.Add(LeseBeitrag(reader));
-            }
-            reader.Close();
-            if (beitraege.Count < 10)
-            {
-                int remaining = 10 - beitraege.Count;
-                MySqlCommand alteBeitraege = new MySqlCommand(@"
+                //neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
+                neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+                neusteBeitraege.Parameters.AddWithValue("@offset", offset);
+                using (MySqlDataReader reader = neusteBeitraege.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        beitraege.Add(LeseBeitrag(reader));
+                    }
+                    reader.Close();
+                }
+                if (beitraege.Count < 10)
+                {
+                    int remaining = 10 - beitraege.Count;
+                    MySqlCommand alteBeitraege = new MySqlCommand(@"
                     SELECT b.beitragid, b.titel, b.text, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
@@ -162,26 +171,30 @@ namespace socialMediaServer
                     GROUP BY b.beitragid
                     ORDER BY b.erstelltAm DESC
                     LIMIT @max OFFSET @offset", conn);
-                alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
-                alteBeitraege.Parameters.AddWithValue("@offset", offset);
-                alteBeitraege.Parameters.AddWithValue("@max", remaining);
-                reader = alteBeitraege.ExecuteReader();
-                while (reader.Read())
-                {
-                    beitraege.Add(LeseBeitrag(reader));
+                    alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+                    alteBeitraege.Parameters.AddWithValue("@offset", offset);
+                    alteBeitraege.Parameters.AddWithValue("@max", remaining);
+                    using (MySqlDataReader reader = alteBeitraege.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            beitraege.Add(LeseBeitrag(reader));
+                        }
+                        reader.Close();
+                    }
                 }
-                reader.Close();
+                conn.Close();
+                return beitraege;
             }
-            conn.Close();
-            return beitraege;
         }
 
         public List<Beitrag> BeitraegeVonAbosHolen(Nutzer n, int offset = 0) 
         {
             List<Beitrag> beitraege = new List<Beitrag>();
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand neusteBeitraege = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand neusteBeitraege = new MySqlCommand(@"
                 SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
@@ -190,19 +203,21 @@ namespace socialMediaServer
                 GROUP BY b.beitragid
                 ORDER BY b.erstelltAm DESC
                 LIMIT 10 OFFSET @offset", conn);
-            neusteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
-            neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
-            neusteBeitraege.Parameters.AddWithValue("@offset", offset);
-            MySqlDataReader reader = neusteBeitraege.ExecuteReader();
-            while (reader.Read())
-            {
-                beitraege.Add(LeseBeitrag(reader));
-            }
-            reader.Close();
-            if (beitraege.Count < 10)
-            {
-                int remaining = 10 - beitraege.Count;
-                MySqlCommand alteBeitraege = new MySqlCommand(@"
+                neusteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
+                neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+                neusteBeitraege.Parameters.AddWithValue("@offset", offset);
+                using (MySqlDataReader reader = neusteBeitraege.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        beitraege.Add(LeseBeitrag(reader));
+                    }
+                    reader.Close();
+                }
+                if (beitraege.Count < 10)
+                {
+                    int remaining = 10 - beitraege.Count;
+                    MySqlCommand alteBeitraege = new MySqlCommand(@"
                     SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
@@ -211,28 +226,32 @@ namespace socialMediaServer
                     GROUP BY b.beitragid
                     ORDER BY b.erstelltAm DESC
                     LIMIT 10 OFFSET @offset", conn);
-                alteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
-                alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
-                alteBeitraege.Parameters.AddWithValue("@offset", offset);
-                alteBeitraege.Parameters.AddWithValue("@max", remaining);
-                reader = alteBeitraege.ExecuteReader();
-                while (reader.Read())
-                {
-                    beitraege.Add(LeseBeitrag(reader));
+                    alteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
+                    alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+                    alteBeitraege.Parameters.AddWithValue("@offset", offset);
+                    alteBeitraege.Parameters.AddWithValue("@max", remaining);
+                    using (MySqlDataReader reader = alteBeitraege.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            beitraege.Add(LeseBeitrag(reader));
+                        }
+                        reader.Close();
+                    }
                 }
-                reader.Close();
-            }
 
-            conn.Close();
-            return beitraege;
+                conn.Close();
+                return beitraege;
+            }
         }
 
         public List<Beitrag> HoleLikedBeitraege(Nutzer n)
         {
             List<Beitrag> beitraege = new List<Beitrag>();
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand likedBeitraege = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand likedBeitraege = new MySqlCommand(@"
                 SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
@@ -240,14 +259,17 @@ namespace socialMediaServer
                 WHERE b.beitragid = (SELECT li.beitragId FROM likes li WHERE li.nutzerId = @nutz)
                 GROUP BY b.beitragid
                 ORDER BY b.erstelltAm DESC", conn);
-            likedBeitraege.Parameters.AddWithValue("@nutz", n.BenutzerId);
-            MySqlDataReader reader = likedBeitraege.ExecuteReader();
-            while (reader.Read())
-            {
-                beitraege.Add(LeseBeitrag(reader));
+                likedBeitraege.Parameters.AddWithValue("@nutz", n.BenutzerId);
+                using (MySqlDataReader reader = likedBeitraege.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        beitraege.Add(LeseBeitrag(reader));
+                    }
+                    reader.Close();
+                }
+                return beitraege;
             }
-            reader.Close();
-            return beitraege;
         }
 
         public List<Beitrag> HoleRelevanteBeitraege(string[] ranking) 
@@ -255,23 +277,27 @@ namespace socialMediaServer
             List<Beitrag> beitraege = new List<Beitrag>();
             foreach (string rank in ranking) 
             {
-                MySqlConnection conn = new MySqlConnection(connectionString);
-                conn.Open();
-                MySqlCommand likedBeitraege = new MySqlCommand(@"
-                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
-                FROM beitrag b
-                JOIN nutzer u ON b.autor = u.nutzerId
-                LEFT JOIN likes l ON b.beitragid = l.beitragId
-                WHERE b.tag = @tag
-                GROUP BY b.beitragid
-                ORDER BY b.erstelltAm DESC", conn);
-                likedBeitraege.Parameters.AddWithValue("@tag", rank);
-                MySqlDataReader reader = likedBeitraege.ExecuteReader();
-                while (reader.Read())
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    beitraege.Add(LeseBeitrag(reader));
+                    conn.Open();
+                    MySqlCommand likedBeitraege = new MySqlCommand(@"
+                        SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
+                        FROM beitrag b
+                        JOIN nutzer u ON b.autor = u.nutzerId
+                        LEFT JOIN likes l ON b.beitragid = l.beitragId
+                        WHERE b.tag = @tag
+                        GROUP BY b.beitragid
+                        ORDER BY b.erstelltAm DESC", conn);
+                    likedBeitraege.Parameters.AddWithValue("@tag", rank);
+                    using (MySqlDataReader reader = likedBeitraege.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            beitraege.Add(LeseBeitrag(reader));
+                        }
+                        reader.Close();
+                    }
                 }
-                reader.Close();
             }
             return beitraege;
         }
@@ -303,38 +329,46 @@ namespace socialMediaServer
         public List<Bild> HoleBilder(int beitragId)
         {
             List<Bild> bilder = new List<Bild>();
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand get = new MySqlCommand("SELECT dateiname FROM bild WHERE beitragid = @beitragid", conn);
-            get.Parameters.AddWithValue("@beitragid", beitragId);
-            MySqlDataReader reader = get.ExecuteReader();
-            while (reader.Read())
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                bilder.Add(new Bild(reader.GetString("dateiname")));
+                conn.Open();
+                MySqlCommand get = new MySqlCommand("SELECT dateiname FROM bild WHERE beitragid = @beitragid", conn);
+                get.Parameters.AddWithValue("@beitragid", beitragId);
+                using (MySqlDataReader reader = get.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        bilder.Add(new Bild(reader.GetString("dateiname")));
+                    }
+                    return bilder;
+                }
             }
-            return bilder;
         }
 
         public int ChangePassword(string oldPassword, string newPassword, int nutzerId)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand get = new MySqlCommand("SELECT passwort FROM nutzer WHERE nutzerId = @id", conn);
-            get.Parameters.AddWithValue("@id", nutzerId);
-            MySqlDataReader reader = get.ExecuteReader();
-            string saved = "";
-            if (reader.Read())
-                saved = reader.GetString("passwort");
-            reader.Close();
-            if (!VeriryPasswort(oldPassword, saved))
-                return -1;
-            string hashed = HashPasswort(newPassword);
-            MySqlCommand update = new MySqlCommand("UPDATE nutzer SET passwort = @p WHERE nutzerId = @id", conn);
-            update.Parameters.AddWithValue("@p", hashed);
-            update.Parameters.AddWithValue("@id", nutzerId);
-            update.ExecuteNonQuery();
-            conn.Close();
-            return 0;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand get = new MySqlCommand("SELECT passwort FROM nutzer WHERE nutzerId = @id", conn);
+                get.Parameters.AddWithValue("@id", nutzerId);
+                string saved = "";
+                using (MySqlDataReader reader = get.ExecuteReader())
+                {
+                    if (reader.Read())
+                        saved = reader.GetString("passwort");
+                    reader.Close();
+                }
+                if (!VeriryPasswort(oldPassword, saved))
+                    return -1;
+                string hashed = HashPasswort(newPassword);
+                MySqlCommand update = new MySqlCommand("UPDATE nutzer SET passwort = @p WHERE nutzerId = @id", conn);
+                update.Parameters.AddWithValue("@p", hashed);
+                update.Parameters.AddWithValue("@id", nutzerId);
+                update.ExecuteNonQuery();
+                conn.Close();
+                return 0;
+            }
         }
         public List<Nutzer> ErmittleAbonnierteNutzer(Nutzer n)
         {
@@ -347,239 +381,268 @@ namespace socialMediaServer
         }
         public Nutzer SucheNutzer(int nutzerId)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand get = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand get = new MySqlCommand(@"
                 SELECT benutzerName, email, zuletztAktiv, profilBild
                 FROM nutzer
                 WHERE nutzerId = @nutzerId", conn);
-            get.Parameters.AddWithValue("@nutzerId", nutzerId);
-            MySqlDataReader reader = get.ExecuteReader();
-            Nutzer n = null;
-            while (reader.Read())
-            {
-                string name = reader.GetString("benutzerName");
-                string email = reader.GetString("email");
-                DateTime time = reader.GetDateTime("zuletztAktiv");
-                int ordinale = reader.GetOrdinal("profilBild");
-                n = new Nutzer(name, "", email, nutzerId);
-                if (!reader.IsDBNull(ordinale))
-                    n.ProfilBild = reader.GetString("profilBild");
-                n.ZuletztAktiv = time;
+                get.Parameters.AddWithValue("@nutzerId", nutzerId);
+                Nutzer n = null;
+                using (MySqlDataReader reader = get.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string name = reader.GetString("benutzerName");
+                        string email = reader.GetString("email");
+                        DateTime time = reader.GetDateTime("zuletztAktiv");
+                        int ordinale = reader.GetOrdinal("profilBild");
+                        n = new Nutzer(name, "", email, nutzerId);
+                        if (!reader.IsDBNull(ordinale))
+                            n.ProfilBild = reader.GetString("profilBild");
+                        n.ZuletztAktiv = time;
+                    }
+                }
+                conn.Close();
+                return n;
             }
-            conn.Close();
-            return n;
         }
 
         public List<Nutzer> SucheNutzer(string suchBegriff)
         {
             List<Nutzer> nutzer = new List<Nutzer>();
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand get = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand get = new MySqlCommand(@"
                 SELECT nutzerId, benutzerName, profilBild
                 FROM nutzer
                 WHERE benutzerName LIKE @name LIMIT 20", conn);
-            get.Parameters.AddWithValue("@name", "%" +  suchBegriff + "%");
+                get.Parameters.AddWithValue("@name", "%" + suchBegriff + "%");
 
-            MySqlDataReader reader = get.ExecuteReader();
-            while(reader.Read())
-            {
-                int id = reader.GetInt32("nutzerId");
-                string name = reader.GetString("benutzerName");
-                int ordinale = reader.GetOrdinal("profilBild");
-                Nutzer n = new Nutzer(name, "", "", id);
-                if (!reader.IsDBNull(ordinale))
-                    n.ProfilBild = reader.GetString("profilBild");
-                nutzer.Add(n);
+                using (MySqlDataReader reader = get.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32("nutzerId");
+                        string name = reader.GetString("benutzerName");
+                        int ordinale = reader.GetOrdinal("profilBild");
+                        Nutzer n = new Nutzer(name, "", "", id);
+                        if (!reader.IsDBNull(ordinale))
+                            n.ProfilBild = reader.GetString("profilBild");
+                        nutzer.Add(n);
+                    }
+                }
+                conn.Close();
+                return nutzer;
             }
-            conn.Close();
-            return nutzer;
         }
 
         public void AktualisiereProfil(int nutzerId, string name, string email)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand update = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand update = new MySqlCommand(@"
                 UPDATE nutzer
                 SET benutzerName = @name, email = @email
                 WHERE nutzerId = @id", conn);
-            update.Parameters.AddWithValue("@name", name);
-            update.Parameters.AddWithValue("@email", email);
-            update.Parameters.AddWithValue("@id", nutzerId);
-            update.ExecuteNonQuery();
-            conn.Close();
+                update.Parameters.AddWithValue("@name", name);
+                update.Parameters.AddWithValue("@email", email);
+                update.Parameters.AddWithValue("@id", nutzerId);
+                update.ExecuteNonQuery();
+                conn.Close();
+            }
         }
 
         public void AktualisiereProfilBild(int nutzerId, string filename)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand update = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand update = new MySqlCommand(@"
                 UPDATE nutzer
                 SET profilBild = @p
                 WHERE nutzerId = @id", conn);
-            update.Parameters.AddWithValue("@id", nutzerId);
-            update.Parameters.AddWithValue("@p", filename);
-            update.ExecuteNonQuery();
-            conn.Close();
+                update.Parameters.AddWithValue("@id", nutzerId);
+                update.Parameters.AddWithValue("@p", filename);
+                update.ExecuteNonQuery();
+                conn.Close();
+            }
         }
 
         public List<string> HoleOriginalBilder(int beitragId)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            List<string> bilder = new List<string>();
-            MySqlCommand cmd = new MySqlCommand("SELECT dateiname FROM bild WHERE beitragid = @b", conn);
-            cmd.Parameters.AddWithValue("@b", beitragId);
-            MySqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                string name = reader.GetString("dateiname");
-                bilder.Add(name);
+                conn.Open();
+                List<string> bilder = new List<string>();
+                MySqlCommand cmd = new MySqlCommand("SELECT dateiname FROM bild WHERE beitragid = @b", conn);
+                cmd.Parameters.AddWithValue("@b", beitragId);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string name = reader.GetString("dateiname");
+                        bilder.Add(name);
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+                return bilder;
             }
-            reader.Close();
-            conn.Close();
-            return bilder;
         }
         public int Abonnieren(int nutzerId, int abonnentId)
         {
             if (nutzerId == abonnentId)
                 return 1;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand check = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand check = new MySqlCommand(@"
                 SELECT COUNT(*)
                 FROM abonnement
                 WHERE abonnentId = @abonnentId
                 AND abonnierteNutzerId = @nutzerId", conn);
-            check.Parameters.AddWithValue("@abonnentId", abonnentId);
-            check.Parameters.AddWithValue("@nutzerId", nutzerId);
-            int verify = Convert.ToInt32(check.ExecuteScalar());
-            if (verify != 0)
-            {
-                Console.WriteLine("Abonnent wurde bereits vom Nutzer abonniert");
-                return 2;
-            }
-            MySqlCommand insert = new MySqlCommand(@"
+                check.Parameters.AddWithValue("@abonnentId", abonnentId);
+                check.Parameters.AddWithValue("@nutzerId", nutzerId);
+                int verify = Convert.ToInt32(check.ExecuteScalar());
+                if (verify != 0)
+                {
+                    Console.WriteLine("Abonnent wurde bereits vom Nutzer abonniert");
+                    return 2;
+                }
+                MySqlCommand insert = new MySqlCommand(@"
                 INSERT INTO abonnement (abonnentId, abonnierteNutzerId)
                 VALUES (@abonnentId, @nutzerId)", conn);
-            insert.Parameters.AddWithValue("@abonnentId", abonnentId);
-            insert.Parameters.AddWithValue("@nutzerId", nutzerId);
-            insert.ExecuteNonQuery();
-            conn.Close();
-            return 0;
+                insert.Parameters.AddWithValue("@abonnentId", abonnentId);
+                insert.Parameters.AddWithValue("@nutzerId", nutzerId);
+                insert.ExecuteNonQuery();
+                conn.Close();
+                return 0;
+            }
         }
         public int ErmittelAbonnentenAnzahl(int nutzerId)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand command = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand command = new MySqlCommand(@"
                 SELECT COUNT(abonnierteNutzerId)
                 FROM abonnement
                 WHERE abonnentId = @nutzerId", conn);
-            command.Parameters.AddWithValue("@nutzerId", nutzerId);
-            int abonnenten = Convert.ToInt32(command.ExecuteScalar());
-            conn.Close();
-            return abonnenten;
+                command.Parameters.AddWithValue("@nutzerId", nutzerId);
+                int abonnenten = Convert.ToInt32(command.ExecuteScalar());
+                conn.Close();
+                return abonnenten;
+            }
         }
         public int Like(int beitragId, int nutzerId)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand check = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand check = new MySqlCommand(@"
                 SELECT beitragid
                 FROM beitrag
                 WHERE autor = @nutzerId
                 AND beitragid = @beitragId", conn);
-            check.Parameters.AddWithValue("@nutzerId", nutzerId);
-            check.Parameters.AddWithValue("@beitragId", beitragId);
-            int verify = Convert.ToInt32(check.ExecuteScalar());
-            if (verify != 0)
-                return -1;
-            MySqlCommand check2 = new MySqlCommand("SELECT nutzerId FROM likes WHERE nutzerId = @n AND beitragId = @b", conn);
-            check2.Parameters.AddWithValue("@n", nutzerId);
-            check2.Parameters.AddWithValue("@b", beitragId);
-            verify = Convert.ToInt32(check2.ExecuteScalar());
-            if (verify != 0)
-                return -2;
-            MySqlCommand like = new MySqlCommand(@"
+                check.Parameters.AddWithValue("@nutzerId", nutzerId);
+                check.Parameters.AddWithValue("@beitragId", beitragId);
+                int verify = Convert.ToInt32(check.ExecuteScalar());
+                if (verify != 0)
+                    return -1;
+                MySqlCommand check2 = new MySqlCommand("SELECT nutzerId FROM likes WHERE nutzerId = @n AND beitragId = @b", conn);
+                check2.Parameters.AddWithValue("@n", nutzerId);
+                check2.Parameters.AddWithValue("@b", beitragId);
+                verify = Convert.ToInt32(check2.ExecuteScalar());
+                if (verify != 0)
+                    return -2;
+                MySqlCommand like = new MySqlCommand(@"
                 INSERT INTO likes (beitragId, nutzerId)
                 VALUES (@bId, @nId)", conn);
-            like.Parameters.AddWithValue("@bId", beitragId);
-            like.Parameters.AddWithValue("@nId", nutzerId);
-            like.ExecuteNonQuery();
-            conn.Close();
-            return 0;
+                like.Parameters.AddWithValue("@bId", beitragId);
+                like.Parameters.AddWithValue("@nId", nutzerId);
+                like.ExecuteNonQuery();
+                conn.Close();
+                return 0;
+            }
         }
 
         public int ErstelleKommentar(int beitragsId, int nutzerId, string text, int? oberKommentar)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand insert = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand insert = new MySqlCommand(@"
                 INSERT INTO kommentar (nachricht, beitragId, autor, oberKommentarId)
                 VALUES (@text, @bId, @autorId, @obKommentarId)", conn);
-            insert.Parameters.AddWithValue("@text", text);
-            insert.Parameters.AddWithValue("@bId", beitragsId);
-            insert.Parameters.AddWithValue("autorId", nutzerId);
-            if (oberKommentar != null)
-                insert.Parameters.AddWithValue("@obKommentarId", oberKommentar);
-            else
-                insert.Parameters.AddWithValue("@obKommentarId", DBNull.Value);
+                insert.Parameters.AddWithValue("@text", text);
+                insert.Parameters.AddWithValue("@bId", beitragsId);
+                insert.Parameters.AddWithValue("autorId", nutzerId);
+                if (oberKommentar != null)
+                    insert.Parameters.AddWithValue("@obKommentarId", oberKommentar);
+                else
+                    insert.Parameters.AddWithValue("@obKommentarId", DBNull.Value);
                 insert.ExecuteNonQuery();
-            conn.Close();
-            return 0;
+                conn.Close();
+                return 0;
+            }
         }
         
         public List<Kommentar> LadeKommentare(int beitragId)
         {
             List<Kommentar> comments = new List<Kommentar>();
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand select = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand select = new MySqlCommand(@"
                 SELECT kommentarid, nachricht, timestamp, autor, oberKommentarId, benutzerName, profilBild
                 From kommentar, nutzer
                 WHERE beitragId = @bId AND nutzerId = autor
                 ORDER BY timestamp ASC", conn);
-            select.Parameters.AddWithValue("@bId", beitragId);
-            MySqlDataReader reader = select.ExecuteReader();
-            while (reader.Read())
-            {
-                int kId = reader.GetInt32("kommentarid");
-                string nachricht = reader.GetString("nachricht");
-                DateTime timestamp = reader.GetDateTime("timestamp");
-                int autor = reader.GetInt32("autor");
-                var ordinal = reader.GetOrdinal("oberKommentarId");
-                string benutzername = reader.GetString("benutzerName");
-                int index = reader.GetOrdinal("profilBild");
-                string profil;
-                if (!reader.IsDBNull(index))
+                select.Parameters.AddWithValue("@bId", beitragId);
+                using (MySqlDataReader reader = select.ExecuteReader())
                 {
-                    profil = reader.GetString("profilBild");
+                    while (reader.Read())
+                    {
+                        int kId = reader.GetInt32("kommentarid");
+                        string nachricht = reader.GetString("nachricht");
+                        DateTime timestamp = reader.GetDateTime("timestamp");
+                        int autor = reader.GetInt32("autor");
+                        var ordinal = reader.GetOrdinal("oberKommentarId");
+                        string benutzername = reader.GetString("benutzerName");
+                        int index = reader.GetOrdinal("profilBild");
+                        string profil;
+                        if (!reader.IsDBNull(index))
+                        {
+                            profil = reader.GetString("profilBild");
+                        }
+                        else
+                        {
+                            profil = null;
+                        }
+                        int? oKid = null;
+                        if (!reader.IsDBNull(ordinal))
+                            oKid = reader.GetInt32(ordinal);
+                        Kommentar k = new Kommentar(nachricht, timestamp, autor);
+                        k.autor = benutzername;
+                        k.profil = profil;
+                        comments.Add(k);
+                    }
                 }
-                else
-                {
-                    profil = null;
-                }
-                int? oKid = null;
-                if (!reader.IsDBNull(ordinal))    
-                    oKid = reader.GetInt32(ordinal);
-                Kommentar k = new Kommentar(nachricht, timestamp, autor);
-                k.autor = benutzername;
-                k.profil = profil;
-                comments.Add(k);
+                conn.Close();
+                return comments;
             }
-            conn.Close();
-            return comments;
         }
 
         public int ChatDoesNotExist(int nutzer1, int nutzer2)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand check = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand check = new MySqlCommand(@"
                 SELECT chatId
                 FROM chatTeilnehmer
                 WHERE nutzerId IN (@n1, @n2)
@@ -587,12 +650,13 @@ namespace socialMediaServer
                 HAVING COUNT(DISTINCT nutzerId) = 2
                 AND COUNT(*) = 2
                 LIMIT 1", conn);
-            check.Parameters.AddWithValue("@n1", nutzer1);
-            check.Parameters.AddWithValue("@n2", nutzer2);
-            var result = check.ExecuteScalar();
-            if (result != null)
-                return Convert.ToInt32(result);
-            return 0;
+                check.Parameters.AddWithValue("@n1", nutzer1);
+                check.Parameters.AddWithValue("@n2", nutzer2);
+                var result = check.ExecuteScalar();
+                if (result != null)
+                    return Convert.ToInt32(result);
+                return 0;
+            }
         }
 
         public int ChatErstellen(int nutzer1, int nutzer2)
@@ -602,46 +666,51 @@ namespace socialMediaServer
             {
                 return value;
             }
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            //MySqlCommand check = new MySqlCommand("")
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                //MySqlCommand check = new MySqlCommand("")
 
-            MySqlCommand chat = new MySqlCommand("INSERT INTO chat(erstelltAm) VALUES (NOW())", conn);
-            chat.ExecuteNonQuery();
-            int chatId = Convert.ToInt32(chat.LastInsertedId);
+                MySqlCommand chat = new MySqlCommand("INSERT INTO chat(erstelltAm) VALUES (NOW())", conn);
+                chat.ExecuteNonQuery();
+                int chatId = Convert.ToInt32(chat.LastInsertedId);
 
-            chat = new MySqlCommand("INSERT INTO chatTeilnehmer(chatId, nutzerId) VALUES (@c, @n)", conn);
-            chat.Parameters.AddWithValue("@c", chatId);
-            chat.Parameters.AddWithValue("@n", nutzer1);
-            chat.ExecuteNonQuery();
-            chat = new MySqlCommand("INSERT INTO chatTeilnehmer(chatId, nutzerId) VALUES (@c, @n)", conn);
-            chat.Parameters.AddWithValue("@c", chatId);
-            chat.Parameters.AddWithValue("@n", nutzer2);
-            chat.ExecuteNonQuery();
-            conn.Close();
-            return chatId;
+                chat = new MySqlCommand("INSERT INTO chatTeilnehmer(chatId, nutzerId) VALUES (@c, @n)", conn);
+                chat.Parameters.AddWithValue("@c", chatId);
+                chat.Parameters.AddWithValue("@n", nutzer1);
+                chat.ExecuteNonQuery();
+                chat = new MySqlCommand("INSERT INTO chatTeilnehmer(chatId, nutzerId) VALUES (@c, @n)", conn);
+                chat.Parameters.AddWithValue("@c", chatId);
+                chat.Parameters.AddWithValue("@n", nutzer2);
+                chat.ExecuteNonQuery();
+                conn.Close();
+                return chatId;
+            }
         }
 
         public void SendeNachricht(int chatId, int sender, string text)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand insert = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand insert = new MySqlCommand(@"
                 INSERT INTO chatnachricht(chatId, senderId, text, gesendetAm)
                 VALUES (@c, @s, @t, NOW())", conn);
-            insert.Parameters.AddWithValue("@c", chatId);
-            insert.Parameters.AddWithValue("@s", sender);
-            insert.Parameters.AddWithValue("@t", text);
-            insert.ExecuteNonQuery();
-            conn.Close();
+                insert.Parameters.AddWithValue("@c", chatId);
+                insert.Parameters.AddWithValue("@s", sender);
+                insert.Parameters.AddWithValue("@t", text);
+                insert.ExecuteNonQuery();
+                conn.Close();
+            }
         }
 
         public List<Chat> LadeChats(int nutzerId)
         {
             List<Chat> chats = new List<Chat>();
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            MySqlCommand get = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand get = new MySqlCommand(@"
                 SELECT c.chatId, n.benutzerName, n.profilBild, na.text, na.gesendetAm
                 FROM chatTeilnehmer t
                 JOIN chat c ON t.chatId = c.chatId
@@ -655,68 +724,75 @@ namespace socialMediaServer
                 WHERE t.nutzerId = @n
                 ORDER BY na.gesendetAm DESC
                 LIMIT 10", conn);
-            get.Parameters.AddWithValue("@n", nutzerId);
-            MySqlDataReader reader = get.ExecuteReader();
-            while (reader.Read())
-            {
-                int id = reader.GetInt32("chatId");
-                string name = reader.GetString("benutzerName");
-                Chat c = new Chat(id);
-                int ordinal = reader.GetOrdinal("text");
-                string text = null;
-                if (!reader.IsDBNull(ordinal))
-                    text = reader.GetString("text");
-                ordinal = reader.GetOrdinal("gesendetAm");
-                DateTime? gesendetAm = null;
-                if (!reader.IsDBNull(ordinal))
-                    gesendetAm = reader.GetDateTime("gesendetAm");
-                ordinal = reader.GetOrdinal("profilBild");
-                if (!reader.IsDBNull(ordinal))
-                { 
-                    string profil = reader.GetString("profilBild");
-                    c.SetData(name, profil, text, gesendetAm);
-                }
-                else
+                get.Parameters.AddWithValue("@n", nutzerId);
+                using (MySqlDataReader reader = get.ExecuteReader())
                 {
-                    c.SetData(name, null, text, gesendetAm);
-                }
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32("chatId");
+                        string name = reader.GetString("benutzerName");
+                        Chat c = new Chat(id);
+                        int ordinal = reader.GetOrdinal("text");
+                        string text = null;
+                        if (!reader.IsDBNull(ordinal))
+                            text = reader.GetString("text");
+                        ordinal = reader.GetOrdinal("gesendetAm");
+                        DateTime? gesendetAm = null;
+                        if (!reader.IsDBNull(ordinal))
+                            gesendetAm = reader.GetDateTime("gesendetAm");
+                        ordinal = reader.GetOrdinal("profilBild");
+                        if (!reader.IsDBNull(ordinal))
+                        {
+                            string profil = reader.GetString("profilBild");
+                            c.SetData(name, profil, text, gesendetAm);
+                        }
+                        else
+                        {
+                            c.SetData(name, null, text, gesendetAm);
+                        }
 
-                chats.Add(c);
+                        chats.Add(c);
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+                return chats;
             }
-            reader.Close();
-            conn.Close();
-            return chats;
         }
 
         public List<Nachricht> LadeNachricht(int chatId)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            conn.Open();
-            List<Nachricht> nachrichten = new List<Nachricht>();
-            MySqlCommand get = new MySqlCommand(@"
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                List<Nachricht> nachrichten = new List<Nachricht>();
+                MySqlCommand get = new MySqlCommand(@"
                 SELECT n.text, n.senderId, n.gesendetAm, u.benutzerName, u.profilBild
                 FROM chatnachricht n
                 JOIN nutzer u ON n.senderId = u.nutzerId
                 WHERE n.chatId = @c
                 ORDER BY n.gesendetAm ASC
                 LIMIT 20", conn);
-            get.Parameters.AddWithValue("@c", chatId);
-            MySqlDataReader reader = get.ExecuteReader();
-            while (reader.Read())
-            {
-                string text = reader.GetString("text");
-                int id = reader.GetInt32("senderId");
-                DateTime gesendetAm = reader.GetDateTime("gesendetAm");
-                string name = reader.GetString("benutzerName");
-                Nutzer n = new Nutzer(name, "", "", id);
-                int ordinal = reader.GetOrdinal("profilBild");
-                if (!reader.IsDBNull(ordinal))
-                    n.ProfilBild = reader.GetString("profilBild");
-                nachrichten.Add(new Nachricht(chatId, n, text, gesendetAm));
+                get.Parameters.AddWithValue("@c", chatId);
+                using (MySqlDataReader reader = get.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string text = reader.GetString("text");
+                        int id = reader.GetInt32("senderId");
+                        DateTime gesendetAm = reader.GetDateTime("gesendetAm");
+                        string name = reader.GetString("benutzerName");
+                        Nutzer n = new Nutzer(name, "", "", id);
+                        int ordinal = reader.GetOrdinal("profilBild");
+                        if (!reader.IsDBNull(ordinal))
+                            n.ProfilBild = reader.GetString("profilBild");
+                        nachrichten.Add(new Nachricht(chatId, n, text, gesendetAm));
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+                return nachrichten;
             }
-            reader.Close();
-            conn.Close();
-            return nachrichten;
         }
 
         public static Image CropToSquare(Image img)

@@ -56,12 +56,12 @@
             // 
             // inhaltAnzeige
             // 
+            this.inhaltAnzeige.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.inhaltAnzeige.AutoScroll = true;
-            this.inhaltAnzeige.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inhaltAnzeige.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.inhaltAnzeige.Location = new System.Drawing.Point(235, 0);
             this.inhaltAnzeige.Name = "inhaltAnzeige";
-            this.inhaltAnzeige.Size = new System.Drawing.Size(565, 451);
+            this.inhaltAnzeige.Size = new System.Drawing.Size(500, 450);
             this.inhaltAnzeige.TabIndex = 3;
             this.inhaltAnzeige.Visible = false;
             this.inhaltAnzeige.WrapContents = false;
