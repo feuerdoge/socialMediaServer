@@ -25,7 +25,9 @@ namespace ClientSocialMedia
         private bool registerToggle = false;
         public List<string> bilder = new List<string>();
         private List<Beitrag> beitraege = new List<Beitrag>();
+        private Button loadMoreBtn = new Button();
         public static Client client = new Client();
+        private int beitragOffset = 0;
         
         public Form1()
         {
@@ -180,6 +182,16 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Suchen"
             };
+
+            loadMoreBtn = new Button()
+            {
+                Text = "Weitere Beiträge laden",
+                Width = 200,
+                Height = 40,
+            };
+            loadMoreBtn.Click += LoadMoreBtn_Click;
+
+
             buttonErstellen.Click += erstellen_Click;
             buttonChat.Click += Chat_Click;
             buttonSuchen.Click += Suche_Click;
@@ -218,8 +230,9 @@ namespace ClientSocialMedia
         }
         private async void EmpfangeDaten() 
         {
+            beitragOffset = 0;
             inhaltAnzeige.Controls.Clear();
-            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false));
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, beitragOffset));
             if(beitraege == null) 
             {
                 return;
@@ -231,9 +244,40 @@ namespace ClientSocialMedia
                 
                 inhaltAnzeige.Controls.Add(inhalt);
             }
+            beitragOffset = beitraege.Count;
+            loadMoreBtn.Tag = "neue";
+            inhaltAnzeige.Controls.Add(loadMoreBtn);
             //Server nach einer Liste aller Beiträge fragen
             //Diese Liste wird interpretiert, d.h das jedes Element dieser Liste von Beiträgen in ein Inhalt gewandelt wird.
             //Diese Inhalte werden auf den FlowLayoutPanel geladen. (inhaltAnzeige.Controls.Add(inhalt))
+        }
+
+        private async void LoadMoreBtn_Click(object sender, EventArgs e)
+        {
+            loadMoreBtn.Enabled = false;
+            loadMoreBtn.Text = "Lade...";
+            List<Beitrag> neue = new List<Beitrag>();
+            if (loadMoreBtn.Tag == "abos")
+                neue = await Task.Run(() => client.beitraegeAnfragen(true, false, beitragOffset));
+            else if (loadMoreBtn.Tag == "neue")
+                neue = await Task.Run(() => client.beitraegeAnfragen(false, false, beitragOffset));
+            if (neue != null)
+            {
+                foreach (Beitrag b in neue)
+                {
+                    Inhalte inhalt = new Inhalte(b);
+                    int index = inhaltAnzeige.Controls.IndexOf(loadMoreBtn);
+                    inhaltAnzeige.Controls.Add(inhalt);
+                    inhaltAnzeige.Controls.SetChildIndex(inhalt, index);
+                }
+            }
+            beitragOffset += neue.Count;
+            loadMoreBtn.Text = "Weitere Beiträge laden";
+            loadMoreBtn.Enabled = true;
+            if (neue.Count == 0)
+            {
+                loadMoreBtn.Text = "Keine weiteren Beiträge vorhanden";
+            }
         }
 
         private void refresh() 
@@ -467,6 +511,9 @@ namespace ClientSocialMedia
 
                 inhaltAnzeige.Controls.Add(inhalt);
             }
+            beitragOffset = beitraege.Count;
+            loadMoreBtn.Tag = "abos";
+            inhaltAnzeige.Controls.Add(loadMoreBtn);
         }
         
         private void empfehlungen_Click(object sender, EventArgs e) 

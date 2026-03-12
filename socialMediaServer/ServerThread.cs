@@ -119,7 +119,12 @@ namespace socialMediaServer
                             break;
                         case "neueBeitraege":
                             string msg = "";
-                            List<Beitrag> beitraege = spf.ErmittleNeueBeitraege(this.nutzer);
+                            int offset = 0;
+                            if (parameter[1] != null)
+                            {
+                                offset = Convert.ToInt32(parameter[1]);
+                            }
+                            List<Beitrag> beitraege = spf.ErmittleNeueBeitraege(this.nutzer, offset);
                             foreach (Beitrag b in beitraege)
                             {
                                 foreach (Bild bild in spf.HoleBilder(b.Id))
@@ -140,7 +145,12 @@ namespace socialMediaServer
                             client.Write("+;fertig\n");
                             break;
                         case "nurAbos":
-                            List<Beitrag> nurAboBeitraege = spf.BeitraegeVonAbosHolen(this.nutzer);
+                            offset = 0;
+                            if (parameter[1] != null)
+                            {
+                                offset = Convert.ToInt32(parameter[1]);
+                            }
+                            List<Beitrag> nurAboBeitraege = spf.BeitraegeVonAbosHolen(this.nutzer, offset);
                             foreach (Beitrag b in nurAboBeitraege)
                             {
                                 foreach (Bild bild in spf.HoleBilder(b.Id))

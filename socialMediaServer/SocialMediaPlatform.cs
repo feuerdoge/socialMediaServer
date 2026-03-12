@@ -127,7 +127,7 @@ namespace socialMediaServer
             passwort[z3] = (char)(rand.Next(4) + '#');
             return passwort;
         }
-        public List<Beitrag> ErmittleNeueBeitraege(Nutzer n)
+        public List<Beitrag> ErmittleNeueBeitraege(Nutzer n, int offset = 0)
         {
             List<Beitrag> beitraege = new List<Beitrag>();
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -140,9 +140,10 @@ namespace socialMediaServer
                 WHERE b.erstelltAm > @zuletztAktiv
                 GROUP BY b.beitragid
                 ORDER BY b.erstelltAm DESC
-                LIMIT 10", conn);
+                LIMIT 10 OFFSET @offset", conn);
             //neusteBeitraege.Parameters.AddWithValue("@nutzerId", n);
             neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+            neusteBeitraege.Parameters.AddWithValue("@offset", offset);
             MySqlDataReader reader = neusteBeitraege.ExecuteReader();
             while (reader.Read())
             {
@@ -160,8 +161,9 @@ namespace socialMediaServer
                     WHERE b.erstelltAm <= @zuletztAktiv
                     GROUP BY b.beitragid
                     ORDER BY b.erstelltAm DESC
-                    LIMIT @max", conn);
+                    LIMIT @max OFFSET @offset", conn);
                 alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+                alteBeitraege.Parameters.AddWithValue("@offset", offset);
                 alteBeitraege.Parameters.AddWithValue("@max", remaining);
                 reader = alteBeitraege.ExecuteReader();
                 while (reader.Read())
@@ -174,7 +176,7 @@ namespace socialMediaServer
             return beitraege;
         }
 
-        public List<Beitrag> BeitraegeVonAbosHolen(Nutzer n) 
+        public List<Beitrag> BeitraegeVonAbosHolen(Nutzer n, int offset = 0) 
         {
             List<Beitrag> beitraege = new List<Beitrag>();
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -187,9 +189,10 @@ namespace socialMediaServer
                 WHERE b.erstelltAm > @zuletztAktiv AND b.autor = (SELECT abonnentId FROM abonnement WHERE abonnierteNutzerId = (SELECT nutzerId FROM nutzer WHERE benutzername = @benutzername))
                 GROUP BY b.beitragid
                 ORDER BY b.erstelltAm DESC
-                LIMIT 10", conn);
+                LIMIT 10 OFFSET @offset", conn);
             neusteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
             neusteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+            neusteBeitraege.Parameters.AddWithValue("@offset", offset);
             MySqlDataReader reader = neusteBeitraege.ExecuteReader();
             while (reader.Read())
             {
@@ -207,9 +210,10 @@ namespace socialMediaServer
                     WHERE b.erstelltAm <= @zuletztAktiv AND b.autor = (SELECT abonnentId FROM abonnement WHERE abonnierteNutzerId = (SELECT nutzerId FROM nutzer WHERE benutzername = @benutzername))
                     GROUP BY b.beitragid
                     ORDER BY b.erstelltAm DESC
-                    LIMIT 10", conn);
+                    LIMIT 10 OFFSET @offset", conn);
                 alteBeitraege.Parameters.AddWithValue("@benutzername", n.BenutzerName);
                 alteBeitraege.Parameters.AddWithValue("@zuletztAktiv", n.ZuletztAktiv);
+                alteBeitraege.Parameters.AddWithValue("@offset", offset);
                 alteBeitraege.Parameters.AddWithValue("@max", remaining);
                 reader = alteBeitraege.ExecuteReader();
                 while (reader.Read())
