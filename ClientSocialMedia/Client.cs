@@ -195,39 +195,83 @@ namespace ClientSocialMedia
         }
         public List<Beitrag> beitraegeAnfragen(bool nurAbos, bool empfehlungen)
         {
-            string str;
             if (!nurAbos) 
             {
                 clientSocket.Write("neueBeitraege\n");
                 
-                str = clientSocket.ReadLine();
-                if (str == "neueBeitaege?0?")
-                {
-                    return null;
-                }
+                //str = clientSocket.ReadLine();
+                //if (str == "neueBeitaege?0?")
+                //{
+                //    return null;
+                //}
             }
             else 
             {
                 clientSocket.Write("nurAbos\n");
 
-                str = clientSocket.ReadLine();
-                if (str == "aboBeitraege?0?")
-                {
-                    return null;
-                }
+                //str = clientSocket.ReadLine();
+                //if (str == "aboBeitraege?0?")
+                //{
+                //    return null;
+                //}
             }
             if(empfehlungen) 
             {
                 clientSocket.Write("empfehlung\n");
 
-                str = clientSocket.ReadLine();
-                if (str == "empfehlungen?0?")
-                {
-                    return null;
-                }
+                //str = clientSocket.ReadLine();
+                //if (str == "empfehlungen?0?")
+                //{
+                //    return null;
+                //}
             }
             // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
+            //msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+
             List<Beitrag> beitraege = new List<Beitrag>();
+
+            while (true)
+            {
+                string str = clientSocket.ReadLine();
+                if (str == null)
+                    break;
+                if (str.Split(';')[1] == "fertig")
+                    break;
+                string[] dataDetail = str.Split(';');
+                int id = Convert.ToInt32(dataDetail[1]);
+                string titel = GetMessage(dataDetail[2]);
+                string text = dataDetail[3];
+                int nutzerId = Convert.ToInt32(dataDetail[4]);
+                int anzahlLikes = Convert.ToInt32(dataDetail[5]);
+                DateTime geposted = Convert.ToDateTime(dataDetail[6]);
+                string tag = dataDetail[8];
+
+                List<Bild> bilder = new List<Bild>();
+                string[] images = dataDetail[7].Split(',');
+                foreach (string image in images)
+                {
+                    string[] innerData = image.Split(':');
+                    string imageName = innerData[0];
+                    string imageData = innerData[1];
+
+                    Bild bild = new Bild(imageName);
+                    bild.bilddata = imageData;
+                    bilder.Add(bild);
+                }
+                Beitrag b = new Beitrag(new Nutzer("", "", "", nutzerId), titel, bilder, tag);
+                b.Id = id;
+                b.setAnzahlLikes(anzahlLikes);
+                b.setGeposted(geposted);
+                if (text != "")
+                {
+                    b.ErstelleText(text);
+                }
+                beitraege.Add(b);
+            }
+            return beitraege;
+
+
+            /*List<Beitrag> beitraege = new List<Beitrag>();
             if(str == null) 
             {
                 return null;
@@ -274,7 +318,7 @@ namespace ClientSocialMedia
                 beitraege.Add(b);
             }
             
-            return beitraege;
+            return beitraege;*/
         }
         
         public Nutzer LadeProfil()

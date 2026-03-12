@@ -26,6 +26,7 @@ namespace ClientSocialMedia
         public List<string> bilder = new List<string>();
         private List<Beitrag> beitraege = new List<Beitrag>();
         public static Client client = new Client();
+        
         public Form1()
         {
             InitializeComponent();
@@ -154,28 +155,28 @@ namespace ClientSocialMedia
             Button empfehlungen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 190),
+                Location = new Point(10, 250),
                 BackColor = Color.White,
                 Text = "Empfehlungen"
             };
             Button buttonChat = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 250),
+                Location = new Point(10, 310),
                 BackColor = Color.White,
                 Text = "Chat"
             };
             Button buttonGruppen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 310),
+                Location = new Point(10, 370),
                 BackColor = Color.White,
                 Text = "Gruppen"
             };
             Button buttonSuchen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 370),
+                Location = new Point(10, 430),
                 BackColor = Color.White,
                 Text = "Suchen"
             };
@@ -215,10 +216,10 @@ namespace ClientSocialMedia
             menuPanel.Visible = true;
             Cursor = Cursors.Default;
         }
-        private void EmpfangeDaten() 
+        private async void EmpfangeDaten() 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = client.beitraegeAnfragen(false, false);
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false));
             if(beitraege == null) 
             {
                 return;

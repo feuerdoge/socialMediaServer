@@ -69,16 +69,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BeitragDetailControl.cs">
+    <Compile Include="UserControl\Beitrag\ImageViewerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BeitragDetailControl.Designer.cs">
-      <DependentUpon>BeitragDetailControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ImageViewerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ImageViewerControl.Designer.cs">
+    <Compile Include="UserControl\Beitrag\ImageViewerControl.Designer.cs">
       <DependentUpon>ImageViewerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControl\Chat\ChatControl.cs">
@@ -156,10 +150,7 @@
     <Compile Include="UserControl\Suchen\UserSearchResultControl.Designer.cs">
       <DependentUpon>UserSearchResultControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="BeitragDetailControl.resx">
-      <DependentUpon>BeitragDetailControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ImageViewerControl.resx">
+    <EmbeddedResource Include="UserControl\Beitrag\ImageViewerControl.resx">
       <DependentUpon>ImageViewerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\Chat\ChatControl.resx">

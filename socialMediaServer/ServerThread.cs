@@ -118,6 +118,7 @@ namespace socialMediaServer
                             client.Write("+;Hochgeladen\n");
                             break;
                         case "neueBeitraege":
+                            string msg = "";
                             List<Beitrag> beitraege = spf.ErmittleNeueBeitraege(this.nutzer);
                             foreach (Beitrag b in beitraege)
                             {
@@ -125,26 +126,18 @@ namespace socialMediaServer
                                 {
                                     b.Hinzufuegen(bild);
                                 }
-                            }
-                            // Protokoll: neueBeitraege.anzahlBeitraege.id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
-                            string msg = "";
-                            if(beitraege.Count == 0) 
-                            {
-                                msg = $"neueBeitaege?{beitraege.Count}?";
-                            }
-                            foreach (Beitrag b in beitraege)
-                            {
-                                List<string> bilderStringList = new List<string>();
+                                List<string> bilderStrings = new List<string>();
                                 foreach (Bild img in b.Bilder)
                                 {
-                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview",img.Dateiname)));
-                                    bilderStringList.Add($"{img.Dateiname}:{s}");
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview", img.Dateiname)));
+
+                                    bilderStrings.Add($"{img.Dateiname}:{s}");
                                 }
-                                string bilderString = string.Join(",", bilderStringList);
-                                msg += $"neueBeitaege?{beitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
-                                msg += ";";
+                                string pictues = string.Join(",", bilderStrings);
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+                                client.Write(msg);
                             }
-                            client.Write(msg + "\n");
+                            client.Write("+;fertig\n");
                             break;
                         case "nurAbos":
                             List<Beitrag> nurAboBeitraege = spf.BeitraegeVonAbosHolen(this.nutzer);
@@ -163,19 +156,22 @@ namespace socialMediaServer
                             }
                             foreach (Beitrag b in nurAboBeitraege)
                             {
-                                List<string> bilderStringList = new List<string>();
+                                foreach (Bild bild in spf.HoleBilder(b.Id))
+                                {
+                                    b.Hinzufuegen(bild);
+                                }
+                                List<string> bilderStrings = new List<string>();
                                 foreach (Bild img in b.Bilder)
                                 {
                                     string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview", img.Dateiname)));
-                                    bilderStringList.Add($"{img.Dateiname}:{s}");
-                                }
-                                string bilderString = string.Join(",", bilderStringList);
-                                msg += $"aboBeitraege?{nurAboBeitraege.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
-                                msg += ";";
-                            }
 
-                            Console.WriteLine(msg);
-                            client.Write(msg + "\n");
+                                    bilderStrings.Add($"{img.Dateiname}:{s}");
+                                }
+                                string pictues = string.Join(",", bilderStrings);
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+                                client.Write(msg);
+                            }
+                            client.Write("+;fertig\n");
                             break;
                         case "original":
                             int beitragId = Convert.ToInt32(parameter[1]);
