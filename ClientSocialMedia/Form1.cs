@@ -306,6 +306,10 @@ namespace ClientSocialMedia
 
         private void erstellen_Click(object sender, EventArgs e)
         {
+            beitragsErstellungsPanel.Controls.Clear();
+            beitragsErstellungsPanel.Controls.Add(this.tagPick);
+            beitragsErstellungsPanel.Controls.Add(this.tagLabel);
+            beitragsErstellungsPanel.Visible = true;
             tagPick.Controls.Clear();
             tagPick.Visible = true;
             tagPick.Items.AddRange(new string[] {
@@ -315,9 +319,6 @@ namespace ClientSocialMedia
                 "News"
             });
             inhaltAnzeige.Show();
-            beitragsErstellungsPanel.Controls.Clear();
-            beitragsErstellungsPanel.Visible = true;
-            //this.Controls.Add(beitragsErstellungsPanel);
 
             titelEingabe = new TextBox();
             beitragsErstellungsPanel.Controls.Add(titelEingabe);
