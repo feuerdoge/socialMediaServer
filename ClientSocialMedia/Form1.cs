@@ -145,24 +145,31 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Beiträge Abonnierter Nutzer"
             };
-            Button buttonChat = new Button()
+            Button empfehlungen = new Button()
             {
                 Size = new Size(215, 60),
                 Location = new Point(10, 190),
+                BackColor = Color.White,
+                Text = "Empfehlungen"
+            };
+            Button buttonChat = new Button()
+            {
+                Size = new Size(215, 60),
+                Location = new Point(10, 250),
                 BackColor = Color.White,
                 Text = "Chat"
             };
             Button buttonGruppen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 250),
+                Location = new Point(10, 310),
                 BackColor = Color.White,
                 Text = "Gruppen"
             };
             Button buttonSuchen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 310),
+                Location = new Point(10, 370),
                 BackColor = Color.White,
                 Text = "Suchen"
             };
@@ -171,6 +178,7 @@ namespace ClientSocialMedia
             menuPanel.Controls.Add(buttonBeitraege);
             menuPanel.Controls.Add(buttonBeliebt);
             menuPanel.Controls.Add(buttonNurAbos);
+            menuPanel.Controls.Add(empfehlungen);
             menuPanel.Controls.Add(buttonChat);
             menuPanel.Controls.Add(buttonGruppen);
             menuPanel.Controls.Add(buttonSuchen);
@@ -178,7 +186,7 @@ namespace ClientSocialMedia
             buttonBeitraege.Click += buttonBeitraege_Click;
             buttonBeliebt.Click += buttonBeliebt_Click;
             buttonNurAbos.Click += buttonNurAbos_Click;
-            
+            empfehlungen.Click += empfehlungen_Click;
             
 
             zeigeInhalte();
@@ -202,7 +210,7 @@ namespace ClientSocialMedia
         private void EmpfangeDaten() 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = client.beitraegeAnfragen(false);
+            beitraege = client.beitraegeAnfragen(false, false);
             if(beitraege == null) 
             {
                 return;
@@ -418,7 +426,7 @@ namespace ClientSocialMedia
         private void buttonNurAbos_Click(object sender, EventArgs e) 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = client.beitraegeAnfragen(true);
+            beitraege = client.beitraegeAnfragen(true, false);
             if (beitraege == null)
             {
                 return;
@@ -432,6 +440,22 @@ namespace ClientSocialMedia
             }
         }
         
+        private void empfehlungen_Click(object sender, EventArgs e) 
+        {
+            inhaltAnzeige.Controls.Clear();
+            beitraege = client.beitraegeAnfragen(false, true);
+            if (beitraege == null)
+            {
+                return;
+            }
+            foreach (Beitrag beitraege in beitraege)
+            {
+                Inhalte inhalt = new Inhalte(beitraege);
+
+
+                inhaltAnzeige.Controls.Add(inhalt);
+            }
+        }
         private void Suche_Click(object sender, EventArgs e)
         {
             inhaltAnzeige.Controls.Clear();

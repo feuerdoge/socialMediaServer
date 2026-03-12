@@ -180,7 +180,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand neusteBeitraege = new MySqlCommand(@"
-                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
                 LEFT JOIN likes l ON b.beitragid = l.beitragId
@@ -200,7 +200,7 @@ namespace socialMediaServer
             {
                 int remaining = 10 - beitraege.Count;
                 MySqlCommand alteBeitraege = new MySqlCommand(@"
-                    SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                    SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                     FROM beitrag b
                     JOIN nutzer u ON b.autor = u.nutzerId
                     LEFT JOIN likes l ON b.beitragid = l.beitragId
@@ -229,7 +229,7 @@ namespace socialMediaServer
             MySqlConnection conn = new MySqlConnection(connectionString);
             conn.Open();
             MySqlCommand likedBeitraege = new MySqlCommand(@"
-                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
                 LEFT JOIN likes l ON b.beitragid = l.beitragId
@@ -243,6 +243,32 @@ namespace socialMediaServer
                 beitraege.Add(LeseBeitrag(reader));
             }
             reader.Close();
+            return beitraege;
+        }
+
+        public List<Beitrag> HoleRelevanteBeitraege(string[] ranking) 
+        {
+            List<Beitrag> beitraege = new List<Beitrag>();
+            foreach (string rank in ranking) 
+            {
+                MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+                MySqlCommand likedBeitraege = new MySqlCommand(@"
+                SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
+                FROM beitrag b
+                JOIN nutzer u ON b.autor = u.nutzerId
+                LEFT JOIN likes l ON b.beitragid = l.beitragId
+                WHERE b.tag = @tag
+                GROUP BY b.beitragid
+                ORDER BY b.erstelltAm DESC", conn);
+                likedBeitraege.Parameters.AddWithValue("@tag", rank);
+                MySqlDataReader reader = likedBeitraege.ExecuteReader();
+                while (reader.Read())
+                {
+                    beitraege.Add(LeseBeitrag(reader));
+                }
+                reader.Close();
+            }
             return beitraege;
         }
         private Beitrag LeseBeitrag(MySqlDataReader reader)
@@ -306,19 +332,12 @@ namespace socialMediaServer
             conn.Close();
             return 0;
         }
-        public List<Nutzer> ErmittleAbonnierteNutzerMitNeuenBeitraegen(Nutzer n)
+        public List<Nutzer> ErmittleAbonnierteNutzer(Nutzer n)
         {
             List<Nutzer> result = new List<Nutzer>();
             foreach (Nutzer a in n.AbonnierteNutzer)
             {
-                foreach(Beitrag b in a.Beitraege)
-                {
-                    if (b.Geposted > n.ZuletztAktiv)
-                    {
-                        result.Add(a);
-                        break;
-                    }
-                }
+                result.Add(a);
             }
             return result;
         }
