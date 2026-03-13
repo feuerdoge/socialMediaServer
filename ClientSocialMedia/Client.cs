@@ -150,6 +150,52 @@ namespace ClientSocialMedia
                 return 0;
         }
 
+        public List<Beitrag> HoleNutzerBeitraege(int offset = 0)
+        {
+            string msg = $"nutzerBeitraege;{offset}n";
+            clientSocket.Write(msg);
+            List<Beitrag> beitraege = new List<Beitrag>();
+            while (true)
+            {
+                string str = clientSocket.ReadLine();
+                if (str == null)
+                    break;
+                if (str.Split(';')[1] == "fertig")
+                    break;
+                string[] dataDetail = str.Split(';');
+                int id = Convert.ToInt32(dataDetail[1]);
+                string titel = GetMessage(dataDetail[2]);
+                string text = GetMessage(dataDetail[3]);
+                int nutzerId = Convert.ToInt32(dataDetail[4]);
+                int anzahlLikes = Convert.ToInt32(dataDetail[5]);
+                DateTime geposted = Convert.ToDateTime(dataDetail[6]);
+                string tag = dataDetail[8];
+
+                List<Bild> bilder = new List<Bild>();
+                string[] images = dataDetail[7].Split(',');
+                foreach (string image in images)
+                {
+                    string[] innerData = image.Split(':');
+                    string imageName = innerData[0];
+                    string imageData = innerData[1];
+
+                    Bild bild = new Bild(imageName);
+                    bild.bilddata = imageData;
+                    bilder.Add(bild);
+                }
+                Beitrag b = new Beitrag(new Nutzer("", "", "", nutzerId), titel, bilder, tag, text);
+                b.Id = id;
+                b.setAnzahlLikes(anzahlLikes);
+                b.setGeposted(geposted);
+                if (text != "")
+                {
+                    b.ErstelleText(text);
+                }
+                OnBeitragErhalten?.Invoke(b);
+                beitraege.Add(b);
+            }
+            return beitraege;
+        }
         public void ErstelleKommentar(int beitragId, string nachricht, int? oberKommentarId)
         {
             string msg = $"kommentar;{beitragId};{ConvertMessage(nachricht)}";

@@ -17,9 +17,12 @@ namespace ClientSocialMedia
         public Action<Image> OnProfileChange;
         public Action OnAbmelden;
         public Action OnClose;
+        private int beitragOffset = 0;
+        private List<Beitrag> beitraege;
         public ProfileControl()
         {
             InitializeComponent();
+            beitraege = new List<Beitrag>();
             LadeProfil();
         }
 
@@ -119,6 +122,26 @@ namespace ClientSocialMedia
         private void closeBtn_Click(object sender, EventArgs e)
         {
             OnClose?.Invoke();
+        }
+
+        private async void loadBeitraegeBtn_Click(object sender, EventArgs e)
+        {
+            beitragOffset = 0;
+            Form1.client.OnBeitragErhalten = BeitragErhalten;
+            beitraege = await Task.Run(() => Form1.client.HoleNutzerBeitraege(beitragOffset));
+
+        }
+        private void BeitragErhalten(Beitrag b)
+        {
+            if (this.InvokeRequired)
+                this.Invoke((Action<Beitrag>)BeitragErhalten, b);
+            else
+            {
+                Inhalte inhalt = new Inhalte(b);
+                beitraege.Add(b);
+                inhalt.setDaten(inhalt.pictures);
+                beitraegePanel.Controls.Add(inhalt);
+            }
         }
     }
 }

@@ -331,6 +331,31 @@ namespace socialMediaServer
             }
             return beitraege;
         }
+
+        public List<Beitrag> HoleNutzerBeitraege(int nutzerId, int offset = 0)
+        {
+            List<Beitrag> beitraege = new List<Beitrag>();
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand get = new MySqlCommand(@"
+                    SELECT beitragid, text, titel, erstelltAm, tag
+                    FROM beitrag
+                    WHERE autor = @nutzer
+                    LIMIT 10 OFFSET @offset", conn);
+                get.Parameters.AddWithValue("@nutzer", nutzerId);
+                get.Parameters.AddWithValue("@offset", offset);
+                using (MySqlDataReader reader =  get.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Beitrag b = LeseBeitrag(reader);
+                        beitraege.Add(b);
+                    }
+                }
+            }
+            return beitraege;
+        }
         private Beitrag LeseBeitrag(MySqlDataReader reader)
         {
             int beitragId = reader.GetInt32("beitragid");

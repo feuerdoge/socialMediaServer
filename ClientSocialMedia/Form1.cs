@@ -473,6 +473,7 @@ namespace ClientSocialMedia
             };
             profil.OnAbmelden = () =>
             {
+                Form1.client.OnBeitragErhalten = BeitragErhalten;
                 Abmelden();
             };
             profil.OnClose = () =>
