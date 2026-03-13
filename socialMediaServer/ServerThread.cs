@@ -454,7 +454,7 @@ namespace socialMediaServer
                                 msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
                                 client.Write(msg);
                             }
-                            client.Write("+;fetig\n");
+                            client.Write("+;fertig\n");
                             break;
                         case "beliebteste":
                             msg = "";
