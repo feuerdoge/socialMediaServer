@@ -23,6 +23,7 @@ namespace ClientSocialMedia
     {
         public SocketAbi.Socket clientSocket;
         private string benutzername;
+
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
