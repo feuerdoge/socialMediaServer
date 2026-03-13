@@ -21,6 +21,8 @@ namespace ClientSocialMedia
         private Panel panel;
         private Button registrieren;
         private Button anmeldeButton;
+        private Button passVergessen;
+        private Button generierePasswort;
         private TextBox email;
         private bool registerToggle = false;
         public List<string> bilder = new List<string>();
@@ -86,8 +88,17 @@ namespace ClientSocialMedia
             tbNutzername.Click += tbNutzername_Click;
             tbPasswort.Click += tbPasswort_Click;
 
+            passVergessen = new Button()
+            {
+                Width = 75,
+                Height = 25,
+                Location = new Point(150, anmelden.Location.Y + 38),
+                BackColor = Color.White,
+                Text = "Vergessen?"
+            };
             anmeldeButton = new Button()
             {
+                
                 Size = new Size(150, 25),
                 Location = new Point(0, anmelden.Location.Y + 60),
                 BackColor = Color.White,
@@ -108,10 +119,20 @@ namespace ClientSocialMedia
                 Location = new Point(0, anmelden.Location.Y + 60),
                 Text = "Email Eingeben"
             };
+            generierePasswort = new Button()
+            {
+                Size = new Size(150, 25),
+                Location = new Point(0, anmelden.Location.Y + 85),
+                BackColor = Color.White,
+                Text = "Neues Passwort Anfordern"
+            };
             email.Click += email_Click;
             panel.Controls.Add(anmeldeButton);
             panel.Controls.Add(registrieren);
             panel.Controls.Add(email);
+            panel.Controls.Add(passVergessen);
+            passVergessen.Click += passVergessen_Click;
+            generierePasswort.Click += generierePasswort_Click;
             if(!registerToggle) 
             {
                 anmeldeButton.Click += anmeldeButton_Click;
@@ -327,6 +348,18 @@ namespace ClientSocialMedia
             
             }
         }
+
+        private void passVergessen_Click(object sender, EventArgs e) 
+        {
+            this.panel.Controls.Clear();
+            email.Visible = true;
+            this.panel.Controls.Add(this.email);
+            this.panel.Controls.Add(generierePasswort);
+        }
+        private void generierePasswort_Click(object sender, EventArgs e) 
+        {
+            
+        }
         private void registrieren_Click(object sender, EventArgs e) 
         {
             if(!registerToggle) 
@@ -336,6 +369,7 @@ namespace ClientSocialMedia
                 registrieren.Text = "Anmelden";
                 anmeldeButton.Text = "Registrieren";
                 email.Visible = true;
+                passVergessen.Visible = false;
                 registrieren.Location = new Point(registrieren.Location.X, registrieren.Location.Y + 20);
                 anmeldeButton.Location = new Point(anmeldeButton.Location.X, anmeldeButton.Location.Y + 20);
                 registerToggle = true;
@@ -349,6 +383,7 @@ namespace ClientSocialMedia
                 registrieren.Location = new Point(registrieren.Location.X, registrieren.Location.Y - 20);
                 anmeldeButton.Location = new Point(anmeldeButton.Location.X, anmeldeButton.Location.Y - 20);
                 registerToggle = false;
+                passVergessen.Visible = true;
             }
             
         }
