@@ -507,6 +507,8 @@ namespace socialMediaServer
                             }
                             client.Write("+;fertig\n");
                             break;
+                        case "newPasswort":
+                            break;
                     } 
                 }
             }
