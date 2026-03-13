@@ -35,6 +35,8 @@
             this.tagLabel = new System.Windows.Forms.Label();
             this.tagPick = new System.Windows.Forms.ComboBox();
             this.profilePic = new System.Windows.Forms.PictureBox();
+            this.textVerfassung = new System.Windows.Forms.TextBox();
+            this.verfassungLabel = new System.Windows.Forms.Label();
             this.beitragsErstellungsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).BeginInit();
             this.SuspendLayout();
@@ -69,6 +71,8 @@
             // beitragsErstellungsPanel
             // 
             this.beitragsErstellungsPanel.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.beitragsErstellungsPanel.Controls.Add(this.verfassungLabel);
+            this.beitragsErstellungsPanel.Controls.Add(this.textVerfassung);
             this.beitragsErstellungsPanel.Controls.Add(this.tagLabel);
             this.beitragsErstellungsPanel.Controls.Add(this.tagPick);
             this.beitragsErstellungsPanel.Location = new System.Drawing.Point(240, 55);
@@ -110,6 +114,24 @@
             this.profilePic.MouseLeave += new System.EventHandler(this.profilePic_MouseLeave);
             this.profilePic.MouseHover += new System.EventHandler(this.profilePic_MouseHover);
             // 
+            // textVerfassung
+            // 
+            this.textVerfassung.Location = new System.Drawing.Point(3, 267);
+            this.textVerfassung.Multiline = true;
+            this.textVerfassung.Name = "textVerfassung";
+            this.textVerfassung.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textVerfassung.Size = new System.Drawing.Size(419, 88);
+            this.textVerfassung.TabIndex = 2;
+            // 
+            // verfassungLabel
+            // 
+            this.verfassungLabel.AutoSize = true;
+            this.verfassungLabel.Location = new System.Drawing.Point(176, 251);
+            this.verfassungLabel.Name = "verfassungLabel";
+            this.verfassungLabel.Size = new System.Drawing.Size(78, 13);
+            this.verfassungLabel.TabIndex = 3;
+            this.verfassungLabel.Text = "Text Verfassen";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -141,6 +163,8 @@
         private System.Windows.Forms.Panel beitragsErstellungsPanel;
         private System.Windows.Forms.ComboBox tagPick;
         private System.Windows.Forms.Label tagLabel;
+        private System.Windows.Forms.Label verfassungLabel;
+        private System.Windows.Forms.TextBox textVerfassung;
     }
 }
 

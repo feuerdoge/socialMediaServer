@@ -75,6 +75,7 @@ namespace socialMediaServer
                             string titel = GetMessage(parameter[1]);
                             int anzahl = Convert.ToInt32(parameter[2]);
                             string tag = GetMessage(parameter[3 + anzahl]);
+                            string text = GetMessage(parameter[4 + anzahl]);
                             if (anzahl > 10)
                             {
                                 client.Write("-;fehler;max10\n");
@@ -110,9 +111,8 @@ namespace socialMediaServer
 
                                 dateinamen.Add(uniqueName);
                             }
-                            string text = null;
                             if (parameter.Length > 4 + anzahl)
-                                text = GetMessage(parameter[4 + anzahl]);
+                                
 
                             spf.ErstelleBeitrag(this.nutzer, titel, text, dateinamen, tag);
                             client.Write("+;Hochgeladen\n");
@@ -139,7 +139,12 @@ namespace socialMediaServer
                                     bilderStrings.Add($"{img.Dateiname}:{s}");
                                 }
                                 string pictues = string.Join(",", bilderStrings);
-                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+                                string textBeitrag = b.Text.text;
+                                if(textBeitrag != null) 
+                                {
+                                    textBeitrag = ConvertMessage(b.Text.text);
+                                }
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{textBeitrag};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
                                 client.Write(msg);
                             }
                             client.Write("+;fertig\n");
@@ -178,7 +183,13 @@ namespace socialMediaServer
                                     bilderStrings.Add($"{img.Dateiname}:{s}");
                                 }
                                 string pictues = string.Join(",", bilderStrings);
-                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+                                string textBeitrag = b.Text.text;
+                                if (textBeitrag != null)
+                                {
+                                    textBeitrag = ConvertMessage(b.Text.text);
+                                }
+
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{textBeitrag};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
                                 client.Write(msg);
                             }
                             client.Write("+;fertig\n");
@@ -433,10 +444,14 @@ namespace socialMediaServer
 
                             GewichtungZuweisen(relevanteBeitraege, beliebt, spf.ErmittleAbonnierteNutzer(this.nutzer));
 
-                            List<Beitrag> beitraegeSortiertNachGewichtung = sortiereBeitraegeNachGewichtung(relevanteBeitraege, 0, relevanteBeitraege.Count - 1);
-
+                            List<Beitrag> beitraegeSortiertNachGewichtungUnflipped = sortiereBeitraegeNachGewichtung(relevanteBeitraege, 0, relevanteBeitraege.Count - 1);
+                            List<Beitrag> beitraegeSortiertNachGewichtung = new List<Beitrag>();
                             // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
                             msg = "";
+                            for(int i = beitraegeSortiertNachGewichtungUnflipped.Count - 1; i > 0; i--) 
+                            {
+                                beitraegeSortiertNachGewichtung.Add(beitraegeSortiertNachGewichtungUnflipped[i]);
+                            }
                             foreach (Beitrag b in beitraegeSortiertNachGewichtung)
                             {
                                 foreach (Bild bild in spf.HoleBilder(b.Id))
@@ -451,7 +466,12 @@ namespace socialMediaServer
                                     bilderStrings.Add($"{img.Dateiname}:{s}");
                                 }
                                 string pictues = string.Join(",", bilderStrings);
-                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+                                string textBeitrag = b.Text.text;
+                                if (textBeitrag != null)
+                                {
+                                    textBeitrag = ConvertMessage(b.Text.text);
+                                }
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{textBeitrag};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
                                 client.Write(msg);
                             }
                             client.Write("+;fertig\n");
@@ -477,7 +497,12 @@ namespace socialMediaServer
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
-                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{bilderString};{b.Tag}\n";
+                                string textBeitrag = b.Text.text;
+                                if (textBeitrag != null)
+                                {
+                                    textBeitrag = ConvertMessage(b.Text.text);
+                                }
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{textBeitrag};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{bilderString};{b.Tag}\n";
                                 client.Write(msg);
                             }
                             client.Write("+;fertig\n");

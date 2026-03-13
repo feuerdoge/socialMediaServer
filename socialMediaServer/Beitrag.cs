@@ -27,11 +27,12 @@ namespace socialMediaServer
 
         private int gewichtung;
         public int Gewichtung { get => gewichtung; }
-        public Beitrag(Nutzer autor, string titel, List<Bild> bild, string tag)
+        public Beitrag(Nutzer autor, string titel, List<Bild> bild, string tag, string text)
         {
             this.autor = autor;
             this.titel = titel;
             this.tag = tag;
+            this.text = new Text(text);
             anzahlLikes = 0;
             geposted = DateTime.Now;
             bilder = new List<Bild>();

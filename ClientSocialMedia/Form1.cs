@@ -367,6 +367,8 @@ namespace ClientSocialMedia
             beitragsErstellungsPanel.Controls.Clear();
             beitragsErstellungsPanel.Controls.Add(this.tagPick);
             beitragsErstellungsPanel.Controls.Add(this.tagLabel);
+            beitragsErstellungsPanel.Controls.Add(this.textVerfassung);
+            beitragsErstellungsPanel.Controls.Add(this.verfassungLabel);
             beitragsErstellungsPanel.Visible = true;
             tagPick.Items.Clear();
             tagPick.Visible = true;
@@ -428,7 +430,7 @@ namespace ClientSocialMedia
                 return;
             }
             tagPick.Visible = false;
-            client.beitragSenden(titelEingabe.Text, bilder, tagPick.Text);
+            client.beitragSenden(titelEingabe.Text, bilder, tagPick.Text, this.textVerfassung.Text);
             beitragsErstellungsPanel.Visible = false;
             EmpfangeDaten();
         }
