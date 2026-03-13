@@ -232,7 +232,7 @@ namespace ClientSocialMedia
         {
             beitragOffset = 0;
             inhaltAnzeige.Controls.Clear();
-            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, beitragOffset));
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
             if(beitraege == null) 
             {
                 return;
@@ -258,9 +258,9 @@ namespace ClientSocialMedia
             loadMoreBtn.Text = "Lade...";
             List<Beitrag> neue = new List<Beitrag>();
             if (loadMoreBtn.Tag == "abos")
-                neue = await Task.Run(() => client.beitraegeAnfragen(true, false, beitragOffset));
+                neue = await Task.Run(() => client.beitraegeAnfragen(true, false, false,beitragOffset));
             else if (loadMoreBtn.Tag == "neue")
-                neue = await Task.Run(() => client.beitraegeAnfragen(false, false, beitragOffset));
+                neue = await Task.Run(() => client.beitraegeAnfragen(false, false, false,beitragOffset));
             if (neue != null)
             {
                 foreach (Beitrag b in neue)
@@ -481,13 +481,14 @@ namespace ClientSocialMedia
 
         private void buttonBeliebt_Click(object sender, EventArgs e) 
         {
+            beitraege = client.beitraegeAnfragen(false, false, true, beitragOffset);
             if (beitraege == null)
             {
                 return;
             }
-
+            beitragOffset += beitraege.Count;
             this.inhaltAnzeige.Controls.Clear();
-            beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
+            //beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
             
             for(int i = beitraege.Count - 1; i > -1; i--) 
             {
@@ -499,7 +500,7 @@ namespace ClientSocialMedia
         private void buttonNurAbos_Click(object sender, EventArgs e) 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = client.beitraegeAnfragen(true, false);
+            beitraege = client.beitraegeAnfragen(true, false, false, beitragOffset);
             if (beitraege == null)
             {
                 return;
@@ -519,7 +520,7 @@ namespace ClientSocialMedia
         private async void empfehlungen_Click(object sender, EventArgs e) 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, true));
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, true, false, beitragOffset));
             if (beitraege == null)
             {
                 return;
@@ -531,6 +532,7 @@ namespace ClientSocialMedia
 
                 inhaltAnzeige.Controls.Add(inhalt);
             }
+            beitragOffset += beitraege.Count;
         }
         private void Suche_Click(object sender, EventArgs e)
         {

@@ -193,7 +193,7 @@ namespace ClientSocialMedia
             }
             return comments;
         }
-        public List<Beitrag> beitraegeAnfragen(bool nurAbos, bool empfehlungen, int offset = 0)
+        public List<Beitrag> beitraegeAnfragen(bool nurAbos, bool empfehlungen, bool beliebteste, int offset = 0)
         {
             if (!nurAbos) 
             {
@@ -217,13 +217,17 @@ namespace ClientSocialMedia
             }
             if(empfehlungen) 
             {
-                clientSocket.Write("empfehlung\n");
+                clientSocket.Write($"empfehlung;{offset}\n");
 
                 //str = clientSocket.ReadLine();
                 //if (str == "empfehlungen?0?")
                 //{
                 //    return null;
                 //}
+            }
+            if(beliebteste) 
+            {
+                clientSocket.Write($"beliebteste;{offset}\n");
             }
             // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
             //msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";

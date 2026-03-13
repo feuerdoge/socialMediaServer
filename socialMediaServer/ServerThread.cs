@@ -456,6 +456,36 @@ namespace socialMediaServer
                             }
                             client.Write("+;fetig\n");
                             break;
+                        case "beliebteste":
+                            offset = 0;
+                            List<Beitrag> beitreageBeliebt = spf.HoleBeliebtesteBeitraege(offset);
+                            foreach (Beitrag b in beitreageBeliebt)
+                            {
+                                foreach (Bild bild in spf.HoleBilder(b.Id))
+                                {
+                                    b.Hinzufuegen(bild);
+                                }
+                            }
+                            // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
+                            msg = "";
+                            if (beitreageBeliebt.Count == 0)
+                            {
+                                msg = $"beliebteste?{beitreageBeliebt.Count}?";
+                            }
+                            foreach (Beitrag b in beitreageBeliebt)
+                            {
+                                List<string> bilderStringList = new List<string>();
+                                foreach (Bild img in b.Bilder)
+                                {
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview", img.Dateiname)));
+                                    bilderStringList.Add($"{img.Dateiname}:{s}");
+                                }
+                                string bilderString = string.Join(",", bilderStringList);
+                                msg += $"beliebteste?{beitreageBeliebt.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
+                                msg += ";";
+                            }
+                            client.Write(msg + "\n");
+                            break;
                     }
                 }
             }
@@ -468,6 +498,10 @@ namespace socialMediaServer
                 client.Close();
                 Console.WriteLine("Client getrennt.");
             }
+        }
+        private void NachrichtAnClientSenden() 
+        {
+            //Alle Sendebefehle an den Client in eine Methode
         }
         private string ConvertMessage(string message)
         {
