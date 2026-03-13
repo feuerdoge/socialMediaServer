@@ -300,7 +300,7 @@ namespace socialMediaServer
             }
         }
 
-        public List<Beitrag> HoleRelevanteBeitraege(string[] ranking) 
+        public List<Beitrag> HoleRelevanteBeitraege(string[] ranking, int offset = 0) 
         {
             List<Beitrag> beitraege = new List<Beitrag>();
             foreach (string rank in ranking) 
@@ -315,8 +315,10 @@ namespace socialMediaServer
                         LEFT JOIN likes l ON b.beitragid = l.beitragId
                         WHERE b.tag = @tag
                         GROUP BY b.beitragid
-                        ORDER BY b.erstelltAm DESC", conn);
+                        ORDER BY b.erstelltAm DESC
+                        LIMIT 10 OFFSET @offset", conn);
                     likedBeitraege.Parameters.AddWithValue("@tag", rank);
+                    likedBeitraege.Parameters.AddWithValue("@offset", offset);
                     using (MySqlDataReader reader = likedBeitraege.ExecuteReader())
                     {
                         while (reader.Read())

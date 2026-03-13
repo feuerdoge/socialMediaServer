@@ -32,6 +32,7 @@ namespace ClientSocialMedia
         public Form1()
         {
             InitializeComponent();
+            Form1.client.OnBeitragErhalten += BeitragErhalten;
             ErstellePanel();
         }
 
@@ -232,17 +233,18 @@ namespace ClientSocialMedia
         {
             beitragOffset = 0;
             inhaltAnzeige.Controls.Clear();
-            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
+            await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
             if(beitraege == null) 
             {
                 return;
             }
-            foreach(Beitrag beitraege in beitraege) 
+            List<Control> controls = this.Controls.Find("Inhalte", true).ToList();
+            foreach (Control c in controls)
             {
-                Inhalte inhalt = new Inhalte(beitraege);
-
-                
-                inhaltAnzeige.Controls.Add(inhalt);
+                Inhalte i = c as Inhalte;
+                i.Beitrag.SetKommentare(i.ladekomm());
+                i.Autor = i.GetUserData();
+                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
             }
             beitragOffset = beitraege.Count;
             loadMoreBtn.Tag = "neue";
@@ -252,25 +254,41 @@ namespace ClientSocialMedia
             //Diese Inhalte werden auf den FlowLayoutPanel geladen. (inhaltAnzeige.Controls.Add(inhalt))
         }
 
+        private async void BeitragErhalten(Beitrag b)
+        {
+            if (this.InvokeRequired)
+                this.Invoke((Action<Beitrag>)BeitragErhalten, b);
+            else
+            {
+                Inhalte inhalt = new Inhalte(b);
+                beitraege.Add(b);
+                inhalt.setDaten(b.Titel, inhalt.pictures, inhalt.tagBeitrag);
+                inhaltAnzeige.Controls.Add(inhalt);
+            }
+        }
         private async void LoadMoreBtn_Click(object sender, EventArgs e)
         {
             loadMoreBtn.Enabled = false;
             loadMoreBtn.Text = "Lade...";
             List<Beitrag> neue = new List<Beitrag>();
             if (loadMoreBtn.Tag == "abos")
-                neue = await Task.Run(() => client.beitraegeAnfragen(true, false, false,beitragOffset));
+                neue = await Task.Run(() => client.beitraegeAnfragen(true, false, false, beitragOffset));
             else if (loadMoreBtn.Tag == "neue")
-                neue = await Task.Run(() => client.beitraegeAnfragen(false, false, false,beitragOffset));
-            if (neue != null)
+                neue = await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
+            else if (loadMoreBtn.Tag == "beliebt")
+                neue = await Task.Run(() => client.beitraegeAnfragen(false, false, true, beitragOffset));
+            else if (loadMoreBtn.Tag == "empfehlung")
+                neue = await Task.Run(() => client.beitraegeAnfragen(false, true, false, beitragOffset));
+            List<Control> controls = this.Controls.Find("Inhalte", true).ToList();
+            for (int i = controls.Count - 1; i >= beitragOffset; i--) 
             {
-                foreach (Beitrag b in neue)
-                {
-                    Inhalte inhalt = new Inhalte(b);
-                    int index = inhaltAnzeige.Controls.IndexOf(loadMoreBtn);
-                    inhaltAnzeige.Controls.Add(inhalt);
-                    inhaltAnzeige.Controls.SetChildIndex(inhalt, index);
-                }
+                Inhalte inhalt = controls[i] as Inhalte;
+                inhalt.Beitrag.SetKommentare(inhalt.ladekomm());
+                inhalt.Autor = inhalt.GetUserData();
+                inhalt.setDaten(inhalt.titel, inhalt.pictures, inhalt.tagBeitrag);
             }
+            inhaltAnzeige.Controls.Remove(loadMoreBtn);
+            inhaltAnzeige.Controls.Add(loadMoreBtn);
             beitragOffset += neue.Count;
             loadMoreBtn.Text = "Weitere Beiträge laden";
             loadMoreBtn.Enabled = true;
@@ -484,36 +502,42 @@ namespace ClientSocialMedia
         private async void buttonBeliebt_Click(object sender, EventArgs e) 
         {
             beitragOffset = 0;
+            inhaltAnzeige.Controls.Clear();
             beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, true, beitragOffset));
             if (beitraege == null)
             {
                 return;
             }
-            beitragOffset += beitraege.Count;
-            this.inhaltAnzeige.Controls.Clear();
-            //beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
             
-            for(int i = 0; i < beitraege.Count; i++) 
+            //beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
+            List<Control> controls = this.Controls.Find("Inhalte", true).ToList();
+            foreach (Control c in controls)
             {
-                Inhalte inhalt = new Inhalte(beitraege[i]);
-                inhaltAnzeige.Controls.Add(inhalt);
+                Inhalte i = c as Inhalte;
+                i.Beitrag.SetKommentare(i.ladekomm());
+                i.Autor = i.GetUserData();
+                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
             }
+            beitragOffset += beitraege.Count;
+            loadMoreBtn.Tag = "beliebt";
+            inhaltAnzeige.Controls.Add(loadMoreBtn);
         }
 
-        private void buttonNurAbos_Click(object sender, EventArgs e) 
+        private async void buttonNurAbos_Click(object sender, EventArgs e) 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = client.beitraegeAnfragen(true, false, false, beitragOffset);
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(true, false, false, beitragOffset));
             if (beitraege == null)
             {
                 return;
             }
-            foreach (Beitrag beitraege in beitraege)
+            List<Control> controls = this.Controls.Find("Inhalte", true).ToList();
+            foreach (Control c in controls)
             {
-                Inhalte inhalt = new Inhalte(beitraege);
-
-
-                inhaltAnzeige.Controls.Add(inhalt);
+                Inhalte i = c as Inhalte;
+                i.Beitrag.SetKommentare(i.ladekomm());
+                i.Autor = i.GetUserData();
+                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
             }
             beitragOffset = beitraege.Count;
             loadMoreBtn.Tag = "abos";
@@ -529,14 +553,17 @@ namespace ClientSocialMedia
             {
                 return;
             }
-            foreach (Beitrag beitraege in beitraege)
+            List<Control> controls = this.Controls.Find("Inhalte", true).ToList();
+            foreach (Control c in controls)
             {
-                Inhalte inhalt = new Inhalte(beitraege);
-
-
-                inhaltAnzeige.Controls.Add(inhalt);
+                Inhalte i = c as Inhalte;
+                i.Beitrag.SetKommentare(i.ladekomm());
+                i.Autor = i.GetUserData();
+                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
             }
-            beitragOffset += beitraege.Count;
+            beitragOffset = beitraege.Count;
+            loadMoreBtn.Tag = "empfehlung";
+            inhaltAnzeige.Controls.Add(loadMoreBtn);
         }
         private void Suche_Click(object sender, EventArgs e)
         {

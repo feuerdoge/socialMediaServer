@@ -436,11 +436,14 @@ namespace socialMediaServer
                             client.Write(msg + "\n");
                             break;
                         case "empfehlung":
+                            offset = 0;
+                            if (parameter[1] != null)
+                                offset = Convert.ToInt32(parameter[1]);
                             List<Beitrag> beitreageLiked = spf.HoleLikedBeitraege(this.nutzer);
 
                             string[] beliebt = TagRankingErmittlen(beitreageLiked);
 
-                            List<Beitrag> relevanteBeitraege = spf.HoleRelevanteBeitraege(beliebt);
+                            List<Beitrag> relevanteBeitraege = spf.HoleRelevanteBeitraege(beliebt, offset);
 
                             GewichtungZuweisen(relevanteBeitraege, beliebt, spf.ErmittleAbonnierteNutzer(this.nutzer));
 
