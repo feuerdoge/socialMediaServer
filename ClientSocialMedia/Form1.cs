@@ -244,7 +244,7 @@ namespace ClientSocialMedia
                 Inhalte i = c as Inhalte;
                 i.Beitrag.SetKommentare(i.ladekomm());
                 i.Autor = i.GetUserData();
-                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
+                i.setDaten(i.pictures);
             }
             beitragOffset = beitraege.Count;
             loadMoreBtn.Tag = "neue";
@@ -262,7 +262,7 @@ namespace ClientSocialMedia
             {
                 Inhalte inhalt = new Inhalte(b);
                 beitraege.Add(b);
-                inhalt.setDaten(b.Titel, inhalt.pictures, inhalt.tagBeitrag);
+                inhalt.setDaten(inhalt.pictures);
                 inhaltAnzeige.Controls.Add(inhalt);
             }
         }
@@ -285,7 +285,7 @@ namespace ClientSocialMedia
                 Inhalte inhalt = controls[i] as Inhalte;
                 inhalt.Beitrag.SetKommentare(inhalt.ladekomm());
                 inhalt.Autor = inhalt.GetUserData();
-                inhalt.setDaten(inhalt.titel, inhalt.pictures, inhalt.tagBeitrag);
+                inhalt.setDaten(inhalt.pictures);
             }
             inhaltAnzeige.Controls.Remove(loadMoreBtn);
             inhaltAnzeige.Controls.Add(loadMoreBtn);
@@ -516,7 +516,7 @@ namespace ClientSocialMedia
                 Inhalte i = c as Inhalte;
                 i.Beitrag.SetKommentare(i.ladekomm());
                 i.Autor = i.GetUserData();
-                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
+                i.setDaten(i.pictures);
             }
             beitragOffset += beitraege.Count;
             loadMoreBtn.Tag = "beliebt";
@@ -537,7 +537,7 @@ namespace ClientSocialMedia
                 Inhalte i = c as Inhalte;
                 i.Beitrag.SetKommentare(i.ladekomm());
                 i.Autor = i.GetUserData();
-                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
+                i.setDaten(i.pictures);
             }
             beitragOffset = beitraege.Count;
             loadMoreBtn.Tag = "abos";
@@ -559,7 +559,7 @@ namespace ClientSocialMedia
                 Inhalte i = c as Inhalte;
                 i.Beitrag.SetKommentare(i.ladekomm());
                 i.Autor = i.GetUserData();
-                i.setDaten(i.titel, i.pictures, i.tagBeitrag);
+                i.setDaten(i.pictures);
             }
             beitragOffset = beitraege.Count;
             loadMoreBtn.Tag = "empfehlung";
