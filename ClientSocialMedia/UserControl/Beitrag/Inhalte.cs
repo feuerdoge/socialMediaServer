@@ -21,8 +21,8 @@ namespace ClientSocialMedia
         private int scrollIndex = 0;
         private int beitragId;
         private Beitrag beitrag;
-        public Beitrag Beitrag { get => beitrag; }
-        private Nutzer Autor;
+        public Beitrag Beitrag { get => beitrag; set => beitrag = value; }
+        public Nutzer Autor { get; set; }
         Kommentaruebersicht ku;
         //public Inhalte(List<string> pictures, string titel, int beitragId)
         //{
@@ -42,18 +42,19 @@ namespace ClientSocialMedia
             this.titel = beitrag.Titel;
             this.beitragId = beitrag.Id;
             this.tagBeitrag = beitrag.Tag;
-            this.beitrag.SetKommentare(ladekomm());
+            //this.beitrag.SetKommentare(ladekomm());
             ku = new Kommentaruebersicht(this.beitrag, this);
             this.Controls.Add(ku);
             ku.Visible = false;
-            this.Autor = GetUserData();
-            ladeVorschau();
+            //Autor = beitrag.Autor;
+            if (Autor == null)
+                Autor = new Nutzer("Nutzername", "", "", beitrag.Autor.BenutzerId);
             foreach (Bild b in beitrag.Bilder)
             {
 
                 this.pictures.Add(b.bilddata);
             }
-            setDaten(titel, pictures, tagBeitrag);
+            //setDaten(titel, pictures, tagBeitrag);
         }
 
         public void setDaten(string titel, List<string> bilder, string tag) 
@@ -73,16 +74,19 @@ namespace ClientSocialMedia
             {
                 next.Visible = false;
             }
-            byte[] imageBytes = Convert.FromBase64String(Autor.ProfilBild);
-
-            using (MemoryStream ms = new MemoryStream(imageBytes))
+            if (Autor.ProfilBild != null)
             {
-                Image img = Image.FromStream(ms);
-                profilePicPb.Image = img;
+                byte[] imageBytes = Convert.FromBase64String(Autor.ProfilBild);
+
+                using (MemoryStream ms = new MemoryStream(imageBytes))
+                {
+                    Image img = Image.FromStream(ms);
+                    profilePicPb.Image = img;
+                }
             }
         }
 
-        private Nutzer GetUserData()
+        public Nutzer GetUserData()
         {
             return Form1.client.LadeNutzer(beitrag.Autor.BenutzerId);
             

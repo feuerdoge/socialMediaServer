@@ -23,10 +23,11 @@ namespace ClientSocialMedia
     {
         public SocketAbi.Socket clientSocket;
         private string benutzername;
+        public Action<Beitrag> OnBeitragErhalten;
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
-            this.clientSocket = new SocketAbi.Socket("10.1.144.72", 5555);
+            this.clientSocket = new SocketAbi.Socket("127.0.0.1", 5555);
             Verbinden();
         }
 
@@ -100,7 +101,7 @@ namespace ClientSocialMedia
             
             clientSocket.Write("beitrag;" + eingabe + ";" + ConvertMessage(tag) + '\n');
             if (clientSocket.ReadLine().Split(';')[0] == "-")
-                MessageBox.Show("Zu viele Bilder, maximal 7!");
+                MessageBox.Show("Zu viele Bilder, maximal 10!");
         }
 
         public List<Image> HoleOriginalBilder(int beitragId)
@@ -271,6 +272,7 @@ namespace ClientSocialMedia
                 {
                     b.ErstelleText(text);
                 }
+                OnBeitragErhalten?.Invoke(b);
                 beitraege.Add(b);
             }
             return beitraege;
