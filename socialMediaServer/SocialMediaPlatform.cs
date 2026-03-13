@@ -256,7 +256,7 @@ namespace socialMediaServer
                 FROM beitrag b
                 JOIN nutzer u ON b.autor = u.nutzerId
                 LEFT JOIN likes l ON b.beitragid = l.beitragId
-                WHERE b.beitragid = (SELECT li.beitragId FROM likes li WHERE li.nutzerId = @nutz)
+                WHERE l.nutzerId = @nutz
                 GROUP BY b.beitragid
                 ORDER BY b.erstelltAm DESC", conn);
                 likedBeitraege.Parameters.AddWithValue("@nutz", n.BenutzerId);

@@ -69,11 +69,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControl\Beitrag\ImageViewerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControl\Beitrag\ImageViewerControl.Designer.cs">
       <DependentUpon>ImageViewerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\Beitrag\Inhalte.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\Beitrag\Inhalte.Designer.cs">
+      <DependentUpon>Inhalte.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControl\Chat\ChatControl.cs">
       <SubType>UserControl</SubType>
@@ -93,18 +108,11 @@
     <Compile Include="UserControl\Chat\ChatOverviewControl.Designer.cs">
       <DependentUpon>ChatOverviewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Client.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControl\Beitrag\Inhalte.cs">
+    <Compile Include="UserControl\Chat\MessageControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControl\Beitrag\Inhalte.Designer.cs">
-      <DependentUpon>Inhalte.cs</DependentUpon>
+    <Compile Include="UserControl\Chat\MessageControl.Designer.cs">
+      <DependentUpon>MessageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControl\Kommentar\KommentarControl.cs">
       <SubType>UserControl</SubType>
@@ -118,31 +126,17 @@
     <Compile Include="UserControl\Kommentar\Kommentaruebersicht.Designer.cs">
       <DependentUpon>Kommentaruebersicht.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControl\Chat\MessageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControl\Chat\MessageControl.Designer.cs">
-      <DependentUpon>MessageControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControl\ProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControl\ProfileControl.Designer.cs">
       <DependentUpon>ProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControl\Suchen\SearchControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControl\Suchen\SearchControl.Designer.cs">
       <DependentUpon>SearchControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControl\UserOverviewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControl\UserOverviewControl.Designer.cs">
-      <DependentUpon>UserOverviewControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControl\Suchen\UserSearchResultControl.cs">
       <SubType>UserControl</SubType>
@@ -150,35 +144,14 @@
     <Compile Include="UserControl\Suchen\UserSearchResultControl.Designer.cs">
       <DependentUpon>UserSearchResultControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UserControl\Beitrag\ImageViewerControl.resx">
-      <DependentUpon>ImageViewerControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\Chat\ChatControl.resx">
-      <DependentUpon>ChatControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\Chat\ChatItemControl.resx">
-      <DependentUpon>ChatItemControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\Chat\ChatOverviewControl.resx">
-      <DependentUpon>ChatOverviewControl.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="UserControl\UserOverviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\UserOverviewControl.Designer.cs">
+      <DependentUpon>UserOverviewControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\Beitrag\Inhalte.resx">
-      <DependentUpon>Inhalte.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\Kommentar\KommentarControl.resx">
-      <DependentUpon>KommentarControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\Kommentar\Kommentaruebersicht.resx">
-      <DependentUpon>Kommentaruebersicht.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\Chat\MessageControl.resx">
-      <DependentUpon>MessageControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\ProfileControl.resx">
-      <DependentUpon>ProfileControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -190,14 +163,41 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UserControl\Beitrag\ImageViewerControl.resx">
+      <DependentUpon>ImageViewerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\Beitrag\Inhalte.resx">
+      <DependentUpon>Inhalte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\Chat\ChatControl.resx">
+      <DependentUpon>ChatControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\Chat\ChatItemControl.resx">
+      <DependentUpon>ChatItemControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\Chat\ChatOverviewControl.resx">
+      <DependentUpon>ChatOverviewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\Chat\MessageControl.resx">
+      <DependentUpon>MessageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\Kommentar\KommentarControl.resx">
+      <DependentUpon>KommentarControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\Kommentar\Kommentaruebersicht.resx">
+      <DependentUpon>Kommentaruebersicht.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\ProfileControl.resx">
+      <DependentUpon>ProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControl\Suchen\SearchControl.resx">
       <DependentUpon>SearchControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\UserOverviewControl.resx">
-      <DependentUpon>UserOverviewControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserControl\Suchen\UserSearchResultControl.resx">
       <DependentUpon>UserSearchResultControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\UserOverviewControl.resx">
+      <DependentUpon>UserOverviewControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -227,6 +227,5 @@
   <ItemGroup>
     <None Include="Resources\profile.jpg" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

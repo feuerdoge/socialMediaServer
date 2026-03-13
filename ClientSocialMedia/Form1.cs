@@ -368,7 +368,7 @@ namespace ClientSocialMedia
             beitragsErstellungsPanel.Controls.Add(this.tagPick);
             beitragsErstellungsPanel.Controls.Add(this.tagLabel);
             beitragsErstellungsPanel.Visible = true;
-            tagPick.Controls.Clear();
+            tagPick.Items.Clear();
             tagPick.Visible = true;
             tagPick.Items.AddRange(new string[] {
                 "Tiere",
@@ -516,10 +516,10 @@ namespace ClientSocialMedia
             inhaltAnzeige.Controls.Add(loadMoreBtn);
         }
         
-        private void empfehlungen_Click(object sender, EventArgs e) 
+        private async void empfehlungen_Click(object sender, EventArgs e) 
         {
             inhaltAnzeige.Controls.Clear();
-            beitraege = client.beitraegeAnfragen(false, true);
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, true));
             if (beitraege == null)
             {
                 return;

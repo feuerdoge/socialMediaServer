@@ -240,6 +240,7 @@ namespace socialMediaServer
                         case "ladeKommentare":
                             beitragId = Convert.ToInt32(parameter[1]);
                             List<Kommentar> kommentare = spf.LadeKommentare(beitragId);
+                            msg = "";
                             msg = $"kommentare;{kommentare.Count}";
                             foreach (Kommentar k in kommentare)
                             {
@@ -434,32 +435,26 @@ namespace socialMediaServer
 
                             List<Beitrag> beitraegeSortiertNachGewichtung = sortiereBeitraegeNachGewichtung(relevanteBeitraege, 0, relevanteBeitraege.Count - 1);
 
+                            // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
+                            msg = "";
                             foreach (Beitrag b in beitraegeSortiertNachGewichtung)
                             {
                                 foreach (Bild bild in spf.HoleBilder(b.Id))
                                 {
                                     b.Hinzufuegen(bild);
                                 }
-                            }
-                            // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
-                            msg = "";
-                            if (beitraegeSortiertNachGewichtung.Count == 0)
-                            {
-                                msg = $"empfehlungen?{beitraegeSortiertNachGewichtung.Count}?";
-                            }
-                            foreach (Beitrag b in beitraegeSortiertNachGewichtung)
-                            {
-                                List<string> bilderStringList = new List<string>();
+                                List<string> bilderStrings = new List<string>();
                                 foreach (Bild img in b.Bilder)
                                 {
-                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", img.Dateiname)));
-                                    bilderStringList.Add($"{img.Dateiname}:{s}");
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview", img.Dateiname)));
+
+                                    bilderStrings.Add($"{img.Dateiname}:{s}");
                                 }
-                                string bilderString = string.Join(",", bilderStringList);
-                                msg += $"empfehlungen?{beitraegeSortiertNachGewichtung.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
-                                msg += ";";
+                                string pictues = string.Join(",", bilderStrings);
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+                                client.Write(msg);
                             }
-                            client.Write(msg + "\n");
+                            client.Write("+;fetig\n");
                             break;
                     }
                 }
