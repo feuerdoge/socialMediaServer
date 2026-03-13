@@ -26,7 +26,7 @@ namespace ClientSocialMedia
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
-            this.clientSocket = new SocketAbi.Socket("localhost", 5555);
+            this.clientSocket = new SocketAbi.Socket("10.1.144.72", 5555);
             Verbinden();
         }
 
@@ -163,10 +163,11 @@ namespace ClientSocialMedia
             clientSocket.Write(msg);
             string data = clientSocket.ReadLine();
             string[] parts = data.Split(';');
-            if (parts[0] != "kommentare")
-                return null;
-            int anzahl = Convert.ToInt32(parts[1]);
             List<Kommentar> comments = new List<Kommentar>();
+            if (parts[0] != "kommentare")
+                return comments;
+            int anzahl = Convert.ToInt32(parts[1]);
+            
             
             for (int i = 0; i < anzahl; i++)
             {

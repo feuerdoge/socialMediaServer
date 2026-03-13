@@ -34,7 +34,7 @@ namespace socialMediaServer
             {
                 while (true)
                 {
-                    
+
                     string befehl = client.ReadLine();
 
                     string[] parameter = befehl.Split(';');
@@ -102,7 +102,7 @@ namespace socialMediaServer
                                 img = SocialMediaPlatform.ResizeImage(img);
 
                                 string uniqueName = Guid.NewGuid().ToString() + Path.GetExtension(dateiname);
-                                string pfad = Path.Combine(imgOrdner, "original",uniqueName);
+                                string pfad = Path.Combine(imgOrdner, "original", uniqueName);
                                 string pfad2 = Path.Combine(imgOrdner, "preview", uniqueName);
 
                                 File.WriteAllBytes(pfad, bytes);
@@ -255,7 +255,7 @@ namespace socialMediaServer
                                     byte[] picture = File.ReadAllBytes(Path.Combine(imgOrdner, "profile", "profile.jpg"));
                                     pictureString = Convert.ToBase64String(picture);
                                 }
-                                    msg += $";{k.Id}|{ConvertMessage(k.Nachricht)}|{k.AutorId}|{k.Timestamp}|{ConvertMessage(k.autor)}|{pictureString}|";
+                                msg += $";{k.Id}|{ConvertMessage(k.Nachricht)}|{k.AutorId}|{k.Timestamp}|{ConvertMessage(k.autor)}|{pictureString}|";
                                 if (k.OberKommentarId != null)
                                     msg += k.OberKommentarId;
                                 else
@@ -309,8 +309,8 @@ namespace socialMediaServer
                                 File.WriteAllBytes(Path.Combine(imgOrdner, "profile", fileName), pictureBytes);
                                 this.nutzer.ProfilBild = fileName;
                             }
-                            else 
-                            spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
+                            else
+                                spf.AktualisiereProfil(this.nutzer.BenutzerId, name, email);
                             this.nutzer.Email = email;
                             this.nutzer.BenutzerName = name;
                             client.Write("+;Profil aktualisiert\n");
@@ -457,23 +457,19 @@ namespace socialMediaServer
                             client.Write("+;fetig\n");
                             break;
                         case "beliebteste":
+                            msg = "";
                             offset = 0;
+                            if (parameter[1] != null)
+                                offset = Convert.ToInt32(parameter[1]);
                             List<Beitrag> beitreageBeliebt = spf.HoleBeliebtesteBeitraege(offset);
+
+                            // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
                             foreach (Beitrag b in beitreageBeliebt)
                             {
                                 foreach (Bild bild in spf.HoleBilder(b.Id))
                                 {
                                     b.Hinzufuegen(bild);
                                 }
-                            }
-                            // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
-                            msg = "";
-                            if (beitreageBeliebt.Count == 0)
-                            {
-                                msg = $"beliebteste?{beitreageBeliebt.Count}?";
-                            }
-                            foreach (Beitrag b in beitreageBeliebt)
-                            {
                                 List<string> bilderStringList = new List<string>();
                                 foreach (Bild img in b.Bilder)
                                 {
@@ -481,12 +477,12 @@ namespace socialMediaServer
                                     bilderStringList.Add($"{img.Dateiname}:{s}");
                                 }
                                 string bilderString = string.Join(",", bilderStringList);
-                                msg += $"beliebteste?{beitreageBeliebt.Count}?{b.Id}|{ConvertMessage(b.Titel)}|{b.Text}|{b.Autor.BenutzerId}|{b.gebeAnzahlLikes()}|{b.Geposted}|{bilderString}|{b.Tag}";
-                                msg += ";";
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{bilderString};{b.Tag}\n";
+                                client.Write(msg);
                             }
-                            client.Write(msg + "\n");
+                            client.Write("+;fertig\n");
                             break;
-                    }
+                    } 
                 }
             }
             catch (Exception e)

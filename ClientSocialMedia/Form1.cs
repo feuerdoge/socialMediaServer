@@ -479,9 +479,10 @@ namespace ClientSocialMedia
             profilePic.Size = new Size(50, 50);
         }
 
-        private void buttonBeliebt_Click(object sender, EventArgs e) 
+        private async void buttonBeliebt_Click(object sender, EventArgs e) 
         {
-            beitraege = client.beitraegeAnfragen(false, false, true, beitragOffset);
+            beitragOffset = 0;
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, true, beitragOffset));
             if (beitraege == null)
             {
                 return;
@@ -490,7 +491,7 @@ namespace ClientSocialMedia
             this.inhaltAnzeige.Controls.Clear();
             //beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
             
-            for(int i = beitraege.Count - 1; i > -1; i--) 
+            for(int i = 0; i < beitraege.Count; i++) 
             {
                 Inhalte inhalt = new Inhalte(beitraege[i]);
                 inhaltAnzeige.Controls.Add(inhalt);
@@ -520,6 +521,7 @@ namespace ClientSocialMedia
         private async void empfehlungen_Click(object sender, EventArgs e) 
         {
             inhaltAnzeige.Controls.Clear();
+            beitragOffset = 0;
             beitraege = await Task.Run(() => client.beitraegeAnfragen(false, true, false, beitragOffset));
             if (beitraege == null)
             {
