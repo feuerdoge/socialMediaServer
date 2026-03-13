@@ -345,7 +345,7 @@ namespace socialMediaServer
             string autorName = reader.GetString("benutzerName");
 
             Nutzer autor = new Nutzer(autorName, "", "", autorId);
-            Beitrag b = new Beitrag(autor, titel, new List<Bild>(), tag);
+            Beitrag b = new Beitrag(autor, titel, new List<Bild>(), tag, text);
             b.Id = beitragId;
             b.setGeposted(erstelltAm);
             b.setAnzahlLikes(reader.GetInt32("likes"));

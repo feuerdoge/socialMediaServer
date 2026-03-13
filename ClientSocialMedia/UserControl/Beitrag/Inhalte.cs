@@ -23,6 +23,7 @@ namespace ClientSocialMedia
         private Beitrag beitrag;
         public Beitrag Beitrag { get => beitrag; }
         private Nutzer Autor;
+        private string text;
         Kommentaruebersicht ku;
         //public Inhalte(List<string> pictures, string titel, int beitragId)
         //{
@@ -43,6 +44,7 @@ namespace ClientSocialMedia
             this.beitragId = beitrag.Id;
             this.tagBeitrag = beitrag.Tag;
             this.beitrag.SetKommentare(ladekomm());
+            this.text = beitrag.Text.text;
             ku = new Kommentaruebersicht(this.beitrag, this);
             this.Controls.Add(ku);
             ku.Visible = false;
@@ -53,13 +55,14 @@ namespace ClientSocialMedia
 
                 this.pictures.Add(b.bilddata);
             }
-            setDaten(titel, pictures, tagBeitrag);
+            setDaten(pictures);
         }
 
-        public void setDaten(string titel, List<string> bilder, string tag) 
+        public void setDaten(List<string> bilder) 
         {
-            this.beitragTitel.Text = titel;
-            this.tag.Text = tag;
+            this.beitragTitel.Text = this.titel;
+            this.tag.Text = this.tagBeitrag;
+            this.beitragText.Text = this.text;
             this.beitragTitel.Left = (this.Width - beitragTitel.Width) / 2;
             likesLb.Text = $"Anzahl Likes: {this.beitrag.gebeAnzahlLikes()}";
             nutzerNameLb.Text = Autor.BenutzerName;
