@@ -196,17 +196,8 @@ namespace ClientSocialMedia
         }
         public List<Beitrag> beitraegeAnfragen(bool nurAbos, bool empfehlungen, bool beliebteste, int offset = 0)
         {
-            if (!nurAbos) 
-            {
-                clientSocket.Write($"neueBeitraege;{offset}\n");
-                
-                //str = clientSocket.ReadLine();
-                //if (str == "neueBeitaege?0?")
-                //{
-                //    return null;
-                //}
-            }
-            else 
+
+            if (nurAbos)
             {
                 clientSocket.Write($"nurAbos;{offset}\n");
 
@@ -216,7 +207,7 @@ namespace ClientSocialMedia
                 //    return null;
                 //}
             }
-            if(empfehlungen) 
+            else if(empfehlungen) 
             {
                 clientSocket.Write($"empfehlung;{offset}\n");
 
@@ -226,13 +217,22 @@ namespace ClientSocialMedia
                 //    return null;
                 //}
             }
-            if(beliebteste) 
+            else if(beliebteste) 
             {
                 clientSocket.Write($"beliebteste;{offset}\n");
             }
             // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
             //msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
+            else
+            {
+                clientSocket.Write($"neueBeitraege;{offset}\n");
 
+                //str = clientSocket.ReadLine();
+                //if (str == "neueBeitaege?0?")
+                //{
+                //    return null;
+                //}
+            }
             List<Beitrag> beitraege = new List<Beitrag>();
 
             while (true)
