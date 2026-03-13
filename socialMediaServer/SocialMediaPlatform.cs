@@ -11,6 +11,7 @@ using MySql.Data;
 using MySql.Data.MySqlClient;
 using Mysqlx;
 using System.Drawing;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 namespace socialMediaServer
 {
     public class SocialMediaPlatform
@@ -243,6 +244,33 @@ namespace socialMediaServer
                 conn.Close();
                 return beitraege;
             }
+        }
+
+        public List<Beitrag> HoleBeliebtesteBeitraege(int offset) 
+        {
+            List<Beitrag> beitraege = new List<Beitrag>();
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand likedBeitraege = new MySqlCommand(@"
+                        SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, u.benutzerName, COUNT(l.beitragId) AS likes, b.tag
+                        FROM beitrag b
+                        JOIN nutzer u ON b.autor = u.nutzerId
+                        LEFT JOIN likes l ON b.beitragid = l.beitragId
+                        GROUP BY b.beitragid
+                        ORDER BY likes DESC
+                        LIMIT 10 OFFSET @offset", conn);
+                likedBeitraege.Parameters.AddWithValue("@offset", offset);
+                using (MySqlDataReader reader = likedBeitraege.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        beitraege.Add(LeseBeitrag(reader));
+                    }
+                    reader.Close();
+                }
+            }
+            return beitraege;
         }
 
         public List<Beitrag> HoleLikedBeitraege(Nutzer n)
