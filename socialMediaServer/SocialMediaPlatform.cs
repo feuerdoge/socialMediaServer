@@ -145,20 +145,27 @@ namespace socialMediaServer
                 {
                     conn.Open();
                     MySqlCommand passwortWechseln = new MySqlCommand(@"
-                    UPDATE nutzer n 
-                    SET n.passwort = @pass
-                    WHERE n.email = @email", conn);
+                    UPDATE nutzer 
+                    SET passwort = @pass
+                    WHERE email = @email", conn);
                     passwortWechseln.Parameters.AddWithValue("@pass", hashedPass);
                     passwortWechseln.Parameters.AddWithValue("@email", email);
-
-                    conn.Close();
-                    return true;
+                    int erfolg = passwortWechseln.ExecuteNonQuery();
+                    if(erfolg == 0) 
+                    {
+                        conn.Close();
+                        return false;
+                    }
+                    else 
+                    {
+                        conn.Close();
+                        return true;
+                    }
                 }
-                catch (Exception ex) 
+                catch (Exception e) 
                 {
                     return false;
                 }
-                
             }
         }
 

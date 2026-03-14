@@ -415,7 +415,7 @@ namespace ClientSocialMedia
 
         public string PasswortVergessenAktualisierung(string email) 
         {
-            string msg = $"newPassword;{ConvertMessage(email)}";
+            string msg = $"newPasswort;{ConvertMessage(email)}\n";
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
         }

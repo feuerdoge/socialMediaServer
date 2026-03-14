@@ -361,6 +361,7 @@ namespace ClientSocialMedia
             string antwort = client.PasswortVergessenAktualisierung(email.Text);
             MessageBox.Show(antwort);
             this.panel.Controls.Clear();
+            this.Controls.Remove(panel);
             ErstellePanel();
         }
         private void registrieren_Click(object sender, EventArgs e) 

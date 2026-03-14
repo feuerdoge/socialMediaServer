@@ -507,18 +507,18 @@ namespace socialMediaServer
                             }
                             client.Write("+;fertig\n");
                             break;
-                        case "newPassword":
+                        case "newPasswort":
                             msg = "";
                             string emailNutzer = GetMessage(parameter[1]);
-                            string passwortNeu = spf.GenerierePasswort().ToString();
+                            string passwortNeu = new string(spf.GenerierePasswort());
                             bool ok = spf.passwortWechseln(passwortNeu, emailNutzer);
                             if(ok) 
                             {
-                                msg = "Neues Passwort, bitte nach Anmeldung wieder wechseln!: " + passwortNeu;
+                                msg = "Neues Passwort, bitte nach Anmeldung wieder wechseln!: " + passwortNeu+"\n";
                             }
                             else 
                             {
-                                msg = "Email nicht gefunden!";
+                                msg = "Email nicht gefunden!" + "\n";
                             }
                             client.Write(msg);
                             break;
