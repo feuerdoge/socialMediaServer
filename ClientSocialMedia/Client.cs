@@ -27,7 +27,7 @@ namespace ClientSocialMedia
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
-            this.clientSocket = new SocketAbi.Socket("10.1.144.72", 5555);
+            this.clientSocket = new SocketAbi.Socket("127.0.0.1", 5555);
             Verbinden();
         }
 
@@ -415,7 +415,7 @@ namespace ClientSocialMedia
 
         public string PasswortVergessenAktualisierung(string email) 
         {
-            string msg = $"newPasswort;{ConvertMessage(email)}";
+            string msg = $"newPassword;{ConvertMessage(email)}";
             clientSocket.Write(msg);
             return clientSocket.ReadLine();
         }

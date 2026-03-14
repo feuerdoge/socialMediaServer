@@ -352,13 +352,16 @@ namespace ClientSocialMedia
         private void passVergessen_Click(object sender, EventArgs e) 
         {
             this.panel.Controls.Clear();
-            email.Visible = true;
             this.panel.Controls.Add(this.email);
+            email.Visible = true;
             this.panel.Controls.Add(generierePasswort);
         }
         private void generierePasswort_Click(object sender, EventArgs e) 
         {
-            
+            string antwort = client.PasswortVergessenAktualisierung(email.Text);
+            MessageBox.Show(antwort);
+            this.panel.Controls.Clear();
+            ErstellePanel();
         }
         private void registrieren_Click(object sender, EventArgs e) 
         {
