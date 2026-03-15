@@ -64,7 +64,6 @@ namespace ClientSocialMedia
         public void registrieren(string benutzername, string passwort, string email) 
         {
             string eingabe = $"{ConvertMessage(benutzername)};{ConvertMessage(passwort)};{ConvertMessage(email)}";
-            clientSocket.Write("registrieren;"+eingabe+'\n');
             if (!Write("registrieren;" + eingabe + '\n'))
                 return;
 
@@ -114,7 +113,6 @@ namespace ClientSocialMedia
                 eingabe += bild;
             } 
             
-            clientSocket.Write("beitrag;" + eingabe + ";" + ConvertMessage(tag) + ";" + ConvertMessage(text) + '\n');
             if (!Write("beitrag;" + eingabe + ";" + ConvertMessage(tag) + ";" + ConvertMessage(text) + '\n'))
                 return;
             string reply = ReadLine();
@@ -456,7 +454,6 @@ namespace ClientSocialMedia
 
         public List<Nutzer> SucheNutzer(string name)
         {
-            clientSocket.Write($"sucheNutzer;{ConvertMessage(name)}\n");
             if (!Write($"sucheNutzer;{ConvertMessage(name)}\n"))
                 return null;
             string reply = ReadLine();
@@ -518,7 +515,6 @@ namespace ClientSocialMedia
         }
         public byte[] LadeProfilePicture()
         {
-            clientSocket.Write("loadProfile\n");
             if (!Write("loadProfile\n"))
                 return null;
             string msg = ReadLine();
@@ -574,7 +570,6 @@ namespace ClientSocialMedia
 
         public List<Chat> LadeChats()
         {
-            clientSocket.Write("chatListe\n");
             if (!Write("chatListe\n"))
                 return null;
             string reply = ReadLine();
@@ -608,16 +603,15 @@ namespace ClientSocialMedia
             string msg = $"nachrichtSenden;{chat};{ConvertMessage(text)}\n";
             if (!Write(msg))
                 return null;
-            string reply = clientSocket.ReadLine();
+            string reply = ReadLine();
             return reply;
         }
 
         public List<Nachricht> LadeNachrichten(int chat)
         {
-            clientSocket.Write($"loadNachrichten;{chat}\n");
             if (!Write($"loadNachrichten;{chat}\n"))
                 return null;
-            string reply = clientSocket.ReadLine();
+            string reply = ReadLine();
             if (reply == null ) 
                 return null;
             string[] parts = reply.Split(';');

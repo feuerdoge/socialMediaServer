@@ -45,8 +45,7 @@ namespace ClientSocialMedia
                 return;
             }
             MessageBox.Show("Verbindung zum Server verloren");
-            Abmelden();
-            verbindenBtn.Visible = true;
+            this.Close();
         }
         public void UpdateProfilePicture()
         {
