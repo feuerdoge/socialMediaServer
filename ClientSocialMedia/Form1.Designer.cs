@@ -32,11 +32,12 @@
             this.momentaneAnsicht = new System.Windows.Forms.Panel();
             this.inhaltAnzeige = new System.Windows.Forms.FlowLayoutPanel();
             this.beitragsErstellungsPanel = new System.Windows.Forms.Panel();
+            this.verfassungLabel = new System.Windows.Forms.Label();
+            this.textVerfassung = new System.Windows.Forms.TextBox();
             this.tagLabel = new System.Windows.Forms.Label();
             this.tagPick = new System.Windows.Forms.ComboBox();
             this.profilePic = new System.Windows.Forms.PictureBox();
-            this.textVerfassung = new System.Windows.Forms.TextBox();
-            this.verfassungLabel = new System.Windows.Forms.Label();
+            this.verbindenBtn = new System.Windows.Forms.Button();
             this.beitragsErstellungsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.profilePic)).BeginInit();
             this.SuspendLayout();
@@ -81,6 +82,24 @@
             this.beitragsErstellungsPanel.TabIndex = 0;
             this.beitragsErstellungsPanel.Visible = false;
             // 
+            // verfassungLabel
+            // 
+            this.verfassungLabel.AutoSize = true;
+            this.verfassungLabel.Location = new System.Drawing.Point(176, 251);
+            this.verfassungLabel.Name = "verfassungLabel";
+            this.verfassungLabel.Size = new System.Drawing.Size(78, 13);
+            this.verfassungLabel.TabIndex = 3;
+            this.verfassungLabel.Text = "Text Verfassen";
+            // 
+            // textVerfassung
+            // 
+            this.textVerfassung.Location = new System.Drawing.Point(3, 267);
+            this.textVerfassung.Multiline = true;
+            this.textVerfassung.Name = "textVerfassung";
+            this.textVerfassung.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textVerfassung.Size = new System.Drawing.Size(419, 88);
+            this.textVerfassung.TabIndex = 2;
+            // 
             // tagLabel
             // 
             this.tagLabel.AutoSize = true;
@@ -114,23 +133,17 @@
             this.profilePic.MouseLeave += new System.EventHandler(this.profilePic_MouseLeave);
             this.profilePic.MouseHover += new System.EventHandler(this.profilePic_MouseHover);
             // 
-            // textVerfassung
+            // verbindenBtn
             // 
-            this.textVerfassung.Location = new System.Drawing.Point(3, 267);
-            this.textVerfassung.Multiline = true;
-            this.textVerfassung.Name = "textVerfassung";
-            this.textVerfassung.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textVerfassung.Size = new System.Drawing.Size(419, 88);
-            this.textVerfassung.TabIndex = 2;
-            // 
-            // verfassungLabel
-            // 
-            this.verfassungLabel.AutoSize = true;
-            this.verfassungLabel.Location = new System.Drawing.Point(176, 251);
-            this.verfassungLabel.Name = "verfassungLabel";
-            this.verfassungLabel.Size = new System.Drawing.Size(78, 13);
-            this.verfassungLabel.TabIndex = 3;
-            this.verfassungLabel.Text = "Text Verfassen";
+            this.verbindenBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.verbindenBtn.Location = new System.Drawing.Point(741, 72);
+            this.verbindenBtn.Name = "verbindenBtn";
+            this.verbindenBtn.Size = new System.Drawing.Size(33, 23);
+            this.verbindenBtn.TabIndex = 4;
+            this.verbindenBtn.Text = "⟳";
+            this.verbindenBtn.UseVisualStyleBackColor = true;
+            this.verbindenBtn.Visible = false;
+            this.verbindenBtn.Click += new System.EventHandler(this.verbindenBtn_Click);
             // 
             // Form1
             // 
@@ -138,6 +151,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 451);
+            this.Controls.Add(this.verbindenBtn);
             this.Controls.Add(this.beitragsErstellungsPanel);
             this.Controls.Add(this.inhaltAnzeige);
             this.Controls.Add(this.momentaneAnsicht);
@@ -165,6 +179,7 @@
         private System.Windows.Forms.Label tagLabel;
         private System.Windows.Forms.Label verfassungLabel;
         private System.Windows.Forms.TextBox textVerfassung;
+        private System.Windows.Forms.Button verbindenBtn;
     }
 }
 

@@ -33,9 +33,21 @@ namespace ClientSocialMedia
         {
             InitializeComponent();
             Form1.client.OnBeitragErhalten += BeitragErhalten;
+            Form1.client.OnConnectionLost += ConnectionLost;
             ErstellePanel();
         }
 
+        private void ConnectionLost()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(ConnectionLost));
+                return;
+            }
+            MessageBox.Show("Verbindung zum Server verloren");
+            Abmelden();
+            verbindenBtn.Visible = true;
+        }
         public void UpdateProfilePicture()
         {
             byte[] profileBytes = client.LadeProfilePicture();
@@ -592,6 +604,19 @@ namespace ClientSocialMedia
         private void Form1_Resize(object sender, EventArgs e)
         {
 
+        }
+
+        private void verbindenBtn_Click(object sender, EventArgs e)
+        {
+            if (Form1.client.Verbinden())
+            {
+                MessageBox.Show("Verbindung zum Server aufgebaut");
+                verbindenBtn.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("Verbindung zum Server fehlgeschlagen");
+            }
         }
     }
 }

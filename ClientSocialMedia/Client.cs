@@ -13,6 +13,7 @@ using System.Net.Configuration;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
@@ -24,37 +25,51 @@ namespace ClientSocialMedia
         public SocketAbi.Socket clientSocket;
         private string benutzername;
         public Action<Beitrag> OnBeitragErhalten;
+        public Action OnConnectionLost;
         public Client()
         {
             //IPAddress adress = IPAddress.Parse("10.1.2.186");
             this.clientSocket = new SocketAbi.Socket("127.0.0.1", 5555);
-            Verbinden();
+            if (!Verbinden())
+            {
+                MessageBox.Show("Server nicht erreichtbar");
+            }
         }
 
         public bool Verbinden() 
         {
-            bool status = clientSocket.Connect();
-            return status;
+            try
+            {
+                clientSocket.Connect();
+                return true;
+            }
+            catch
+            {
+                ConnectionLost();
+                return false;
+            }
         }
         public string anmelden(string benutzername, string passwort) 
         {
             string eingabe = $"{ConvertMessage(benutzername)};{ConvertMessage(passwort)}";
-            clientSocket.Write("anmelden;" + eingabe +'\n');
-            string msg = clientSocket.ReadLine();
+            if (!Write("anmelden;" + eingabe + '\n'))
+                return null;
+            string msg = ReadLine();
+            if (msg == null) return null;
             this.benutzername = benutzername;
             MessageBox.Show(msg);
             return msg;
-            //List<string> bilder = BilderAuswaehlen();
-            //msg = $"beitrag;Hallo Welt;{bilder.Count}";
-            //clientSocket.Write($"{msg}{PictureMessage(bilder)};Wow das ist ja ein cooler Beitrag!\n");
-            //MessageBox.Show(clientSocket.ReadLine());
         }
 
         public void registrieren(string benutzername, string passwort, string email) 
         {
             string eingabe = $"{ConvertMessage(benutzername)};{ConvertMessage(passwort)};{ConvertMessage(email)}";
             clientSocket.Write("registrieren;"+eingabe+'\n');
-            string msg = clientSocket.ReadLine();
+            if (!Write("registrieren;" + eingabe + '\n'))
+                return;
+
+            string msg = ReadLine();
+            if (msg == null) return;
             MessageBox.Show(msg);
             //clientSocket.Write("registrieren;" + eingabe + ";test1233@gmx.de" +'\n');  // Registrieren
             //MessageBox.Show(clientSocket.ReadLine());
@@ -100,15 +115,23 @@ namespace ClientSocialMedia
             } 
             
             clientSocket.Write("beitrag;" + eingabe + ";" + ConvertMessage(tag) + ";" + ConvertMessage(text) + '\n');
-            if (clientSocket.ReadLine().Split(';')[0] == "-")
+            if (!Write("beitrag;" + eingabe + ";" + ConvertMessage(tag) + ";" + ConvertMessage(text) + '\n'))
+                return;
+            string reply = ReadLine();
+            if (reply == null) 
+                return;
+            if (reply.Split(';')[0] == "-")
                 MessageBox.Show("Zu viele Bilder, maximal 10!");
         }
 
         public List<Image> HoleOriginalBilder(int beitragId)
         {
             string msg = $"original;{beitragId}\n";
-            clientSocket.Write(msg);
-            string reply = clientSocket.ReadLine();
+            if (!Write(msg)) 
+                return null;
+            string reply = ReadLine();
+            if (reply == null)
+                return null;
             string[] parts = reply.Split(';');
             List<Image> bilder = new List<Image>();
             int anzahl = Convert.ToInt32(parts[1]);
@@ -126,38 +149,46 @@ namespace ClientSocialMedia
         public string Like(int beitragId)
         {
             string msg = $"like;{beitragId}\n";
-            clientSocket.Write(msg);
-            return clientSocket.ReadLine();
+            if (!Write(msg))
+                return null;
+            return ReadLine();
         }
 
         public string Abonnieren(int abonnentId)
         {
             string msg = $"abonnieren;{abonnentId}\n";
-            clientSocket.Write(msg);
-            return clientSocket.ReadLine();
+            if (!Write(msg))
+                return null;
+            return ReadLine();
         }
 
         public int GetAbonnentenAnzahl(int nutzerId)
         {
             string msg = $"abonnentenAnzahl;{nutzerId}\n";
-            clientSocket.Write(msg);
-            string reply = clientSocket.ReadLine();
+            if (!Write(msg))
+                return 0;
+            string reply = ReadLine();
+            if (reply == null)
+                return 0;
             if (reply.Trim(';')[0] == '+')
             {
                 return Convert.ToInt32(reply.Split(';')[1]);
             }
             else
+            {
                 return 0;
+            }
         }
 
         public List<Beitrag> HoleNutzerBeitraege(int offset = 0)
         {
             string msg = $"nutzerBeitraege;{offset}\n";
-            clientSocket.Write(msg);
+            if (!Write(msg))
+                return null;
             List<Beitrag> beitraege = new List<Beitrag>();
             while (true)
             {
-                string str = clientSocket.ReadLine();
+                string str = ReadLine();
                 if (str == null)
                     break;
                 if (str.Split(';')[1] == "fertig")
@@ -198,17 +229,23 @@ namespace ClientSocialMedia
         }
         public void ErstelleKommentar(int beitragId, string nachricht, int? oberKommentarId)
         {
-            string msg = $"kommentar;{beitragId};{ConvertMessage(nachricht)}";
-            clientSocket.Write(msg + "\n");
-            string reply = clientSocket.ReadLine();
+            string msg = $"kommentar;{beitragId};{ConvertMessage(nachricht)}\n";
+            if (!Write(msg))
+                return;
+            string reply = ReadLine();
+            if (reply == null)
+                return;
             MessageBox.Show(reply);
         }
 
         public List<Kommentar> LadeKommentare(int beitragId)
         {
             string msg = $"ladeKommentare;{beitragId}\n";
-            clientSocket.Write(msg);
-            string data = clientSocket.ReadLine();
+            if (!Write(msg))
+                return null;
+            string data = ReadLine();
+            if (data == null)
+                return null;
             string[] parts = data.Split(';');
             List<Kommentar> comments = new List<Kommentar>();
             if (parts[0] != "kommentare")
@@ -246,8 +283,8 @@ namespace ClientSocialMedia
 
             if (nurAbos)
             {
-                clientSocket.Write($"nurAbos;{offset}\n");
-
+                if (!Write($"nurAbos;{offset}\n"))
+                    return null;
                 //str = clientSocket.ReadLine();
                 //if (str == "aboBeitraege?0?")
                 //{
@@ -256,8 +293,8 @@ namespace ClientSocialMedia
             }
             else if(empfehlungen) 
             {
-                clientSocket.Write($"empfehlung;{offset}\n");
-
+                if (!Write($"empfehlung;{offset}\n"))
+                    return null;
                 //str = clientSocket.ReadLine();
                 //if (str == "empfehlungen?0?")
                 //{
@@ -266,13 +303,15 @@ namespace ClientSocialMedia
             }
             else if(beliebteste) 
             {
-                clientSocket.Write($"beliebteste;{offset}\n");
+                if (!Write($"beliebteste;{offset}\n"))
+                    return null;
             }
             // Protokoll: neueBeitraege?anzahlBeitraege?id|titel|text|autor|anzahlLikes|timestamp|dateinamen1:bild1,dateinamen2:bild2,..,dateinamenN:bildn;...
             //msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{b.Text};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{pictues};{b.Tag}\n";
             else
             {
-                clientSocket.Write($"neueBeitraege;{offset}\n");
+                if (!Write($"neueBeitraege;{offset}\n"))
+                    return null;
 
                 //str = clientSocket.ReadLine();
                 //if (str == "neueBeitaege?0?")
@@ -284,7 +323,7 @@ namespace ClientSocialMedia
 
             while (true)
             {
-                string str = clientSocket.ReadLine();
+                string str = ReadLine();
                 if (str == null)
                     break;
                 if (str.Split(';')[1] == "fertig")
@@ -376,8 +415,11 @@ namespace ClientSocialMedia
         
         public Nutzer LadeProfil()
         {
-            clientSocket.Write("loadProfile\n");
-            string msg = clientSocket.ReadLine();
+            if (!Write($"loadProfile\n"))
+                return null;
+            string msg = ReadLine();
+            if (msg == null)
+                return null;
             string[] parts = msg.Split(';');
             string name = GetMessage(parts[1]);
             string email = GetMessage(parts[2]);
@@ -394,8 +436,11 @@ namespace ClientSocialMedia
         }
         public Nutzer LadeNutzer(int nutzerId)
         {
-            clientSocket.Write($"loadNutzer;{nutzerId}\n");
-            string msg = clientSocket.ReadLine();
+            if (!Write($"loadNutzer;{nutzerId}\n"))
+                return null;
+            string msg = ReadLine();
+            if (msg == null)
+                return null;
             string[] parts = msg.Split(';');
             string name = GetMessage(parts[1]);
             int id = Convert.ToInt32(parts[2]);
@@ -412,7 +457,12 @@ namespace ClientSocialMedia
         public List<Nutzer> SucheNutzer(string name)
         {
             clientSocket.Write($"sucheNutzer;{ConvertMessage(name)}\n");
-            string[] parts = clientSocket.ReadLine().Split(';');
+            if (!Write($"sucheNutzer;{ConvertMessage(name)}\n"))
+                return null;
+            string reply = ReadLine();
+            if (reply == null)
+                return null;
+            string[] parts = reply.Split(';');
             int anzahl = Convert.ToInt32(parts[1]);
             List<Nutzer> nutzerListe = new List<Nutzer>(); 
             for(int i = 0; i < anzahl; i++)
@@ -430,10 +480,50 @@ namespace ClientSocialMedia
             return nutzerListe;
         }
 
+        private bool Write(string msg)
+        {
+            try
+            {
+                clientSocket.Write(msg);
+                return true;
+            }
+            catch
+            {
+                ConnectionLost();
+                return false;
+            }
+        }
+
+        private string ReadLine()
+        {
+            try
+            {
+                return clientSocket.ReadLine();
+            }
+            catch
+            {
+                ConnectionLost();
+                return null;
+            }
+        }
+
+        private void ConnectionLost()
+        {
+            try
+            {
+                clientSocket.Close(); 
+            }
+            catch { }
+            OnConnectionLost?.Invoke();
+        }
         public byte[] LadeProfilePicture()
         {
             clientSocket.Write("loadProfile\n");
-            string msg = clientSocket.ReadLine();
+            if (!Write("loadProfile\n"))
+                return null;
+            string msg = ReadLine();
+            if (msg == null)
+                return null;
             string[] parts = msg.Split(';');
             string base64 = parts[6];
             return Convert.FromBase64String(base64);
@@ -442,29 +532,35 @@ namespace ClientSocialMedia
         public string ProfilAktualisieren(string name, string email)
         {
             string msg = $"updateProfile;{ConvertMessage(name)};{ConvertMessage(email)}\n";
-            clientSocket.Write(msg);
-            return clientSocket.ReadLine();
+            if (!Write(msg))
+                return null;
+            return ReadLine();
         }
 
         public string ProfilBild(string fileName, string picture)
         {
             string msg = $"addProfilePicture;{fileName};{picture}\n";
-            clientSocket.Write(msg);
-            return clientSocket.ReadLine();
+            if (!Write(msg))
+                return null;
+            return ReadLine();
         }
 
         public string PasswortAktualisieren(string old, string newP)
         {
             string msg = $"updatePasswort;{ConvertMessage(old)};{ConvertMessage(newP)}\n";
-            clientSocket.Write(msg);
-            return clientSocket.ReadLine();
+            if (!Write(msg))
+                return null;
+            return ReadLine();
         }
 
         public int ChatErstellen(int nutzerId)
         {
             string msg = $"chatErstellen;{nutzerId}\n";
-            clientSocket.Write(msg);
-            string reply = clientSocket.ReadLine();
+            if (!Write(msg))
+                return 0;
+            string reply = ReadLine();
+            if (reply == null)
+                return 0;
             string[] parts = reply.Split(';');
             if (parts[0] == "+")
             {
@@ -479,7 +575,11 @@ namespace ClientSocialMedia
         public List<Chat> LadeChats()
         {
             clientSocket.Write("chatListe\n");
-            string reply = clientSocket.ReadLine();
+            if (!Write("chatListe\n"))
+                return null;
+            string reply = ReadLine();
+            if (reply == null)
+                return null;
             List<Chat> chats = new List<Chat>();
             string[] parts = reply.Split(';');
             int anzahl = Convert.ToInt32(parts[1]);
@@ -506,7 +606,8 @@ namespace ClientSocialMedia
         public string SendeNachricht(int chat, string text)
         {
             string msg = $"nachrichtSenden;{chat};{ConvertMessage(text)}\n";
-            clientSocket.Write(msg);
+            if (!Write(msg))
+                return null;
             string reply = clientSocket.ReadLine();
             return reply;
         }
@@ -514,7 +615,11 @@ namespace ClientSocialMedia
         public List<Nachricht> LadeNachrichten(int chat)
         {
             clientSocket.Write($"loadNachrichten;{chat}\n");
+            if (!Write($"loadNachrichten;{chat}\n"))
+                return null;
             string reply = clientSocket.ReadLine();
+            if (reply == null ) 
+                return null;
             string[] parts = reply.Split(';');
             List<Nachricht> nachrichten = new List<Nachricht>();
             if (parts[0] != "+")
@@ -590,8 +695,9 @@ namespace ClientSocialMedia
         public string Abmelden()
         {
             string msg = "abmelden\n";
-            clientSocket.Write(msg);
-            return clientSocket.ReadLine();
+            if (!Write(msg))
+                return null;
+            return ReadLine();
         }
         private string ConvertMessage(string message)
         {
