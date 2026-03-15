@@ -525,6 +525,32 @@ namespace socialMediaServer
                             }
                             client.Write(msg);
                             break;
+                        case "nutzerBeitraege":
+                            offset = 0;
+                            if (parameter[1] != null)
+                                offset = Convert.ToInt32(parameter[1]);
+                            beitraege = spf.HoleNutzerBeitraege(this.nutzer.BenutzerId, offset);
+                            foreach (Beitrag b in beitraege)
+                            {
+                                foreach (Bild bild in spf.HoleBilder(b.Id))
+                                {
+                                    b.Hinzufuegen(bild);
+                                }
+                                List<string> bilderStringList = new List<string>();
+                                foreach (Bild img in b.Bilder)
+                                {
+                                    string s = Convert.ToBase64String(File.ReadAllBytes(Path.Combine("img", "preview", img.Dateiname)));
+                                    bilderStringList.Add($"{img.Dateiname}:{s}");
+                                }
+                                string bilderString = string.Join(",", bilderStringList);
+                                string textBeitrag = b.Text.text;
+                                if (textBeitrag != null)
+                                    textBeitrag = ConvertMessage(textBeitrag);
+                                msg = $"+;{b.Id};{ConvertMessage(b.Titel)};{textBeitrag};{b.Autor.BenutzerId};{b.gebeAnzahlLikes()};{b.Geposted};{bilderString};{b.Tag}\n";
+                                client.Write(msg);
+                            }
+                            client.Write("+;fertig\n");
+                            break;
                     } 
                 }
             }

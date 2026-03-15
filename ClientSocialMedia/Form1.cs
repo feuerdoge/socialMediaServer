@@ -36,9 +36,20 @@ namespace ClientSocialMedia
         {
             InitializeComponent();
             Form1.client.OnBeitragErhalten += BeitragErhalten;
+            Form1.client.OnConnectionLost += ConnectionLost;
             ErstellePanel();
         }
 
+        private void ConnectionLost()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(ConnectionLost));
+                return;
+            }
+            MessageBox.Show("Verbindung zum Server verloren");
+            this.Close();
+        }
         public void UpdateProfilePicture()
         {
             byte[] profileBytes = client.LadeProfilePicture();
@@ -258,7 +269,7 @@ namespace ClientSocialMedia
         {
             beitragOffset = 0;
             inhaltAnzeige.Controls.Clear();
-            await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
             if(beitraege == null) 
             {
                 return;
@@ -522,6 +533,7 @@ namespace ClientSocialMedia
             };
             profil.OnAbmelden = () =>
             {
+                Form1.client.OnBeitragErhalten = BeitragErhalten;
                 Abmelden();
             };
             profil.OnClose = () =>
@@ -650,6 +662,19 @@ namespace ClientSocialMedia
         private void Form1_Resize(object sender, EventArgs e)
         {
 
+        }
+
+        private void verbindenBtn_Click(object sender, EventArgs e)
+        {
+            if (Form1.client.Verbinden())
+            {
+                MessageBox.Show("Verbindung zum Server aufgebaut");
+                verbindenBtn.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("Verbindung zum Server fehlgeschlagen");
+            }
         }
     }
 }

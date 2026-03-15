@@ -17,9 +17,12 @@ namespace ClientSocialMedia
         public Action<Image> OnProfileChange;
         public Action OnAbmelden;
         public Action OnClose;
+        private int beitragOffset = 0;
+        private List<Beitrag> beitraege;
         public ProfileControl()
         {
             InitializeComponent();
+            beitraege = new List<Beitrag>();
             LadeProfil();
         }
 
@@ -119,6 +122,56 @@ namespace ClientSocialMedia
         private void closeBtn_Click(object sender, EventArgs e)
         {
             OnClose?.Invoke();
+        }
+
+        private async void loadBeitraegeBtn_Click(object sender, EventArgs e)
+        {
+            beitragOffset = 0;
+            beitraege = await Task.Run(() => Form1.client.HoleNutzerBeitraege(beitragOffset));
+
+            List<Control> controls = this.Parent.Controls.Find("Inhalte", true).ToList();
+        
+            foreach (Control c in controls)
+            {
+                Inhalte i = c as Inhalte;
+                i.Beitrag.SetKommentare(i.ladekomm());
+                i.Autor = i.GetUserData();
+                i.setDaten(i.pictures);
+            }
+            beitragOffset = beitraege.Count;
+            Button loadMoreBtn = new Button()
+            {
+                Text = "Weitere Beiträge laden",
+                Width = 200,
+                Height = 40,
+            };
+            loadMoreBtn.Click += loadMoreBtn_Click;
+            this.Parent.Controls.Add(loadMoreBtn);
+        }
+        private async void loadMoreBtn_Click(Object sender, EventArgs e)
+        {
+            Button loadMoreBtn = sender as Button;
+            loadMoreBtn.Enabled = false;
+            loadMoreBtn.Text = "Lade...";
+
+            List<Beitrag> neue = await Task.Run(() => Form1.client.HoleNutzerBeitraege(beitragOffset));
+            List<Control> controls = this.Parent.Controls.Find("Inhalte", true).ToList();
+            for (int i = controls.Count - 1; i >= beitragOffset; i--)
+            {
+                Inhalte inhalt = controls[i] as Inhalte;
+                inhalt.Beitrag.SetKommentare(inhalt.ladekomm());
+                inhalt.Autor = inhalt.GetUserData();
+                inhalt.setDaten(inhalt.pictures);
+            }
+            this.Parent.Controls.Remove(loadMoreBtn);
+            this.Parent.Controls.Add(loadMoreBtn);
+            beitragOffset += neue.Count;
+            loadMoreBtn.Text = "Weitere Beiträge laden";
+            loadMoreBtn.Enabled = true;
+            if (neue.Count == 0)
+            {
+                loadMoreBtn.Text = "Keine weiteren Beiträge vorhanden";
+            }
         }
     }
 }
