@@ -570,8 +570,6 @@ namespace ClientSocialMedia
             {
                 return;
             }
-            
-            //beitraege = client.sortiereBeitraegeNachBeliebtheit(beitraege, 0, beitraege.Count - 1);
             List<Control> controls = this.Controls.Find("Inhalte", true).ToList();
             foreach (Control c in controls)
             {

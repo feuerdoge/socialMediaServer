@@ -640,58 +640,6 @@ namespace ClientSocialMedia
             }
             return nachrichten;
         }
-
-        public List<Beitrag> sortiereBeitraegeNachBeliebtheit(List<Beitrag> beitraege, int left, int right) 
-        {
-
-            int i = left;
-            int x = right - 1;
-            var pivot = beitraege[right];
-            
-            while(i < x) 
-            {
-                if (beitraege[i].gebeAnzahlLikes() <= pivot.gebeAnzahlLikes()) 
-                {
-                    i++;
-                }
-                if (beitraege[x].gebeAnzahlLikes() >= pivot.gebeAnzahlLikes()) 
-                {
-                    x--;
-                }
-                if (beitraege[i].gebeAnzahlLikes() >= pivot.gebeAnzahlLikes() && beitraege[x].gebeAnzahlLikes() <= pivot.gebeAnzahlLikes()) 
-                {
-                    var temp = beitraege[i];
-                    beitraege[i] = beitraege[x];
-                    beitraege[x] = temp;
-
-                    i++;
-                    x--;
-                }
-            }
-
-            if (beitraege[i].gebeAnzahlLikes() > pivot.gebeAnzahlLikes()) 
-            {
-                beitraege[right] = beitraege[i];
-                beitraege[i] = pivot;
-            }
-
-            left += i + 1;
-
-            if(left < right) 
-            {
-                beitraege = sortiereBeitraegeNachBeliebtheit(beitraege, left, right);
-            }
-            else 
-            {
-                left = 0;
-                if(right == 0) 
-                {
-                    return beitraege;
-                }
-                beitraege = sortiereBeitraegeNachBeliebtheit(beitraege, left, right - 1);
-            }
-            return beitraege;
-        }
         
         public string Abmelden()
         {
