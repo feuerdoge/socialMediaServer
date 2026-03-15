@@ -24,6 +24,7 @@ namespace ClientSocialMedia
         private Button passVergessen;
         private Button generierePasswort;
         private TextBox email;
+        private PictureBox logo;
         private bool registerToggle = false;
         public List<string> bilder = new List<string>();
         private List<Beitrag> beitraege = new List<Beitrag>();
@@ -69,7 +70,7 @@ namespace ClientSocialMedia
             panel.Height = this.Height;
             this.Controls.Add(panel);
 
-            PictureBox logo = new PictureBox()
+            logo = new PictureBox()
             {
                 Width = 150,
                 Height = 100,
@@ -366,6 +367,7 @@ namespace ClientSocialMedia
                 {
                     panel.Hide();
                     profilePic.Visible = true;
+                    this.Controls.Remove(logo);
                     zeigeProgram();
                 }
             }
