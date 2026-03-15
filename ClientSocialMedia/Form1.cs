@@ -202,17 +202,10 @@ namespace ClientSocialMedia
                 BackColor = Color.White,
                 Text = "Chat"
             };
-            Button buttonGruppen = new Button()
-            {
-                Size = new Size(215, 60),
-                Location = new Point(10, 370),
-                BackColor = Color.White,
-                Text = "Gruppen"
-            };
             Button buttonSuchen = new Button()
             {
                 Size = new Size(215, 60),
-                Location = new Point(10, 430),
+                Location = new Point(10, 370),
                 BackColor = Color.White,
                 Text = "Suchen"
             };
@@ -233,7 +226,6 @@ namespace ClientSocialMedia
             menuPanel.Controls.Add(empfehlungen);
             menuPanel.Controls.Add(buttonErstellen);
             menuPanel.Controls.Add(buttonChat);
-            menuPanel.Controls.Add(buttonGruppen);
             menuPanel.Controls.Add(buttonSuchen);
             if(!laedGerade) 
             {
