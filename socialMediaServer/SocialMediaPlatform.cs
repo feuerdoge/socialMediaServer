@@ -134,6 +134,41 @@ namespace socialMediaServer
             passwort[z3] = (char)(rand.Next(4) + '#');
             return passwort;
         }
+
+        public bool passwortWechseln(string pass, string email) 
+        {
+            string hashedPass = HashPasswort(pass);
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString)) 
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand passwortWechseln = new MySqlCommand(@"
+                    UPDATE nutzer 
+                    SET passwort = @pass
+                    WHERE email = @email", conn);
+                    passwortWechseln.Parameters.AddWithValue("@pass", hashedPass);
+                    passwortWechseln.Parameters.AddWithValue("@email", email);
+                    int erfolg = passwortWechseln.ExecuteNonQuery();
+                    if(erfolg == 0) 
+                    {
+                        conn.Close();
+                        return false;
+                    }
+                    else 
+                    {
+                        conn.Close();
+                        return true;
+                    }
+                }
+                catch (Exception e) 
+                {
+                    return false;
+                }
+            }
+        }
+
         public List<Beitrag> ErmittleNeueBeitraege(Nutzer n, int offset = 0)
         {
             List<Beitrag> beitraege = new List<Beitrag>();

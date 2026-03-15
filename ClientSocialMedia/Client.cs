@@ -414,6 +414,13 @@ namespace ClientSocialMedia
             return clientSocket.ReadLine();
         }
 
+        public string PasswortVergessenAktualisierung(string email) 
+        {
+            string msg = $"newPasswort;{ConvertMessage(email)}\n";
+            clientSocket.Write(msg);
+            return clientSocket.ReadLine();
+        }
+
         public int ChatErstellen(int nutzerId)
         {
             string msg = $"chatErstellen;{nutzerId}\n";
