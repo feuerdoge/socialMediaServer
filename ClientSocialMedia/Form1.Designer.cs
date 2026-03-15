@@ -103,7 +103,7 @@
             // tagLabel
             // 
             this.tagLabel.AutoSize = true;
-            this.tagLabel.Location = new System.Drawing.Point(228, 27);
+            this.tagLabel.Location = new System.Drawing.Point(115, 13);
             this.tagLabel.Name = "tagLabel";
             this.tagLabel.Size = new System.Drawing.Size(26, 13);
             this.tagLabel.TabIndex = 1;
@@ -113,7 +113,7 @@
             // 
             this.tagPick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tagPick.FormattingEnabled = true;
-            this.tagPick.Location = new System.Drawing.Point(260, 24);
+            this.tagPick.Location = new System.Drawing.Point(147, 10);
             this.tagPick.Name = "tagPick";
             this.tagPick.Size = new System.Drawing.Size(121, 21);
             this.tagPick.TabIndex = 0;
