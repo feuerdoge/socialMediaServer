@@ -339,9 +339,13 @@ namespace socialMediaServer
             {
                 conn.Open();
                 MySqlCommand get = new MySqlCommand(@"
-                    SELECT beitragid, text, titel, erstelltAm, tag
-                    FROM beitrag
-                    WHERE autor = @nutzer
+                    SELECT b.beitragid, b.text, b.titel, b.erstelltAm, b.autor, b.tag, u.benutzerName, Count(l.beitragId) AS likes
+                    FROM beitrag b
+                    JOIN nutzer u ON b.autor = u.nutzerId
+                    LEFT JOIN likes l ON b.beitragid = l.beitragId
+                    WHERE b.autor = @nutzer
+                    GROUP BY b.beitragid
+                    ORDER BY b.erstelltAm DESC
                     LIMIT 10 OFFSET @offset", conn);
                 get.Parameters.AddWithValue("@nutzer", nutzerId);
                 get.Parameters.AddWithValue("@offset", offset);
@@ -350,6 +354,7 @@ namespace socialMediaServer
                     while (reader.Read())
                     {
                         Beitrag b = LeseBeitrag(reader);
+
                         beitraege.Add(b);
                     }
                 }

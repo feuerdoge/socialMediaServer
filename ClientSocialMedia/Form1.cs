@@ -233,7 +233,7 @@ namespace ClientSocialMedia
         {
             beitragOffset = 0;
             inhaltAnzeige.Controls.Clear();
-            await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
+            beitraege = await Task.Run(() => client.beitraegeAnfragen(false, false, false, beitragOffset));
             if(beitraege == null) 
             {
                 return;

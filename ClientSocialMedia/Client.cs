@@ -152,7 +152,7 @@ namespace ClientSocialMedia
 
         public List<Beitrag> HoleNutzerBeitraege(int offset = 0)
         {
-            string msg = $"nutzerBeitraege;{offset}n";
+            string msg = $"nutzerBeitraege;{offset}\n";
             clientSocket.Write(msg);
             List<Beitrag> beitraege = new List<Beitrag>();
             while (true)

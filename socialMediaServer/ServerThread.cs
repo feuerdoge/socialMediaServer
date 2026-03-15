@@ -512,8 +512,8 @@ namespace socialMediaServer
                             break;
                         case "nutzerBeitraege":
                             offset = 0;
-                            if (parameter[2] != null)
-                                offset = Convert.ToInt32(parameter[2]);
+                            if (parameter[1] != null)
+                                offset = Convert.ToInt32(parameter[1]);
                             beitraege = spf.HoleNutzerBeitraege(this.nutzer.BenutzerId, offset);
                             foreach (Beitrag b in beitraege)
                             {
