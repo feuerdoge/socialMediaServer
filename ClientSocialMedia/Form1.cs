@@ -69,6 +69,15 @@ namespace ClientSocialMedia
             panel.Height = this.Height;
             this.Controls.Add(panel);
 
+            PictureBox logo = new PictureBox()
+            {
+                Width = 150,
+                Height = 100,
+                BackColor = Color.Transparent,
+                BackgroundImage = Properties.Resources.logo              
+            };
+            this.Controls.Add(logo);
+            logo.BringToFront();
             Label anmelden = new Label()
             {
                 Width = 150,
@@ -277,9 +286,6 @@ namespace ClientSocialMedia
             beitragOffset = beitraege.Count;
             loadMoreBtn.Tag = "neue";
             inhaltAnzeige.Controls.Add(loadMoreBtn);
-            //Server nach einer Liste aller Beiträge fragen
-            //Diese Liste wird interpretiert, d.h das jedes Element dieser Liste von Beiträgen in ein Inhalt gewandelt wird.
-            //Diese Inhalte werden auf den FlowLayoutPanel geladen. (inhaltAnzeige.Controls.Add(inhalt))
         }
 
         private async void BeitragErhalten(Beitrag b)

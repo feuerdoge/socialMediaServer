@@ -44,6 +44,7 @@
             // 
             // menuPanel
             // 
+            this.menuPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.menuPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuPanel.Location = new System.Drawing.Point(0, 0);
             this.menuPanel.Name = "menuPanel";
@@ -61,6 +62,7 @@
             // 
             this.inhaltAnzeige.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.inhaltAnzeige.AutoScroll = true;
+            this.inhaltAnzeige.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.inhaltAnzeige.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.inhaltAnzeige.Location = new System.Drawing.Point(235, 0);
             this.inhaltAnzeige.Name = "inhaltAnzeige";
@@ -150,6 +152,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 451);
             this.Controls.Add(this.verbindenBtn);
             this.Controls.Add(this.beitragsErstellungsPanel);
